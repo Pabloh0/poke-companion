@@ -12,11 +12,13 @@ export function TypeToggle({
   type,
   selected,
   disabled = false,
+  className,
   onToggle,
 }: {
   type: PokemonType;
   selected: boolean;
   disabled?: boolean;
+  className?: string;
   onToggle?: (type: PokemonType) => void;
 }) {
   const t = useTranslations("Types");
@@ -27,14 +29,15 @@ export function TypeToggle({
       disabled={disabled}
       onClick={() => onToggle?.(type)}
       className={cn(
-        "relative inline-flex h-9 items-center overflow-hidden rounded-[5px] border pr-3 pl-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40",
+        "relative inline-flex h-9 min-w-0 items-center overflow-hidden rounded-[5px] border pr-2 pl-3.5 text-sm font-semibold whitespace-nowrap transition-colors disabled:cursor-not-allowed disabled:opacity-40",
         selected
           ? cn(
               typeBackgroundClass(type),
               typeTextClass(type),
-              "border-transparent shadow-[inset_0_-2px_0_rgb(0_0_0/0.15)]",
+              "border-transparent",
             )
           : "border-border bg-card hover:bg-accent",
+        className,
       )}
     >
       {!selected && (
@@ -46,7 +49,7 @@ export function TypeToggle({
           )}
         />
       )}
-      {t(type)}
+      <span className="condensed">{t(type)}</span>
     </button>
   );
 }

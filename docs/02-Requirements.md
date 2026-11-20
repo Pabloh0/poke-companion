@@ -20,14 +20,15 @@ commits. Estado: ✅ hecho · 🔜 siguiente · ⏳ pendiente.
 
 ### Pokédex (RF-P)
 
-| ID     | Requisito                                                             | Estado |
-| ------ | --------------------------------------------------------------------- | ------ |
-| RF-P01 | Listado de todos los Pokémon con número, nombre, sprite y tipos.      | ✅     |
-| RF-P02 | Filtros por tipo y generación; búsqueda por nombre o número.          | ✅     |
-| RF-P03 | Ficha con estadísticas base, habilidades, altura, peso y descripción. | ✅     |
-| RF-P04 | Formas alternativas (regionales, Mega, Gigamax…) dentro de la ficha.  | ⏳     |
-| RF-P05 | Movimientos que aprende, por método (nivel, MT, huevo, tutor).        | ⏳     |
-| RF-P06 | Nombres y descripciones en el idioma del usuario.                     | ✅     |
+| ID     | Requisito                                                                              | Estado |
+| ------ | -------------------------------------------------------------------------------------- | ------ |
+| RF-P01 | Listado de todos los Pokémon con número, nombre, sprite y tipos.                       | ✅     |
+| RF-P02 | Filtros por tipo y generación; búsqueda por nombre o número.                           | ✅     |
+| RF-P03 | Ficha con estadísticas base, habilidades, altura, peso y descripción.                  | ✅     |
+| RF-P04 | Formas alternativas (regionales, Mega, Gigamax…) dentro de la ficha.                   | 🔜     |
+| RF-P07 | Formas regionales: en el listado, buscables, filtrables por región y con ficha propia. | ✅     |
+| RF-P05 | Movimientos que aprende, por método (nivel, MT, huevo, tutor).                         | ⏳     |
+| RF-P06 | Nombres y descripciones en el idioma del usuario.                                      | ✅     |
 
 ### Calculadora de tipos (RF-T)
 

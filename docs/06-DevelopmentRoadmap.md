@@ -43,7 +43,11 @@ pronto y no tienen riesgos de seguridad.
 - [x] Línea evolutiva en la ficha (adelantada de la fase 4, ver abajo).
 - [x] Cartas legibles desde 320 px: la carta adapta su contenido a su propio
       ancho (consultas de contenedor), no al de la pantalla.
-- [ ] Formas alternativas (regionales, Mega, Gigamax) en la ficha.
+- [x] Formas regionales (57): en el listado tras su especie, buscables
+      («alola», «vulpix», «ardiente»), filtro por región y ficha propia.
+- [x] Filtros en un panel ordenado: una fila por filtro, todo alineado y en el
+      mismo plano (sin pestañas).
+- [ ] Otras formas alternativas (Mega, Gigamax…) en la ficha.
 
 ## Fase 3 · Calculadora de tipos ✅
 

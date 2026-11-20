@@ -59,6 +59,7 @@ export default async function LocaleLayout({
             Pokedex: messages.Pokedex,
             Types: messages.Types,
             TypeCalculator: messages.TypeCalculator,
+            Forms: messages.Forms,
           }}
         >
           <a

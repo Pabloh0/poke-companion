@@ -37,7 +37,7 @@ src/
 │   ├── global-not-found.tsx  404 para direcciones que no existen en absoluto
 │   └── globals.css           Tokens de diseño y Tailwind
 ├── components/
-│   ├── ui/                   Primitivas de shadcn/ui (Button…)
+│   ├── ui/                   Primitivas: Button (shadcn/ui), SegmentedControl
 │   └── layout/               Cabecera, pie, selector de idioma, tema
 ├── features/                 Una carpeta por funcionalidad
 │   ├── pokedex/              components/, data/, lib/ (lógica pura), server/ (consultas)
@@ -153,13 +153,43 @@ en la URL (`?q=…&types=water,flying&gen=3`) con `history.replaceState`, así q
 una búsqueda se puede compartir. La lógica de filtrado es pura
 (`features/pokedex/lib/filters.ts`) y tiene tests.
 
+El listado incluye las **57 formas regionales**, cada una justo detrás de su
+especie (Vulpix, Vulpix de Alola…), y el filtro `form=alola|galar|hisui|paldea`
+deja solo las de una región. La generación se refiere a la de la especie: Vulpix
+de Alola sale en Kanto (I).
+
 Coste asumido: la página incluye la lista completa (~220 KB de HTML sin
-comprimir, bastante menos con compresión). Se pintan 96 tarjetas y el resto con
+comprimir, bastante menos con compresión). Se pintan 60 cartas y el resto con
 "Mostrar más".
 
 Consecuencia para CI y Vercel: **el build necesita las variables
 `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`**, porque
 lee Supabase para prerenderizar.
+
+### Formas regionales
+
+- Los datos de cada forma (tipos, estadísticas, habilidades, altura y peso) ya
+  estaban en la base de datos: la importación trae todas las filas de
+  `pokemon`, también las que no son la forma por defecto. Lo que faltaba es
+  saber cuáles son regionales.
+- Esa lista vive en el código (`features/pokedex/data/regional-forms.ts`),
+  generada del `pokemon_forms.csv` de PokeAPI en el commit fijado: formas cuyo
+  identificador es una región, más Darmanitan de Galar y las tres variedades de
+  Tauros de Paldea. Quedan fuera las formas de combate (Darmanitan Daruma), los
+  Pokémon dominantes y los Pikachu con gorra. Ver D-24.
+- `getRegionalForms(locale)` trae las 57 en una petición cacheada.
+- PokeAPI no tiene nombres en español para las formas, así que se componen con
+  plantillas de los archivos de traducción: «{name} de {region}» → «Vulpix de
+  Alola»; en inglés «{region} {name}» → «Alolan Vulpix». La variedad de Tauros
+  va aparte («Variedad ardiente»).
+- Ficha propia en `/pokedex/vulpix-alola`, prerenderizada como las demás (2179
+  páginas en total). PokeAPI solo tiene entradas de la Pokédex por especie y
+  describen la forma original, así que las formas muestran un aviso en su lugar.
+- Línea evolutiva vista desde una forma: cada fase se cambia por su forma de la
+  misma región si existe (`regionalizeTree`). Limitación: como el árbol sale de
+  datos de especie, Meowth de Galar muestra Persian además de Perrserker; las
+  evoluciones exactas llegarán con los métodos de evolución (fase 4).
+- Otras formas (Mega, Gigamax…) siguen sin página: su slug da la página 404.
 
 ### Ficha de cada Pokémon (`/pokedex/[slug]`)
 
@@ -256,3 +286,5 @@ Diseño detallado de la base de datos en [04-DatabaseDesign.md](04-DatabaseDesig
 | D-21 | La carta se adapta a su propio ancho (consultas de contenedor)          | La misma carta aparece a varios tamaños (rejilla, línea evolutiva, abanico); decidir por el ancho de pantalla dejaba tipos tapando el total en móviles.                                                                               |
 | D-22 | Tabla de efectividades en el código, no en la base de datos             | 324 números que solo cambian cuando una generación añade un tipo (la última vez, Hada en 2013); la calculadora los necesita en el navegador para responder al instante y sin red. Generada del CSV de PokeAPI y comprobada con tests. |
 | D-23 | Ruta `/tipos` igual en ambos idiomas                                    | El español es el idioma principal; traducir rutas (`/en/types`) con `pathnames` exigiría reescribir todos los enlaces dinámicos. Revisable si importa para el SEO en inglés.                                                          |
+| D-24 | Lista de formas regionales en el código, datos de la base de datos      | La base de datos ya tenía tipos y estadísticas de todas las formas; solo faltaba marcar cuáles son regionales. Una lista generada de PokeAPI evita una migración y una nueva importación, y cambia solo cuando sale una región nueva. |
+| D-25 | Filtros en un único panel, sin pestañas                                 | Una fila por filtro con todas las opciones en el mismo plano y alineadas. Las pestañas de carpeta dejaban unas opciones «detrás» de otras y el usuario las encontró desordenadas.                                                     |

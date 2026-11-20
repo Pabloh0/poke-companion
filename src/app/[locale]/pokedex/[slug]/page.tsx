@@ -4,16 +4,25 @@ import { notFound } from "next/navigation";
 import { locale as rootLocale } from "next/root-params";
 import { hasLocale } from "next-intl";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
-import { EvolutionLine } from "@/features/pokedex/components/evolution-line";
+import {
+  EvolutionLine,
+  LineCard,
+} from "@/features/pokedex/components/evolution-line";
+import { REGIONAL_FORMS } from "@/features/pokedex/data/regional-forms";
 import { HoloSurface } from "@/features/pokedex/components/holo-surface";
 import { PokemonHeroCard } from "@/features/pokedex/components/pokemon-hero-card";
 import { PokemonPager } from "@/features/pokedex/components/pokemon-pager";
 import { StatBars } from "@/features/pokedex/components/stat-bars";
 import { neighbours } from "@/features/pokedex/lib/detail";
 import { buildEvolutionTree } from "@/features/pokedex/lib/evolution";
+import {
+  familyOfForms,
+  regionalizeTree,
+} from "@/features/pokedex/lib/regional";
 import { formatDexNumber } from "@/features/pokedex/lib/filters";
 import { getEvolutionLinks } from "@/features/pokedex/server/get-evolution-links";
 import { getPokedexEntries } from "@/features/pokedex/server/get-pokedex-entries";
+import { getRegionalForms } from "@/features/pokedex/server/get-regional-forms";
 import { getPokemonDetail } from "@/features/pokedex/server/get-pokemon-detail";
 import { MatchupList } from "@/features/types/components/matchup-list";
 import { TypeBadge } from "@/features/types/components/type-badge";
@@ -26,15 +35,19 @@ import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
 /**
- * Prerender every species at build time (one page per language). Slugs that
- * are not listed here render on the first request; unknown ones → 404.
+ * Prerender every species and regional form at build time (one page per
+ * language). Slugs that are not listed here render on the first request;
+ * unknown ones → 404.
  */
 export async function generateStaticParams() {
   const locale = await rootLocale();
   const entries = await getPokedexEntries(
     hasLocale(routing.locales, locale) ? locale : routing.defaultLocale,
   );
-  return entries.map((entry) => ({ slug: entry.slug }));
+  return [
+    ...entries.map((entry) => ({ slug: entry.slug })),
+    ...REGIONAL_FORMS.map((form) => ({ slug: form.slug })),
+  ];
 }
 
 export async function generateMetadata({
@@ -58,16 +71,27 @@ export default async function PokemonPage({
 }: PageProps<"/[locale]/pokedex/[slug]">) {
   const { slug } = await params;
   const locale = await getLocale();
-  const [pokemon, entries, evolutionLinks, t, tDex, tCalc, format] =
-    await Promise.all([
-      getPokemonDetail(slug, locale),
-      getPokedexEntries(locale),
-      getEvolutionLinks(),
-      getTranslations("Pokemon"),
-      getTranslations("Pokedex"),
-      getTranslations("TypeCalculator"),
-      getFormatter(),
-    ]);
+  const [
+    pokemon,
+    entries,
+    forms,
+    evolutionLinks,
+    t,
+    tDex,
+    tCalc,
+    tForms,
+    format,
+  ] = await Promise.all([
+    getPokemonDetail(slug, locale),
+    getPokedexEntries(locale),
+    getRegionalForms(locale),
+    getEvolutionLinks(),
+    getTranslations("Pokemon"),
+    getTranslations("Pokedex"),
+    getTranslations("TypeCalculator"),
+    getTranslations("Forms"),
+    getFormatter(),
+  ]);
   if (!pokemon) notFound();
 
   const { previous, next } = neighbours(entries, pokemon.dexNumber);
@@ -80,11 +104,19 @@ export default async function PokemonPage({
     label: tCalc(`defense.${MULTIPLIER_KEY[multiplier]}`),
     types: matchups[multiplier],
   }));
-  const evolution = buildEvolutionTree(
+  const speciesTree = buildEvolutionTree(
     evolutionLinks,
     entries,
     pokemon.dexNumber,
   );
+  // Seen from a regional form, each stage becomes its form from the same
+  // region where there is one (Vulpix de Alola → Ninetales de Alola).
+  const evolution =
+    speciesTree && pokemon.form
+      ? regionalizeTree(speciesTree, pokemon.form.region, forms)
+      : speciesTree;
+  // The original and its regional forms (only shown when there are some).
+  const family = familyOfForms(pokemon.dexNumber, entries, forms);
   const [mainType] = pokemon.types;
   const measure = (value: number, unit: "meter" | "kilogram") =>
     format.number(value, { style: "unit", unit, maximumFractionDigits: 1 });
@@ -134,6 +166,12 @@ export default async function PokemonPage({
                 {tDex(`card.rarity.${pokemon.rarity}`)}
               </span>
             )}
+            {pokemon.form && (
+              <span className="ml-1 text-sm font-semibold">
+                {tForms("formOf", { region: pokemon.form.regionLabel })}
+                {pokemon.form.variantLabel && ` · ${pokemon.form.variantLabel}`}
+              </span>
+            )}
           </div>
 
           <section aria-labelledby="entry-heading" className="mt-10">
@@ -156,8 +194,8 @@ export default async function PokemonPage({
                 {pokemon.flavorText.text}
               </blockquote>
             ) : (
-              <p className="mt-3 font-serif text-lg text-muted-foreground">
-                {t("noEntry")}
+              <p className="mt-3 max-w-[52ch] font-serif text-lg text-muted-foreground">
+                {pokemon.form ? t("noFormEntry") : t("noEntry")}
               </p>
             )}
             {pokemon.flavorText && pokemon.flavorText.locale !== locale && (
@@ -193,7 +231,9 @@ export default async function PokemonPage({
                   {t("region")}
                 </dt>
                 <dd className="mt-1 font-display text-2xl font-bold condensed">
-                  {tDex(`regions.${pokemon.generation}`)}
+                  {pokemon.form
+                    ? pokemon.form.regionLabel
+                    : tDex(`regions.${pokemon.generation}`)}
                 </dd>
               </div>
               <div className="col-span-2 sm:col-span-1">
@@ -265,6 +305,39 @@ export default async function PokemonPage({
         </div>
       </section>
 
+      {family.length > 1 && (
+        <section
+          aria-labelledby="forms-heading"
+          className="mt-16 border-t-[3px] border-foreground pt-10"
+        >
+          <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
+            <div>
+              <h2
+                id="forms-heading"
+                className="text-3xl font-black tracking-tight condensed"
+              >
+                {t("formsHeading")}
+              </h2>
+              <p className="mt-3 font-serif text-lg leading-snug text-muted-foreground">
+                {t("formsIntro")}
+              </p>
+            </div>
+            <HoloSurface className="min-w-0">
+              <ul className="flex flex-wrap justify-center gap-3 sm:justify-start">
+                {family.map((entry) => (
+                  <li key={entry.slug}>
+                    <LineCard
+                      entry={entry}
+                      isCurrent={entry.slug === pokemon.slug}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </HoloSurface>
+          </div>
+        </section>
+      )}
+
       <section
         aria-labelledby="evolution-heading"
         className="mt-16 border-t-[3px] border-foreground pt-10"
@@ -285,10 +358,7 @@ export default async function PokemonPage({
           </div>
           {evolution && evolution.children.length > 0 ? (
             <HoloSurface className="flex min-w-0 justify-center sm:justify-start">
-              <EvolutionLine
-                tree={evolution}
-                currentDexNumber={pokemon.dexNumber}
-              />
+              <EvolutionLine tree={evolution} currentSlug={pokemon.slug} />
             </HoloSurface>
           ) : (
             <p className="font-serif text-lg text-muted-foreground lg:pt-1.5">

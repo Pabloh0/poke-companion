@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { XIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,7 +15,7 @@ import {
   type PokedexFilters,
 } from "../lib/filters";
 import { HoloSurface } from "./holo-surface";
-import { GenerationTabs, PokedexFilterBar } from "./pokedex-filter-bar";
+import { PokedexFilterBar } from "./pokedex-filter-bar";
 import { PokemonGrid } from "./pokemon-card";
 
 /** Cards rendered at first and per "Show more" click (divisible by 2–5). */
@@ -61,26 +62,24 @@ export function PokedexExplorer({
     <div>
       <PokedexFilterBar filters={filters} onChange={updateFilters} />
 
-      <section aria-labelledby="pokedex-results" className="mt-10">
+      <section aria-labelledby="pokedex-results" className="mt-8">
         <h2 id="pokedex-results" className="sr-only">
           {t("resultsHeading")}
         </h2>
-        <GenerationTabs
-          value={filters.generation}
-          onChange={(generation) => updateFilters({ ...filters, generation })}
-        />
         <BinderPage>
-          <div className="mb-5 flex min-h-9 flex-wrap items-center justify-between gap-3">
+          <div className="mb-5 flex min-h-9 flex-wrap items-center gap-x-4 gap-y-2.5">
             <p
               aria-live="polite"
               className="font-display text-xl font-bold condensed"
             >
               {t("cardCount", { count: results.length })}
             </p>
+            <ActiveFilters filters={filters} onChange={updateFilters} />
             {hasActiveFilters(filters) && (
               <Button
                 variant="outline"
                 size="sm"
+                className="ml-auto"
                 onClick={() => updateFilters(EMPTY_FILTERS)}
               >
                 {t("clearFilters")}
@@ -129,12 +128,81 @@ export function PokedexExplorer({
   );
 }
 
-/** The page of the binder the cards sit on, under the generation tabs. */
+/** The binder page the cards sit on. */
 function BinderPage({ children }: { children: React.ReactNode }) {
+  return <div className="rounded-xl border bg-card p-3 sm:p-6">{children}</div>;
+}
+
+/**
+ * What is being filtered, as small chips next to the count. Each one removes
+ * its own filter, which matters most on phones, where the panel is folded.
+ */
+function ActiveFilters({
+  filters,
+  onChange,
+}: {
+  filters: PokedexFilters;
+  onChange: (filters: PokedexFilters) => void;
+}) {
+  const t = useTranslations("Pokedex");
+  const tTypes = useTranslations("Types");
+  const tForms = useTranslations("Forms");
+  const query = filters.query.trim();
+
+  const chips: { key: string; label: string; next: PokedexFilters }[] = [
+    ...(query
+      ? [
+          {
+            key: "query",
+            label: t("searchChip", { query }),
+            next: { ...filters, query: "" },
+          },
+        ]
+      : []),
+    ...(filters.generation
+      ? [
+          {
+            key: "generation",
+            label: t(`generations.${filters.generation}`),
+            next: { ...filters, generation: null },
+          },
+        ]
+      : []),
+    ...filters.types.map((type) => ({
+      key: type,
+      label: tTypes(type),
+      next: { ...filters, types: filters.types.filter((tp) => tp !== type) },
+    })),
+    ...(filters.region
+      ? [
+          {
+            key: "region",
+            label: tForms("formOf", {
+              region: tForms(`regions.${filters.region}`),
+            }),
+            next: { ...filters, region: null },
+          },
+        ]
+      : []),
+  ];
+
+  if (chips.length === 0) return null;
   return (
-    <div className="rounded-xl rounded-tl-none border bg-card p-3 sm:p-6">
-      {children}
-    </div>
+    <ul className="flex flex-wrap gap-1.5">
+      {chips.map((chip) => (
+        <li key={chip.key}>
+          <button
+            type="button"
+            aria-label={t("removeFilter", { filter: chip.label })}
+            onClick={() => onChange(chip.next)}
+            className="inline-flex h-7 items-center gap-1 rounded-full border bg-background pr-1.5 pl-2.5 text-sm font-semibold transition-colors hover:border-foreground/40"
+          >
+            {chip.label}
+            <XIcon aria-hidden className="size-3.5 text-muted-foreground" />
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }
 
@@ -151,8 +219,7 @@ export function PokedexExplorerFallback({
   return (
     <div>
       <PokedexFilterBar filters={EMPTY_FILTERS} />
-      <section className="mt-10">
-        <GenerationTabs value={null} />
+      <section className="mt-8">
         <BinderPage>
           <div className="mb-5 flex min-h-9 items-center">
             <p className="font-display text-xl font-bold condensed">

@@ -7,12 +7,33 @@ import {
   type PokemonType,
 } from "@/features/types/data/pokemon-types";
 import { isGeneration, type Generation } from "../data/generations";
+import {
+  isRegion,
+  type FormVariant,
+  type Region,
+} from "../data/regional-forms";
 
 export type Rarity = "common" | "legendary" | "mythical";
 
+/** Present only on regional forms (Vulpix de Alola). */
+export type RegionalFormInfo = {
+  /** Row id in `pokemon`: the form's own sprite and artwork. */
+  pokemonId: number;
+  region: Region;
+  variant: FormVariant | null;
+  /** Species name, printed on the card next to the region stamp: "Vulpix". */
+  baseName: string;
+  /** "Alola" */
+  regionLabel: string;
+  /** "Variedad ardiente" (Paldean Tauros only). */
+  variantLabel: string | null;
+};
+
 export type PokedexEntry = {
+  /** National Pokédex number of the species (shared by its forms). */
   dexNumber: number;
   slug: string;
+  /** Full name: "Pikachu", "Vulpix de Alola". */
   name: string;
   /** "Mouse Pokémon"; null when PokeAPI has no text in this language. */
   genus: string | null;
@@ -20,6 +41,7 @@ export type PokedexEntry = {
   types: PokemonType[];
   rarity: Rarity;
   baseStatTotal: number;
+  form?: RegionalFormInfo;
 };
 
 export function rarityOf(row: {
@@ -36,6 +58,8 @@ export type PokedexFilters = {
   /** Up to two types; a Pokémon must have all of them. */
   types: PokemonType[];
   generation: Generation | null;
+  /** Only the regional forms of this region. */
+  region: Region | null;
 };
 
 export const MAX_TYPE_FILTERS = 2;
@@ -44,6 +68,7 @@ export const EMPTY_FILTERS: PokedexFilters = {
   query: "",
   types: [],
   generation: null,
+  region: null,
 };
 
 /** "#0025" style number used across the app (without the "#"). */
@@ -64,7 +89,8 @@ export function hasActiveFilters(filters: PokedexFilters): boolean {
   return (
     filters.query.trim() !== "" ||
     filters.types.length > 0 ||
-    filters.generation !== null
+    filters.generation !== null ||
+    filters.region !== null
   );
 }
 
@@ -84,18 +110,24 @@ export function filterEntries(
     ) {
       return false;
     }
+    if (filters.region !== null && entry.form?.region !== filters.region) {
+      return false;
+    }
     if (!filters.types.every((type) => entry.types.includes(type))) {
       return false;
     }
     if (query === "") return true;
-    return dexNumber !== null
-      ? entry.dexNumber === dexNumber
-      : normalizeText(entry.name).includes(query);
+    if (dexNumber !== null) return entry.dexNumber === dexNumber;
+    // Name, plus the breed for Paldean Tauros ("ardiente").
+    const haystack = normalizeText(
+      [entry.name, entry.form?.variantLabel ?? ""].join(" "),
+    );
+    return haystack.includes(query);
   });
 }
 
 // ---------------------------------------------------------------------------
-// URL <-> filters: /pokedex?q=pika&types=water,flying&gen=3
+// URL <-> filters: /pokedex?q=pika&types=water,flying&gen=3&form=alola
 // Invalid or unknown values are ignored, never trusted.
 // ---------------------------------------------------------------------------
 
@@ -113,6 +145,9 @@ export function parseFilters(params: SearchParamsLike): PokedexFilters {
     query: (params.get("q") ?? "").slice(0, 50),
     types,
     generation: Number.isInteger(gen) && isGeneration(gen) ? gen : null,
+    region: isRegion(params.get("form"))
+      ? (params.get("form") as Region)
+      : null,
   };
 }
 
@@ -123,6 +158,7 @@ export function serializeFilters(filters: PokedexFilters): string {
   if (filters.types.length > 0) params.set("types", filters.types.join(","));
   if (filters.generation !== null)
     params.set("gen", String(filters.generation));
+  if (filters.region !== null) params.set("form", filters.region);
   // Keep commas readable in the URL: types=water,flying
   return params.toString().replaceAll("%2C", ",");
 }

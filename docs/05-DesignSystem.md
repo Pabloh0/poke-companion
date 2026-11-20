@@ -141,6 +141,11 @@ WCAG AA (`src/features/types/data/pokemon-types.ts`).
 ╚════════════════════════════════════╝
 ```
 
+- **Formas regionales**: el nombre de la especie («Vulpix») y, a su derecha,
+  un **sello de región** en tinta («Alola»), como el símbolo de expansión de
+  una carta alternativa. Mismo número de colección que la original, sprite
+  propio. En los Tauros de Paldea la variedad sustituye a la categoría.
+
 - Rareza: ● común, ★ legendario, ✦ singular (con texto para lectores de
   pantalla). Legendarios y singulares llevan brillo holográfico permanente.
 - Si falta la categoría en el idioma (127 especies recientes en español), la
@@ -186,15 +191,32 @@ WCAG AA (`src/features/types/data/pokemon-types.ts`).
   si son más de tres, en una cuadrícula (las 8 de Eevee: 2 columnas, 3 en `md`
   y `xl`). La carta de la ficha actual no es enlace: lleva un contorno de 3 px
   y `aria-current="page"`. Si no evoluciona, una frase lo dice.
+- **Formas regionales**: si la especie tiene formas, una fila con la original y
+  todas sus formas (la de la ficha actual, recuadrada). En la ficha de una
+  forma, la región que se muestra es la de la forma.
 - **Pasar hoja** (`PokemonPager`): anterior y siguiente con su sprite, como las
   páginas de una carpeta.
 
-### Pestañas de carpeta (`GenerationTabs`)
+### Panel de filtros (`PokedexFilterBar`)
 
-Las generaciones (Todas, I–IX) son pestañas unidas a la página de la carpeta
-que contiene las cartas. Son `input type="radio"` nativos: flechas del teclado
-y lectores de pantalla funcionan sin código extra. Cada pestaña lleva el nombre
-de la región en `title` y para lectores de pantalla.
+Un único panel con una fila por filtro (Buscar, Generación, Tipos, Formas
+regionales), como la hoja índice al principio de una carpeta: el nombre del
+filtro a la izquierda (debajo de `md`, encima) y los controles a la derecha,
+separados por líneas finas.
+
+- **Todo en el mismo plano y alineado.** Cada opción es una casilla con borde
+  del mismo alto (36 px); la elegida se rellena. Nada queda «detrás» de otra
+  cosa: se sustituyeron las pestañas de carpeta por esto a petición del
+  usuario (D-25).
+- Generación y región usan `SegmentedControl` (radios nativos, flechas del
+  teclado): 10 casillas en una fila (5 × 2 en móvil) y 5 casillas.
+- Los tipos, en una rejilla fija de 6 × 3 (3 × 6 en móvil), siempre con la
+  misma forma.
+- Todos los controles ocupan el mismo ancho, así que sus bordes coinciden.
+- En móvil, generación, tipos y región se pliegan tras un botón «Filtros» que
+  muestra cuántos hay activos; la búsqueda queda siempre visible.
+- Encima de las cartas, los filtros activos aparecen como fichas («Fuego ✕»)
+  que se quitan una a una.
 
 ### Pegatinas de separador (filtro de tipos y enlaces de tipo)
 
@@ -209,8 +231,8 @@ atacar solo hay uno.
 ### Calculadora de tipos (`/tipos`)
 
 - Misma cabecera de «lomo de carpeta» que la Pokédex.
-- **Defensa / Ataque** como dos pestañas de carpeta (radios nativos: se cambian
-  con las flechas del teclado).
+- **Defensa / Ataque** con el mismo `SegmentedControl` que los filtros de la
+  Pokédex, y los tipos en la misma rejilla de casillas (3 columnas).
 - Pegatinas de tipo a la izquierda y el resultado a la derecha (debajo en
   móvil). El resultado es una **ficha de referencia impresa** (`MatchupList`):
   el multiplicador en cifras grandes condensadas (×4, ×2, ×1, ×½, ×¼, ×0), su
@@ -271,7 +293,8 @@ del menú: subrayado grueso.
 | `HoloSurface`      | `src/features/pokedex/components/holo-surface.tsx`       | Client |
 | `CardFan`          | `src/features/pokedex/components/card-fan.tsx`           | Server |
 | `PokedexFilterBar` | `src/features/pokedex/components/pokedex-filter-bar.tsx` | Client |
-| `GenerationTabs`   | `src/features/pokedex/components/pokedex-filter-bar.tsx` | Client |
+| `SegmentedControl` | `src/components/ui/segmented-control.tsx`                | Server |
+| `EvolutionLine`    | `src/features/pokedex/components/evolution-line.tsx`     | Server |
 | `BrandMark`        | `src/components/layout/brand-mark.tsx`                   | Server |
 | `SiteHeader`       | `src/components/layout/site-header.tsx`                  | Server |
 | `MainNav`          | `src/components/layout/main-nav.tsx`                     | Client |

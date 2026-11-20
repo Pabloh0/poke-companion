@@ -100,10 +100,10 @@
   },
   "Pokedex": {
     "title": "Pokédex",
-    "description": "All 1025 Pokémon with their number, types and generation. Search by name or number and filter by type or generation.",
-    "intro": "The complete collection: 1025 Pokémon, one per card. Search by name or number, and sort them by type or generation.",
-    "searchLabel": "Search by name or number",
-    "searchPlaceholder": "Pikachu, 25…",
+    "description": "All {species} Pokémon and their {forms} regional forms, with number, types and generation. Search by name or number and filter by type, generation or region.",
+    "intro": "The complete collection: {species} Pokémon and their {forms} regional forms, one per card. Search by name or number, and sort them by type, generation or region.",
+    "searchLabel": "Search",
+    "searchPlaceholder": "Pikachu, 25, Alolan…",
     "generationLabel": "Generation",
     "allGenerations": "All",
     "generations": {
@@ -118,7 +118,7 @@
       "9": "Paldea (IX)"
     },
     "typesLabel": "Types",
-    "typesHint": "Combine up to two.",
+    "typesHint": "Up to two",
     "resultsHeading": "Results",
     "showing": "Showing {shown} of {total}",
     "showMore": "Show more",
@@ -157,7 +157,16 @@
       "7": "Alola",
       "8": "Galar",
       "9": "Paldea"
-    }
+    },
+    "searchHint": "Name or number",
+    "formsLabel": "Regional forms",
+    "formsHint": "Only one region's",
+    "allForms": "All",
+    "filtersButton": "Filters",
+    "removeFilter": "Remove filter: {filter}",
+    "searchChip": "“{query}”",
+    "filtersHeading": "Filters",
+    "generationHint": "By region of origin"
   },
   "Pokemon": {
     "metaDescription": "{name}: types, base stats, abilities and Pokédex entry.",
@@ -193,7 +202,10 @@
     "noEvolution": "{name} does not evolve: it is the only card in its family.",
     "matchupsHeading": "Weaknesses and resistances",
     "matchupsNote": "Based on its types, not counting abilities: Levitate, for example, cancels Ground damage.",
-    "openInCalculator": "Open in the type calculator"
+    "openInCalculator": "Open in the type calculator",
+    "formsHeading": "Regional forms",
+    "formsIntro": "The same species in other regions: a different look, different types and different stats.",
+    "noFormEntry": "This regional form has no Pokédex entry in our data yet."
   },
   "TypeCalculator": {
     "title": "Type calculator",
@@ -244,6 +256,27 @@
       "x05": "Not very effective (×½)",
       "x0": "No effect (×0)",
       "x1": "Normal (×1)"
+    }
+  },
+  "Forms": {
+    "fullName": "{region} {name}",
+    "regionInName": {
+      "alola": "Alolan",
+      "galar": "Galarian",
+      "hisui": "Hisuian",
+      "paldea": "Paldean"
+    },
+    "regions": {
+      "alola": "Alola",
+      "galar": "Galar",
+      "hisui": "Hisui",
+      "paldea": "Paldea"
+    },
+    "formOf": "{region} form",
+    "variants": {
+      "combat": "Combat Breed",
+      "blaze": "Blaze Breed",
+      "aqua": "Aqua Breed"
     }
   }
 }

@@ -5,6 +5,7 @@ import { TypeBadge } from "@/features/types/components/type-badge";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { formatDexNumber, type PokedexEntry } from "../lib/filters";
+import { imageIdOf } from "../lib/regional";
 import { spriteUrl } from "../lib/sprites";
 
 /** National Pokédex size: the "set" every card belongs to. */
@@ -35,6 +36,7 @@ export function PokemonCard({
   priority?: boolean;
 }) {
   const t = useTranslations("Pokedex");
+  const tForms = useTranslations("Forms");
   const [first, second = first] = entry.types;
   const frameStyle = {
     "--t1": `var(--color-type-${first})`,
@@ -53,13 +55,32 @@ export function PokemonCard({
       )}
     >
       <div className="flex h-full flex-col overflow-hidden rounded-[10px] bg-stock text-stock-ink">
-        <header className="px-2.5 pt-2">
+        <header className="flex items-center gap-1.5 px-2.5 pt-2">
           <h3
             title={entry.name}
-            className="truncate font-display text-[1.05rem] leading-tight font-extrabold condensed"
+            className="min-w-0 truncate font-display text-[1.05rem] leading-tight font-extrabold condensed"
           >
-            {entry.name}
+            {entry.form ? (
+              <>
+                {entry.form.baseName}
+                <span className="sr-only">
+                  , {tForms("formOf", { region: entry.form.regionLabel })}
+                </span>
+              </>
+            ) : (
+              entry.name
+            )}
           </h3>
+          {/* Regional forms carry a region stamp, like the set symbol of an
+              alternate card: same species, same number, different region. */}
+          {entry.form && (
+            <span
+              aria-hidden
+              className="ml-auto shrink-0 rounded-[3px] bg-stock-ink px-1 py-px text-[0.6rem] leading-tight font-bold text-stock condensed"
+            >
+              {entry.form.regionLabel}
+            </span>
+          )}
         </header>
 
         {/* Art window: tinted with the main type, with a printed halftone. */}
@@ -71,7 +92,7 @@ export function PokemonCard({
           {/* Decorative: the name is in the header. Tiny pixel-art PNGs from
               PokeAPI skip Next's image optimizer (unoptimized). */}
           <Image
-            src={spriteUrl(entry.dexNumber)}
+            src={spriteUrl(imageIdOf(entry))}
             alt=""
             width={96}
             height={96}
@@ -109,7 +130,8 @@ export function PokemonCard({
 
         <div className="flex min-h-[1.25rem] items-baseline gap-1.5 px-2.5 pt-1">
           <p className="min-w-0 flex-1 truncate font-serif text-[0.8rem] text-stock-ink-muted italic">
-            {entry.genus}
+            {/* Paldean Tauros: the breed instead of the category. */}
+            {entry.form?.variantLabel ?? entry.genus}
           </p>
           <StatTotal
             value={entry.baseStatTotal}
@@ -207,7 +229,7 @@ export function PokemonGrid({ entries }: { entries: readonly PokedexEntry[] }) {
   return (
     <ul className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 lg:grid-cols-5">
       {entries.map((entry, index) => (
-        <li key={entry.dexNumber}>
+        <li key={entry.slug}>
           <PokemonCardLink entry={entry} priority={index < 10} />
         </li>
       ))}

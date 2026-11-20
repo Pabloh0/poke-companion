@@ -5,11 +5,16 @@ import {
   PokedexExplorer,
   PokedexExplorerFallback,
 } from "@/features/pokedex/components/pokedex-explorer";
+import { comparePokedexOrder } from "@/features/pokedex/lib/regional";
 import { getPokedexEntries } from "@/features/pokedex/server/get-pokedex-entries";
+import { getRegionalForms } from "@/features/pokedex/server/get-regional-forms";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Pokedex");
-  return { title: t("title"), description: t("description") };
+  return {
+    title: t("title"),
+    description: t("description", { species: 1025, forms: 57 }),
+  };
 }
 
 export default async function PokedexPage() {
@@ -17,7 +22,12 @@ export default async function PokedexPage() {
     getLocale(),
     getTranslations("Pokedex"),
   ]);
-  const entries = await getPokedexEntries(locale);
+  const [species, forms] = await Promise.all([
+    getPokedexEntries(locale),
+    getRegionalForms(locale),
+  ]);
+  // Each regional form right after its original: Vulpix, Vulpix de Alola…
+  const entries = [...species, ...forms].sort(comparePokedexOrder);
 
   return (
     <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 sm:px-6 sm:pt-14">
@@ -27,7 +37,7 @@ export default async function PokedexPage() {
           {t("title")}
         </h1>
         <p className="max-w-[44ch] font-serif text-lg leading-snug text-muted-foreground">
-          {t("intro")}
+          {t("intro", { species: species.length, forms: forms.length })}
         </p>
       </header>
       {/* The explorer reads the URL (?q=…&types=…) in the browser; until then

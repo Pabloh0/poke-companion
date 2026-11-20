@@ -111,8 +111,32 @@ producción, Chrome):
   1025 fichas sin scroll horizontal a 320, 390 y 1280 px. Sin errores en
   consola.
 
-Tests unitarios actuales (`npm run test`, 69): transformación de datos de
-PokeAPI (12), conexión segura (4), filtros y rareza de la Pokédex (12),
+Verificación de las formas regionales y el nuevo panel de filtros (réplica de
+Supabase, build de producción, Chrome):
+
+- La consulta a la réplica devuelve las 57 formas con sus tipos; el listado
+  muestra 1082 cartas.
+- Búsquedas: «alola» → 18; «vulpix» y «#37» → Vulpix y Vulpix de Alola;
+  «ardiente» → Tauros de Paldea. Hisui → 16 (URL `?form=hisui`); con las
+  flechas, Paldea; Paldea + Agua → la variedad acuática; quitar la ficha de la
+  región conserva el tipo.
+- Ficha de Vulpix de Alola: Hielo, región Alola, aviso en lugar de entrada,
+  línea Vulpix de Alola → Ninetales de Alola, debilidades Fuego, Lucha, Roca y
+  Acero; enlace a la forma original. Tauros: 4 cartas con sus variedades.
+  `/pokedex/charizard-mega-x` → página 404.
+- Las 1082 cartas a 320, 360, 390, 640, 768, 1024 y 1280 px: ningún tipo tapa
+  el total y el sello de región no pisa el nombre. Ningún botón del panel ni de
+  la calculadora corta su texto (también en inglés). Esta prueba destapó que a
+  640 px la etiqueta a la izquierda no dejaba sitio; desde entonces va encima
+  hasta `md`.
+- Las 114 fichas de formas (2 idiomas) a 320, 390 y 1280 px sin scroll
+  horizontal y con su carta marcada. Regresión de las 340 líneas evolutivas y
+  del resto de páginas. Sin errores en consola.
+
+Tests unitarios actuales (`npm run test`, 82): transformación de datos de
+PokeAPI (12), conexión segura (4), filtros y rareza de la Pokédex (16, con
+formas regionales), formas regionales (9: lista, nombres, orden, línea
+evolutiva regional),
 lógica de la ficha (8), árbol evolutivo (10: líneas rectas, ramas, números
 desordenados como Pichu → Pikachu, especies sin evolución, cadenas
 circulares), efectividades de tipos (13: totales e inmunidades de la tabla,

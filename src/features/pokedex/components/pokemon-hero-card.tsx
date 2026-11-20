@@ -29,9 +29,19 @@ export function PokemonHeroCard({ pokemon }: { pokemon: PokemonDetail }) {
       className="holo-card relative mx-auto aspect-[5/7] w-full max-w-sm rounded-[22px] bg-[linear-gradient(135deg,var(--t1),var(--t2))] p-2 shadow-[0_2px_2px_rgb(20_24_40/0.12),0_24px_48px_-20px_rgb(20_24_40/0.55)]"
     >
       <div className="flex h-full flex-col overflow-hidden rounded-[15px] bg-stock text-stock-ink">
-        <p className="truncate px-4 pt-3 font-display text-2xl leading-tight font-extrabold condensed">
-          {pokemon.name}
-        </p>
+        <div className="flex items-center gap-2 px-4 pt-3">
+          <p className="min-w-0 truncate font-display text-2xl leading-tight font-extrabold condensed">
+            {pokemon.form?.baseName ?? pokemon.name}
+          </p>
+          {pokemon.form && (
+            <span
+              aria-hidden
+              className="ml-auto shrink-0 rounded-[3px] bg-stock-ink px-1.5 py-0.5 text-xs leading-tight font-bold text-stock condensed"
+            >
+              {pokemon.form.regionLabel}
+            </span>
+          )}
+        </div>
         <div className="relative mx-3 mt-2 flex min-h-0 flex-1 items-center justify-center overflow-hidden rounded-[10px] bg-[radial-gradient(circle_at_50%_60%,color-mix(in_oklab,var(--t1)_40%,white),color-mix(in_oklab,var(--t1)_14%,white)_72%)] ring-1 ring-stock-ink/10">
           <div
             aria-hidden
@@ -62,10 +72,10 @@ export function PokemonHeroCard({ pokemon }: { pokemon: PokemonDetail }) {
           </p>
         </div>
         <p
-          lang={pokemon.genus?.locale}
+          lang={pokemon.form?.variantLabel ? undefined : pokemon.genus?.locale}
           className="min-h-7 truncate px-4 pt-1.5 font-serif text-base text-stock-ink-muted italic"
         >
-          {pokemon.genus?.text}
+          {pokemon.form?.variantLabel ?? pokemon.genus?.text}
         </p>
         <footer className="mt-2 flex items-center justify-between border-t border-stock-ink/10 bg-stock-shade px-4 py-2 text-xs text-stock-ink-muted">
           <span className="font-semibold condensed tabular-nums">

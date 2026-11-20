@@ -1,6 +1,6 @@
 # 01 · Visión general del proyecto
 
-> Última actualización: 2026-11-20 · Estado: **Pokédex y calculadora de tipos listas; línea evolutiva en la ficha**
+> Última actualización: 2026-11-20 · Estado: **Pokédex (con formas regionales) y calculadora de tipos listas; línea evolutiva en la ficha**
 
 ## Qué es PokéCompanion
 

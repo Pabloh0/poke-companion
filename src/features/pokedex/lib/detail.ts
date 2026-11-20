@@ -4,7 +4,7 @@
  */
 import type { PokemonType } from "@/features/types/data/pokemon-types";
 import type { Generation } from "../data/generations";
-import type { PokedexEntry, Rarity } from "./filters";
+import type { PokedexEntry, Rarity, RegionalFormInfo } from "./filters";
 
 export const STAT_ORDER = [
   "hp",
@@ -41,6 +41,8 @@ export type PokemonDetail = {
   stats: { stat: StatName; value: number }[];
   baseStatTotal: number;
   abilities: { slug: string; name: string; isHidden: boolean }[];
+  /** Regional forms only (Vulpix de Alola). */
+  form: RegionalFormInfo | null;
 };
 
 /**

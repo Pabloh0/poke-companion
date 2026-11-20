@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { formatDexNumber, type PokedexEntry } from "../lib/filters";
+import { imageIdOf } from "../lib/regional";
 import { spriteUrl } from "../lib/sprites";
 
 /** Previous / next species, like turning the pages of a binder. */
@@ -56,7 +57,7 @@ function PagerLink({
         className="size-5 shrink-0 text-muted-foreground transition-transform group-hover:text-foreground motion-safe:group-hover:translate-x-0.5"
       />
       <Image
-        src={spriteUrl(entry.dexNumber)}
+        src={spriteUrl(imageIdOf(entry))}
         alt=""
         width={96}
         height={96}

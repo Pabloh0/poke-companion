@@ -4,8 +4,8 @@ import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
+import { SegmentedControl } from "@/components/ui/segmented-control";
 import { Link } from "@/i18n/navigation";
-import { cn } from "@/lib/utils";
 import { POKEMON_TYPES } from "../data/pokemon-types";
 import {
   EMPTY_CALCULATOR,
@@ -14,7 +14,6 @@ import {
   pickType,
   serializeCalculator,
   switchMode,
-  type CalculatorMode,
   type CalculatorState,
 } from "../lib/calculator";
 import {
@@ -74,30 +73,51 @@ function CalculatorPanel({
       <h2 id="calculator-heading" className="sr-only">
         {t("calculatorHeading")}
       </h2>
-      <ModeTabs
-        value={state.mode}
-        onChange={
-          onChange ? (mode) => onChange(switchMode(state, mode)) : undefined
-        }
-      />
-      <div className="grid gap-x-12 gap-y-10 rounded-xl rounded-tl-none border bg-card p-4 sm:p-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
-        <fieldset className="min-w-0">
-          <legend className="text-sm font-semibold">
-            {t("typesLabel")}{" "}
-            <span className="font-normal text-muted-foreground">
-              {t(`hint.${state.mode}`)}
-            </span>
-          </legend>
-          <div className="mt-2.5 flex flex-wrap gap-1.5">
-            {POKEMON_TYPES.map((type) => (
-              <TypeToggle
-                key={type}
-                type={type}
-                selected={state.types.includes(type)}
-                disabled={disabled}
-                onToggle={() => onChange?.(pickType(state, type))}
-              />
-            ))}
+      <div className="grid gap-x-12 gap-y-10 rounded-xl border bg-card p-4 sm:p-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
+        <div className="min-w-0 space-y-6">
+          <div role="group" aria-labelledby="calculator-mode-label">
+            <p
+              id="calculator-mode-label"
+              className="font-display text-lg leading-tight font-bold condensed"
+            >
+              {t("modeLabel")}
+            </p>
+            <SegmentedControl
+              name="calculator-mode"
+              className="mt-2.5 grid-cols-2"
+              value={state.mode}
+              onChange={
+                onChange
+                  ? (mode) => onChange(switchMode(state, mode))
+                  : undefined
+              }
+              options={(["defense", "attack"] as const).map((mode) => ({
+                value: mode,
+                label: t(`modes.${mode}`),
+              }))}
+            />
+          </div>
+          <div role="group" aria-labelledby="calculator-types-label">
+            <p id="calculator-types-label">
+              <span className="block font-display text-lg leading-tight font-bold condensed">
+                {t("typesLabel")}
+              </span>
+              <span className="block text-xs text-muted-foreground">
+                {t(`hint.${state.mode}`)}
+              </span>
+            </p>
+            <div className="mt-2.5 grid grid-cols-3 gap-1.5 sm:grid-cols-6 lg:grid-cols-3">
+              {POKEMON_TYPES.map((type) => (
+                <TypeToggle
+                  key={type}
+                  type={type}
+                  selected={state.types.includes(type)}
+                  disabled={disabled}
+                  className="w-full"
+                  onToggle={() => onChange?.(pickType(state, type))}
+                />
+              ))}
+            </div>
           </div>
           {state.types.length > 0 && (
             <Button
@@ -109,55 +129,13 @@ function CalculatorPanel({
               {t("clear")}
             </Button>
           )}
-        </fieldset>
+        </div>
 
         <div aria-live="polite" className="min-w-0">
           <Results state={state} />
         </div>
       </div>
     </section>
-  );
-}
-
-/** Defense / Attack as two binder tabs (native radios, like the Pokédex). */
-function ModeTabs({
-  value,
-  onChange,
-}: {
-  value: CalculatorMode;
-  onChange?: (mode: CalculatorMode) => void;
-}) {
-  const t = useTranslations("TypeCalculator");
-  return (
-    <fieldset className="min-w-0">
-      <legend className="sr-only">{t("modeLabel")}</legend>
-      <div className="-mb-px flex gap-0.5 px-1 pt-1">
-        {(["defense", "attack"] as const).map((mode) => {
-          const checked = mode === value;
-          return (
-            <label
-              key={mode}
-              className={cn(
-                "relative shrink-0 cursor-pointer rounded-t-md border border-b-0 px-4 pt-2 pb-2.5 text-base font-bold transition-colors has-[:disabled]:cursor-not-allowed has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ring",
-                checked
-                  ? "z-10 border-border bg-card text-foreground"
-                  : "border-transparent bg-muted/70 text-muted-foreground hover:text-foreground",
-              )}
-            >
-              <input
-                type="radio"
-                name="calculator-mode"
-                className="sr-only"
-                checked={checked}
-                disabled={!onChange}
-                onChange={() => onChange?.(mode)}
-              />
-              <span className="condensed">{t(`modes.${mode}`)}</span>
-            </label>
-          );
-        })}
-      </div>
-    </fieldset>
   );
 }
 
