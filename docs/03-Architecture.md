@@ -41,6 +41,13 @@ src/
 ├── config/                   Configuración del sitio
 ├── lib/                      Utilidades genéricas (cn)
 └── proxy.ts                  Se ejecuta antes de cada petición
+
+scripts/
+└── seed-pokedex/             Importación de datos de PokeAPI (ver 04-DatabaseDesign.md)
+supabase/
+├── config.toml               Configuración del CLI de Supabase
+├── migrations/               Cambios de esquema versionados
+└── certs/                    Certificado público de Supabase (para TLS)
 ```
 
 Dentro de cada funcionalidad se repite el mismo patrón cuando haga falta:

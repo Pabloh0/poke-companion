@@ -42,3 +42,7 @@ next-env.d.ts
 
 # allow the documented example file
 !.env.example
+
+# supabase cli
+supabase/.temp/
+supabase/.branches/

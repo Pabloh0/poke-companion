@@ -20,18 +20,20 @@ pronto y no tienen riesgos de seguridad.
 - [x] Tokens de diseño, tipografías autoalojadas, colores de tipo.
 - [x] Cabecera, pie con aviso legal, inicio, 404.
 - [x] CI en GitHub Actions.
-- [ ] Repositorio en GitHub y primer push (lo hace el desarrollador).
+- [x] Repositorio en GitHub y primer push.
 - [ ] Proyecto conectado en Vercel y primer despliegue.
 
-## Fase 2 · Pokédex 🔜
+## Fase 2 · Pokédex 🚧
 
-- [ ] Proyecto de Supabase (desarrollo) y CLI de Supabase en local.
-- [ ] Migraciones de los datos de referencia (tipos, especies, formas,
-      estadísticas, habilidades) con RLS.
-- [ ] Script de importación desde los datos de PokeAPI (idempotente).
+- [x] CLI de Supabase en el proyecto (`supabase/config.toml`).
+- [x] Migración de los datos de referencia (tipos, especies, formas,
+      estadísticas, habilidades, traducciones) con RLS.
+- [x] Script de importación desde PokeAPI (idempotente, transaccional, TLS
+      verificado), con tests (Vitest) y verificado contra PostgreSQL 17.
+- [ ] Proyecto de Supabase creado, migración aplicada y datos importados.
+- [ ] Cliente de Supabase en la web (clave publicable) y tipos generados.
 - [ ] Listado con búsqueda y filtros por tipo y generación.
 - [ ] Ficha de Pokémon.
-- [ ] Primeros tests (Vitest) de la lógica de filtrado.
 
 ## Fase 3 · Calculadora de tipos
 

@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   check:
-    name: Lint, types, format and build
+    name: Lint, types, format, tests and build
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -41,6 +41,9 @@ jobs:
 
       - name: Format check
         run: npm run format:check
+
+      - name: Unit tests
+        run: npm run test
 
       - name: Build
         run: npm run build

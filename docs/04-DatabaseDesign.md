@@ -1,47 +1,102 @@
 # 04 · Diseño de base de datos
 
-> Última actualización: 2026-11-20 · Estado: **propuesta, sin implementar**
-
-Este documento recoge el modelo previsto. Se validará y ajustará al empezar la
-fase 2 (datos de referencia) y la fase 6 (datos de usuario). Hasta entonces no
-existe ninguna tabla ni migración.
+> Última actualización: 2026-11-20
+> Estado: **datos de referencia implementados** (fase 2) · datos de usuario: propuesta
 
 ## Principios
 
-- **PostgreSQL en Supabase**, con cambios de esquema siempre mediante
-  **migraciones** versionadas en el repositorio (`supabase/migrations/`).
+- **PostgreSQL 17 en Supabase.** Los cambios de esquema se hacen siempre con
+  **migraciones** versionadas en `supabase/migrations/` y se aplican con
+  `npx supabase db push --remote` (sin `--remote`, el CLI v3 apunta a una
+  base de datos local con Docker).
 - **Row Level Security (RLS) activado en todas las tablas**, sin excepción.
-  - Datos de referencia (Pokémon, tipos…): lectura pública, escritura solo
-    desde el script de importación (clave de servicio, nunca en el cliente).
-  - Datos de usuario: cada usuario solo lee y modifica lo suyo, salvo lo que
-    marque explícitamente como público.
-- Identificadores de PokeAPI como claves primarias en los datos de referencia,
-  para que reimportar sea idempotente.
-- Textos traducibles en tablas `*_translations` (`language` = `es` | `en`).
+  - Datos de referencia: la web (`anon`, `authenticated`) **solo puede leer**.
+    Además de RLS, se les retiran los permisos de escritura (defensa en
+    profundidad).
+  - Datos de usuario (fase 6): cada usuario solo lee y modifica lo suyo.
+- Los ids de los datos de referencia son los de PokeAPI, así que reimportar es
+  idempotente.
+- Textos traducibles en tablas `*_translations` con columna `locale`
+  (`es` | `en`, dominio `app_locale`).
 
-## Datos de referencia (fase 2 en adelante)
+## Datos de referencia (implementado)
+
+Migración: `supabase/migrations/20261120120000_reference_data.sql`.
 
 ```text
-types ─────────────┐
-  id, slug          │
-                    ├── type_efficacy (attacking_type_id, defending_type_id, multiplier)
-                    │
-pokemon_species ────┼── pokemon (formas: id, species_id, is_default, height, weight, sprite_url…)
-  id, slug,         │     ├── pokemon_types (pokemon_id, type_id, slot)
-  generation,       │     ├── pokemon_stats (pokemon_id, stat, base_value)
-  evolution_chain_id│     ├── pokemon_abilities (pokemon_id, ability_id, is_hidden, slot)
-                    │     └── pokemon_moves (pokemon_id, move_id, method, level, version_group)
-                    │
-evolution_chains ───┘── evolutions (from_species_id, to_species_id, trigger, min_level, item_id…)
+generations (id, slug)
 
-abilities (id, slug)      moves (id, slug, type_id, category, power, accuracy, pp, priority)
-items (id, slug, category, sprite_url)
+types (id, slug)                         ← solo los 18 tipos de combate
+└── type_translations (type_id, locale, name)
 
-*_translations: species_translations, ability_translations, move_translations,
-                item_translations, type_translations (id, language, name, description)
+pokemon_species (id = nº Pokédex, slug, generation_id, evolves_from_species_id,
+│                evolution_chain_id, is_baby, is_legendary, is_mythical)
+├── pokemon_species_translations (species_id, locale, name, genus, flavor_text)
+└── pokemon (id, slug, species_id, is_default, height_dm, weight_hg, base_experience)
+    ├── pokemon_types     (pokemon_id, slot 1–2, type_id)
+    ├── pokemon_stats     (pokemon_id, stat, base_value 1–255, effort 0–3)
+    └── pokemon_abilities (pokemon_id, slot 1–3, ability_id, is_hidden)
+
+abilities (id, slug, generation_id)
+└── ability_translations (ability_id, locale, name)
 ```
 
-## Datos de usuario (fase 6 en adelante)
+Detalles que conviene saber:
+
+- **Especie vs. Pokémon.** La especie es lo que numera la Pokédex (Pikachu es
+  la #25). Cada especie tiene una forma por defecto (`is_default`, una sola
+  por especie, garantizado por un índice único parcial) y puede tener formas
+  alternativas (Alola, Mega, Gigamax…).
+- **Unidades originales**: altura en decímetros y peso en hectogramos (como en
+  los juegos). La conversión a m/kg se hace al mostrarlos.
+- **Textos que faltan**: PokeAPI no tiene categoría ni descripción en español
+  para 127 especies recientes. Se guardan como `null` y la interfaz muestra el
+  texto en inglés marcado con `lang="en"`.
+- **Evoluciones "hacia atrás"**: Pikachu (#25) evoluciona de Pichu (#172). La
+  clave foránea `evolves_from_species_id` es _deferrable_ para poder
+  comprobarla al final de la transacción de importación.
+- **Búsqueda por nombre**: índice sobre `(locale, lower(name))` para búsquedas
+  por prefijo ("pika" → Pikachu).
+- Las etiquetas de las estadísticas ("PS", "Ataque"…) son textos de la
+  interfaz y viven en `src/messages/`, no en la base de datos.
+
+### Volumen actual
+
+| Tabla                          | Filas |
+| ------------------------------ | ----- |
+| `pokemon_species`              | 1025  |
+| `pokemon_species_translations` | 2050  |
+| `pokemon`                      | 1351  |
+| `pokemon_types`                | 2116  |
+| `pokemon_stats`                | 8106  |
+| `abilities`                    | 314   |
+| `pokemon_abilities`            | 2943  |
+
+## Importación de datos
+
+Script: `scripts/seed-pokedex/` · comando: `npm run db:seed`.
+
+1. Descarga los CSV de PokeAPI desde **un commit fijo** de su repositorio
+   (`POKEAPI_COMMIT` en `sources.ts`): la importación siempre da el mismo
+   resultado. Para actualizar datos se cambia ese commit a propósito.
+2. Los transforma con funciones puras (`transform.ts`, con tests). Si algo no
+   cuadra (un tipo desconocido, una especie sin nombre en español…), **falla
+   en lugar de importar datos rotos**.
+3. Escribe todo en **una sola transacción**: o se aplica entero o no se aplica
+   nada. Las entidades (especies, Pokémon, habilidades) se actualizan por id;
+   traducciones y relaciones se reemplazan para que lo que desaparezca en
+   origen desaparezca también aquí.
+4. Se conecta directamente a PostgreSQL con TLS y **verificación completa del
+   certificado** (`verify-full`) usando el certificado de Supabase.
+
+`npm run db:seed -- --dry-run` descarga y transforma sin escribir nada.
+
+Por qué no se usa `supabase/seed.sql` con `db push --include-seed`: el CLI de
+Supabase solo ejecuta cada archivo de seed una vez; si el archivo cambia, se
+limita a actualizar su huella sin ejecutar los datos nuevos (comprobado en el
+código fuente del CLI v3). La base de datos quedaría desactualizada sin avisar.
+
+## Datos de usuario (fase 6, propuesta)
 
 ```text
 auth.users (Supabase Auth)
@@ -52,7 +107,7 @@ auth.users (Supabase Auth)
           └── collection_entries (owner_id, pokemon_id, is_shiny, caught_at)
 ```
 
-Políticas RLS previstas (resumen):
+Políticas RLS previstas:
 
 | Tabla                | Leer                               | Crear / editar / borrar  |
 | -------------------- | ---------------------------------- | ------------------------ |

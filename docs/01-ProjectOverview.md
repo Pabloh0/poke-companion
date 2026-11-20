@@ -1,6 +1,6 @@
 # 01 · Visión general del proyecto
 
-> Última actualización: 2026-11-20 · Estado: **Fase 1 (base técnica) completada**
+> Última actualización: 2026-11-20 · Estado: **Fase 2 (Pokédex) en curso**
 
 ## Qué es PokéCompanion
 
@@ -76,4 +76,7 @@ Lo que existe hoy y funciona (verificado con build de producción):
 - Página 404 real (código 404) para direcciones inexistentes.
 - CI en GitHub Actions: lint, tipos, formato y build.
 
-Todavía **no** hay base de datos, autenticación ni datos de Pokémon.
+- Esquema de base de datos de la Pokédex y script de importación de datos de
+  PokeAPI, verificados contra PostgreSQL 17 (pendiente de aplicar en Supabase).
+
+Todavía **no** hay páginas de Pokédex ni autenticación.

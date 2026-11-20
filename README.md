@@ -10,7 +10,7 @@ independiente, en desarrollo.
 
 ## Requisitos
 
-- Node.js 20.9 o superior (recomendado: 22, ver `.nvmrc`)
+- Node.js 22.12 o superior (ver `.nvmrc`)
 - npm 10 o superior
 - Git
 
@@ -25,16 +25,37 @@ Abre <http://localhost:3000> (español) o <http://localhost:3000/en> (inglés).
 
 ## Scripts
 
-| Comando                | Qué hace                                           |
-| ---------------------- | -------------------------------------------------- |
-| `npm run dev`          | Servidor de desarrollo con recarga en caliente     |
-| `npm run build`        | Build de producción                                |
-| `npm run start`        | Sirve el build de producción                       |
-| `npm run lint`         | ESLint                                             |
-| `npm run typecheck`    | Genera los tipos de rutas y comprueba TypeScript   |
-| `npm run format`       | Formatea todo el código con Prettier               |
-| `npm run format:check` | Comprueba el formato sin modificar nada            |
-| `npm run check`        | Lint + tipos + formato (lo mismo que comprueba CI) |
+| Comando                | Qué hace                                         |
+| ---------------------- | ------------------------------------------------ |
+| `npm run dev`          | Servidor de desarrollo con recarga en caliente   |
+| `npm run build`        | Build de producción                              |
+| `npm run start`        | Sirve el build de producción                     |
+| `npm run lint`         | ESLint                                           |
+| `npm run typecheck`    | Genera los tipos de rutas y comprueba TypeScript |
+| `npm run format`       | Formatea todo el código con Prettier             |
+| `npm run format:check` | Comprueba el formato sin modificar nada          |
+| `npm run test`         | Tests unitarios (Vitest)                         |
+| `npm run check`        | Lint + tipos + formato + tests (lo mismo que CI) |
+| `npm run db:seed`      | Importa los datos de la Pokédex desde PokeAPI    |
+
+## Base de datos (Supabase)
+
+Primera vez:
+
+1. Copia `.env.example` como `.env.local` y rellena `SUPABASE_DB_URL`
+   (Supabase → **Connect** → **Session pooler**).
+2. Descarga el certificado de Supabase y guárdalo como
+   `supabase/certs/prod-ca-2021.crt` (ver `supabase/certs/README.md`).
+3. Aplica las migraciones e importa los datos:
+
+```bash
+npx supabase login
+npx supabase link --project-ref <id-del-proyecto>
+npx supabase db push --remote
+npm run db:seed
+```
+
+`npm run db:seed` se puede repetir cuando quieras: siempre deja los mismos datos.
 
 ## Estructura
 

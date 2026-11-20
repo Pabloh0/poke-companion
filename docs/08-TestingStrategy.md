@@ -23,6 +23,20 @@ Verificación manual realizada al cerrar la fase 1 (build de producción con
 - Los 18 chips de tipo se renderizan; el selector de idioma marca el actual.
 - Captura visual en tema oscuro y claro, escritorio y móvil.
 
+Verificación de la fase 2 (base de datos), contra un PostgreSQL 17 real local
+con los roles `anon` y `authenticated` de Supabase simulados:
+
+- La migración se aplica con un rol **no superusuario** (como en Supabase).
+- La importación completa tarda ~2 s y, ejecutada **dos veces**, deja
+  exactamente los mismos datos (idempotente).
+- Si la importación falla en el último paso, **no queda ningún cambio**
+  (transacción revertida).
+- `anon` puede leer; `insert`, `update` y `delete` dan _permission denied_.
+- Todas las tablas de `public` tienen RLS activado.
+
+Tests unitarios actuales (`npm run test`): transformación de datos de PokeAPI
+(12) y configuración segura de la conexión (4).
+
 ## Qué se añadirá y cuándo
 
 | Nivel             | Herramienta                  | Para qué                                                        | Desde  |
