@@ -92,6 +92,8 @@ por tipo para cumplir WCAG AA (≥ 4,5:1); está en
 | Cuerpo  | **Atkinson Hyperlegible Next** (variable) | Diseñada para máxima legibilidad (Braille Institute); ideal para datos densos.          |
 
 - Clases: `font-display` (títulos) y `font-sans` (cuerpo, por defecto).
+- Atkinson Hyperlegible dibuja el cero con una barra para no confundirlo con la
+  O: es intencionado.
 - Los `h1`–`h3` usan `font-display` automáticamente; para títulos de elementos
   pequeños dentro de listas se puede volver a `font-sans` en negrita.
 - Números en tablas y estadísticas: `tabular-nums` para que las cifras se alineen.
@@ -111,6 +113,16 @@ Escala (rem): 0,75 · 0,875 · 1 · 1,125 · 1,25 · 1,5 · 1,875 · 2,25 · 3 �
 - Ancho máximo de contenido: `max-w-6xl` (72 rem), alineado a la izquierda.
 - Espaciado en múltiplos de 4 px (escala de Tailwind).
 
+## Patrones
+
+- **Chips de tipo como filtro**: botones con `aria-pressed`. Sin seleccionar,
+  muestran un punto del color del tipo; seleccionados, se rellenan con él.
+  Al llegar al límite (dos tipos), los demás se deshabilitan.
+- **Sprites pixel art**: se muestran a su tamaño nativo (96 px) con
+  `image-rendering: pixelated`, y con `alt=""` porque el nombre va justo debajo.
+- **Cabecera en móvil**: por debajo de `sm` solo se ve el símbolo de la marca,
+  para que el menú, el idioma y el tema quepan siempre (comprobado a 360 px).
+
 ## Movimiento
 
 - Una sola animación orquestada por página. En el inicio: los 18 chips de tipo
@@ -120,15 +132,18 @@ Escala (rem): 0,75 · 0,875 · 1 · 1,125 · 1,25 · 1,5 · 1,875 · 2,25 · 3 �
 
 ## Componentes existentes
 
-| Componente       | Ubicación                                      | Tipo   |
-| ---------------- | ---------------------------------------------- | ------ |
-| `Button`         | `src/components/ui/button.tsx` (shadcn)        | Server |
-| `TypeBadge`      | `src/features/types/components/type-badge.tsx` | Server |
-| `BrandMark`      | `src/components/layout/brand-mark.tsx`         | Server |
-| `SiteHeader`     | `src/components/layout/site-header.tsx`        | Server |
-| `SiteFooter`     | `src/components/layout/site-footer.tsx`        | Server |
-| `LocaleSwitcher` | `src/components/layout/locale-switcher.tsx`    | Client |
-| `ThemeToggle`    | `src/components/layout/theme-toggle.tsx`       | Client |
+| Componente         | Ubicación                                                | Tipo   |
+| ------------------ | -------------------------------------------------------- | ------ |
+| `Button`           | `src/components/ui/button.tsx` (shadcn)                  | Server |
+| `TypeBadge`        | `src/features/types/components/type-badge.tsx`           | Server |
+| `PokemonCard`      | `src/features/pokedex/components/pokemon-card.tsx`       | Server |
+| `PokedexFilterBar` | `src/features/pokedex/components/pokedex-filter-bar.tsx` | Client |
+| `MainNav`          | `src/components/layout/main-nav.tsx`                     | Client |
+| `BrandMark`        | `src/components/layout/brand-mark.tsx`                   | Server |
+| `SiteHeader`       | `src/components/layout/site-header.tsx`                  | Server |
+| `SiteFooter`       | `src/components/layout/site-footer.tsx`                  | Server |
+| `LocaleSwitcher`   | `src/components/layout/locale-switcher.tsx`              | Client |
+| `ThemeToggle`      | `src/components/layout/theme-toggle.tsx`                 | Client |
 
 Para añadir componentes de shadcn/ui: `npx shadcn@latest add <componente>`.
 Después, revisar que usa los tokens del proyecto (no colores fijos).

@@ -53,7 +53,13 @@ export default async function LocaleLayout({
       <body className="flex min-h-dvh flex-col">
         {/* Only the namespaces used by Client Components are sent to the
             browser; Server Components read the rest on the server. */}
-        <NextIntlClientProvider messages={{ Header: messages.Header }}>
+        <NextIntlClientProvider
+          messages={{
+            Header: messages.Header,
+            Pokedex: messages.Pokedex,
+            Types: messages.Types,
+          }}
+        >
           <a
             href={`#${mainId}`}
             className="sr-only z-50 rounded-md bg-primary px-4 py-2 font-semibold text-primary-foreground focus:not-sr-only focus:fixed focus:top-3 focus:left-3"

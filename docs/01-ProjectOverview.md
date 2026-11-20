@@ -76,7 +76,9 @@ Lo que existe hoy y funciona (verificado con build de producción):
 - Página 404 real (código 404) para direcciones inexistentes.
 - CI en GitHub Actions: lint, tipos, formato y build.
 
-- Esquema de base de datos de la Pokédex y script de importación de datos de
-  PokeAPI, verificados contra PostgreSQL 17 (pendiente de aplicar en Supabase).
+- Base de datos en Supabase con los datos de la Pokédex (1025 especies, 1351
+  formas) importados desde PokeAPI.
+- Pokédex: listado con búsqueda por nombre o número y filtros por tipo y
+  generación.
 
-Todavía **no** hay páginas de Pokédex ni autenticación.
+Todavía **no** hay ficha de cada Pokémon ni autenticación.

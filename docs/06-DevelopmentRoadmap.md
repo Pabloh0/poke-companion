@@ -30,10 +30,12 @@ pronto y no tienen riesgos de seguridad.
       estadísticas, habilidades, traducciones) con RLS.
 - [x] Script de importación desde PokeAPI (idempotente, transaccional, TLS
       verificado), con tests (Vitest) y verificado contra PostgreSQL 17.
-- [ ] Proyecto de Supabase creado, migración aplicada y datos importados.
-- [ ] Cliente de Supabase en la web (clave publicable) y tipos generados.
-- [ ] Listado con búsqueda y filtros por tipo y generación.
-- [ ] Ficha de Pokémon.
+- [x] Proyecto de Supabase creado (París), migración aplicada y datos importados.
+- [x] Cliente de Supabase en la web (clave publicable) y tipos generados.
+- [x] Listado con búsqueda (nombre o número, sin acentos), filtros por hasta
+      dos tipos y por generación, URL compartible.
+- [ ] Ficha de Pokémon (estadísticas, habilidades, descripción, formas).
+- [ ] Despliegue en Vercel (región París, `cdg1`).
 
 ## Fase 3 · Calculadora de tipos
 

@@ -39,7 +39,16 @@ pokemon_species (id = nº Pokédex, slug, generation_id, evolves_from_species_id
 
 abilities (id, slug, generation_id)
 └── ability_translations (ability_id, locale, name)
+
+pokedex_entries (vista)  ← una fila por (especie, idioma): dex_number, slug,
+                           locale, name, generation_id, types[]
 ```
+
+La vista `pokedex_entries` (migración `20261120130000_pokedex_entries_view.sql`)
+da a la web todo lo que necesita el listado en una sola consulta. Tiene
+`security_invoker = true`: se ejecuta con los permisos de quien consulta
+(`anon`), así que las políticas RLS de las tablas siguen aplicándose. Sin esa
+opción, una vista se ejecuta con los permisos de su dueño y se saltaría RLS.
 
 Detalles que conviene saber:
 

@@ -9,6 +9,7 @@
 | Estilo y errores | ESLint (config de Next) | Local y CI |
 | Tipos            | `next typegen` + `tsc`  | Local y CI |
 | Formato          | Prettier                | Local y CI |
+| Tests unitarios  | Vitest                  | Local y CI |
 | Que compila      | `next build`            | CI         |
 
 Verificación manual realizada al cerrar la fase 1 (build de producción con
@@ -34,18 +35,32 @@ con los roles `anon` y `authenticated` de Supabase simulados:
 - `anon` puede leer; `insert`, `update` y `delete` dan _permission denied_.
 - Todas las tablas de `public` tienen RLS activado.
 
-Tests unitarios actuales (`npm run test`): transformación de datos de PokeAPI
-(12) y configuración segura de la conexión (4).
+Verificación de la Pokédex de extremo a extremo, con una réplica local de
+Supabase (PostgreSQL 17 + PostgREST 13 + un proxy que imita su pasarela:
+clave publicable → rol `anon`, `max_rows = 1000`), build de producción y Chrome:
+
+- Sin clave la API responde 401; `anon` no puede escribir.
+- Pedir 2000 filas devuelve solo 1000 de 1025: la paginación es necesaria, y
+  la página recibe las 1025 (aparece Pecharunt, #1025).
+- `/es/pokedex` y `/en/pokedex` se prerenderizan como estáticas.
+- Búsqueda por nombre ("chu"), por número ("#25") y sin acentos ("flabebe");
+  Agua + Volador + Hoenn → Wingull y Pelipper; un tercer tipo queda bloqueado.
+- La URL con filtros, abierta en otra pestaña, restaura los mismos filtros.
+- Estado vacío y "Quitar filtros"; los sprites cargan; sin errores en consola.
+- Cabecera completa visible a 360 y 390 px.
+
+Tests unitarios actuales (`npm run test`, 27): transformación de datos de
+PokeAPI (12), conexión segura (4) y filtros de la Pokédex (11).
 
 ## Qué se añadirá y cuándo
 
-| Nivel             | Herramienta                  | Para qué                                                        | Desde  |
-| ----------------- | ---------------------------- | --------------------------------------------------------------- | ------ |
-| Unitarias         | **Vitest**                   | Lógica pura: multiplicadores de tipos, filtros, parseo Showdown | Fase 2 |
-| Componentes       | Vitest + **Testing Library** | Componentes interactivos (filtros, editor de equipo)            | Fase 2 |
-| Base de datos     | **pgTAP** (Supabase CLI)     | Que las políticas RLS bloquean lo que deben                     | Fase 6 |
-| Extremo a extremo | **Playwright**               | Flujos críticos: buscar Pokémon, crear y guardar un equipo      | Fase 3 |
-| Accesibilidad     | `@axe-core/playwright`       | Detectar problemas de accesibilidad en cada página              | Fase 3 |
+| Nivel             | Herramienta                  | Para qué                                                   | Desde  |
+| ----------------- | ---------------------------- | ---------------------------------------------------------- | ------ |
+| Unitarias         | **Vitest** ✅                | Lógica pura: importación, filtros, tipos, parseo Showdown  | Fase 2 |
+| Componentes       | Vitest + **Testing Library** | Componentes interactivos (filtros, editor de equipo)       | Fase 2 |
+| Base de datos     | **pgTAP** (Supabase CLI)     | Que las políticas RLS bloquean lo que deben                | Fase 6 |
+| Extremo a extremo | **Playwright**               | Flujos críticos: buscar Pokémon, crear y guardar un equipo | Fase 3 |
+| Accesibilidad     | `@axe-core/playwright`       | Detectar problemas de accesibilidad en cada página         | Fase 3 |
 
 ## Criterios
 

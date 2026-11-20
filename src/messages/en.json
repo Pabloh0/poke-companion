@@ -14,6 +14,10 @@
     "languages": {
       "es": "Español",
       "en": "English"
+    },
+    "mainNav": "Main navigation",
+    "nav": {
+      "pokedex": "Pokédex"
     }
   },
   "Footer": {
@@ -27,8 +31,8 @@
     "roadmapHeading": "What we're building",
     "roadmapIntro": "The site ships in stages. This is the order the tools will arrive in:",
     "status": {
-      "next": "Up next",
-      "planned": "Later"
+      "planned": "Later",
+      "inProgress": "In progress"
     },
     "modules": {
       "pokedex": {
@@ -63,7 +67,8 @@
         "name": "Community",
         "description": "Share teams and collections with other trainers."
       }
-    }
+    },
+    "openPokedex": "Open the Pokédex"
   },
   "NotFound": {
     "title": "Nothing here",
@@ -89,5 +94,34 @@
     "dark": "Dark",
     "steel": "Steel",
     "fairy": "Fairy"
+  },
+  "Pokedex": {
+    "title": "Pokédex",
+    "description": "All 1025 Pokémon with their number, types and generation. Search by name or number and filter by type or generation.",
+    "intro": "Every Pokémon, from 1 to 1025. Search by name or number, and filter by type or generation.",
+    "searchLabel": "Search by name or number",
+    "searchPlaceholder": "Pikachu, 25…",
+    "generationLabel": "Generation",
+    "allGenerations": "All",
+    "generations": {
+      "1": "Kanto (I)",
+      "2": "Johto (II)",
+      "3": "Hoenn (III)",
+      "4": "Sinnoh (IV)",
+      "5": "Unova (V)",
+      "6": "Kalos (VI)",
+      "7": "Alola (VII)",
+      "8": "Galar (VIII)",
+      "9": "Paldea (IX)"
+    },
+    "typesLabel": "Types",
+    "typesHint": "You can combine up to two.",
+    "resultsHeading": "Results",
+    "results": "{count, plural, =0 {No Pokémon} one {# Pokémon} other {# Pokémon}}",
+    "showing": "Showing {shown} of {total}",
+    "showMore": "Show more",
+    "clearFilters": "Clear filters",
+    "emptyTitle": "No Pokémon match your search",
+    "emptyDescription": "Try another name or number, or remove a filter."
   }
 }

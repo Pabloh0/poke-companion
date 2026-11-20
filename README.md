@@ -42,8 +42,8 @@ Abre <http://localhost:3000> (español) o <http://localhost:3000/en> (inglés).
 
 Primera vez:
 
-1. Copia `.env.example` como `.env.local` y rellena `SUPABASE_DB_URL`
-   (Supabase → **Connect** → **Session pooler**).
+1. Copia `.env.example` como `.env.local` y rellena las variables
+   (las de la web y `SUPABASE_DB_URL`; cada una explica de dónde sale).
 2. Descarga el certificado de Supabase y guárdalo como
    `supabase/certs/prod-ca-2021.crt` (ver `supabase/certs/README.md`).
 3. Aplica las migraciones e importa los datos:
@@ -56,6 +56,12 @@ npm run db:seed
 ```
 
 `npm run db:seed` se puede repetir cuando quieras: siempre deja los mismos datos.
+
+Cada vez que se añada una migración nueva: `npx supabase db push --remote`.
+
+**CI (GitHub Actions)**: el build lee Supabase para prerenderizar la Pokédex.
+Añade `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` en
+GitHub → Settings → Secrets and variables → Actions → **Variables**.
 
 ## Estructura
 

@@ -1,11 +1,12 @@
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { TypeBadge } from "@/features/types/components/type-badge";
 import { POKEMON_TYPES } from "@/features/types/data/pokemon-types";
 import { cn } from "@/lib/utils";
 
 // Order matches docs/06-DevelopmentRoadmap.md.
 const MODULES = [
-  { id: "pokedex", status: "next" },
+  { id: "pokedex", status: "inProgress", href: "/pokedex" },
   { id: "typeCalculator", status: "planned" },
   { id: "evolutions", status: "planned" },
   { id: "database", status: "planned" },
@@ -80,11 +81,19 @@ export default function HomePage() {
                   <p className="mt-1 max-w-[60ch] text-muted-foreground">
                     {t(`modules.${module.id}.description`)}
                   </p>
+                  {"href" in module && (
+                    <Link
+                      href={module.href}
+                      className="mt-2 inline-block font-semibold text-highlight underline-offset-4 hover:underline"
+                    >
+                      {t("openPokedex")}
+                    </Link>
+                  )}
                 </div>
                 <span
                   className={cn(
                     "col-start-2 mt-2 inline-flex h-7 w-fit items-center rounded-full border px-3 text-sm font-semibold sm:col-start-3 sm:mt-0",
-                    module.status === "next"
+                    module.status === "inProgress"
                       ? "border-primary bg-primary text-primary-foreground"
                       : "text-muted-foreground",
                   )}

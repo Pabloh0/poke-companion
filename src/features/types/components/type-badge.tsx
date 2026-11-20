@@ -27,6 +27,14 @@ const TYPE_BG: Record<PokemonType, string> = {
   fairy: "bg-type-fairy",
 };
 
+export function typeBackgroundClass(type: PokemonType): string {
+  return TYPE_BG[type];
+}
+
+export function typeTextClass(type: PokemonType): string {
+  return typeTextTone(type) === "light" ? "text-white" : "text-ink";
+}
+
 type TypeBadgeProps = {
   type: PokemonType;
   size?: "sm" | "md";
@@ -41,8 +49,8 @@ export function TypeBadge({ type, size = "md", className }: TypeBadgeProps) {
       data-type={type}
       className={cn(
         "inline-flex items-center justify-center rounded-full font-semibold tracking-wide",
-        TYPE_BG[type],
-        typeTextTone(type) === "light" ? "text-white" : "text-ink",
+        typeBackgroundClass(type),
+        typeTextClass(type),
         size === "sm" ? "h-6 px-2.5 text-xs" : "h-8 px-3.5 text-sm",
         className,
       )}
