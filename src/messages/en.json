@@ -278,5 +278,64 @@
       "blaze": "Blaze Breed",
       "aqua": "Aqua Breed"
     }
+  },
+  "Moves": {
+    "heading": "Moves",
+    "intro": "What it learns in Pokémon {game}.",
+    "introOlderGame": "What it learns in Pokémon {game}: it isn't in Scarlet and Violet, so we show the latest game it appears in.",
+    "methodsLabel": "How it learns them",
+    "moveCount": "{count, plural, one {# move} other {# moves}}",
+    "methods": {
+      "level-up": "Level up",
+      "machine": "Machines",
+      "egg": "Egg",
+      "tutor": "Tutor",
+      "reminder": "Reminder"
+    },
+    "methodIntro": {
+      "level-up": "Learned by levelling up. \"Evo.\" means it learns the move when it evolves.",
+      "machine": "Can learn them from Technical Machines (TM), Technical Records (TR) or Hidden Machines (HM).",
+      "egg": "Egg moves: inherited from its parents when it hatches.",
+      "tutor": "Taught by a move tutor.",
+      "reminder": "Can only get them back from the move reminder."
+    },
+    "columns": {
+      "level": "Lv.",
+      "machine": "Machine",
+      "move": "Move",
+      "type": "Type",
+      "category": "Category",
+      "power": "Pow.",
+      "accuracy": "Acc.",
+      "pp": "PP"
+    },
+    "columnsFull": {
+      "power": "Power",
+      "accuracy": "Accuracy",
+      "pp": "Power points"
+    },
+    "evolve": "Evo.",
+    "evolveFull": "On evolution",
+    "machine": {
+      "tm": "TM{number}",
+      "tr": "TR{number}",
+      "hm": "HM{number}"
+    },
+    "categories": {
+      "physical": "Physical",
+      "special": "Special",
+      "status": "Status"
+    },
+    "noValue": "no fixed value",
+    "games": {
+      "scarlet-violet": "Scarlet and Violet",
+      "sword-shield": "Sword and Shield",
+      "brilliant-diamond-shining-pearl": "Brilliant Diamond and Shining Pearl",
+      "ultra-sun-ultra-moon": "Ultra Sun and Ultra Moon",
+      "sun-moon": "Sun and Moon",
+      "omega-ruby-alpha-sapphire": "Omega Ruby and Alpha Sapphire",
+      "x-y": "X and Y"
+    },
+    "empty": "We don't have {name}'s moves yet."
   }
 }

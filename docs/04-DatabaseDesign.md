@@ -45,6 +45,35 @@ pokedex_entries (vista)  ← una fila por (especie, idioma): dex_number, slug,
                            is_legendary, is_mythical, base_stat_total
 ```
 
+### Movimientos (fase 2, RF-P05)
+
+Migración: `supabase/migrations/20261120150000_moves.sql`.
+
+```text
+version_groups (id, slug, generation_id)   ← juegos tal como los agrupa PokeAPI
+
+moves (id, slug, type_id, damage_class, power, accuracy, pp, priority)
+└── move_translations (move_id, locale, name, description)
+
+pokemon_moves (pokemon_id, move_id, method, level, machine, version_group_id)
+```
+
+- **Un juego por Pokémon** (D-26): el más reciente de la serie principal en
+  que aparece. Hoy: 733 especies con Escarlata/Púrpura, 244 con
+  Espada/Escudo, 39 con Diamante Brillante/Perla Reluciente y 9 con
+  Ultrasol/Ultraluna; las formas regionales tienen su propia lista.
+- `method`: `level-up`, `machine`, `egg`, `tutor` o `reminder`. En `level-up`,
+  `level = 0` significa «al evolucionar» y `1`, «desde el principio».
+- `machine` guarda la MT/DT/MO (`tm045`, `tr12`, `hm03`) solo cuando el método
+  es `machine`; un `check` comprueba el formato.
+- `power` y `accuracy` son `null` cuando el movimiento no tiene un valor fijo
+  (movimientos de estado, ataques que no fallan). PokeAPI pone `0` en algunos
+  movimientos recientes (Danza Triunfal, Refugio…) y la importación lo
+  convierte en `null`: la primera importación real falló justo ahí, por el
+  `check (power > 0)`, y no dejó nada a medias.
+- La descripción es la más reciente de cada idioma.
+- Solo se importan los movimientos que alguna lista usa (797 de los 938 de PokeAPI).
+
 La línea evolutiva de la ficha usa dos columnas de `pokemon_species`:
 `evolves_from_species_id` (de quién evoluciona; puede apuntar a un número
 mayor, como Pikachu #25 ← Pichu #172) y `evolution_chain_id` (la familia). Con
@@ -94,6 +123,10 @@ Detalles que conviene saber:
 | `pokemon_stats`                | 8106  |
 | `abilities`                    | 314   |
 | `pokemon_abilities`            | 2943  |
+| `version_groups`               | 5     |
+| `moves`                        | 797   |
+| `move_translations`            | 1594  |
+| `pokemon_moves`                | 77578 |
 
 ## Importación de datos
 

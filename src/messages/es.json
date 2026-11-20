@@ -278,5 +278,64 @@
       "blaze": "Variedad ardiente",
       "aqua": "Variedad acuática"
     }
+  },
+  "Moves": {
+    "heading": "Movimientos",
+    "intro": "Lo que aprende en Pokémon {game}.",
+    "introOlderGame": "Lo que aprende en Pokémon {game}: no está en Escarlata y Púrpura, así que mostramos el juego más reciente en el que aparece.",
+    "methodsLabel": "Cómo los aprende",
+    "moveCount": "{count, plural, one {# movimiento} other {# movimientos}}",
+    "methods": {
+      "level-up": "Por nivel",
+      "machine": "Máquinas",
+      "egg": "Huevo",
+      "tutor": "Tutor",
+      "reminder": "Recordar"
+    },
+    "methodIntro": {
+      "level-up": "Los aprende al subir de nivel. «Evo.» quiere decir que lo aprende al evolucionar.",
+      "machine": "Puede aprenderlos con máquinas técnicas (MT), discos técnicos (DT) o máquinas ocultas (MO).",
+      "egg": "Movimientos huevo: los hereda de sus progenitores al nacer.",
+      "tutor": "Se los enseña un tutor de movimientos.",
+      "reminder": "Solo puede recuperarlos con el recordador de movimientos."
+    },
+    "columns": {
+      "level": "Nv.",
+      "machine": "Máquina",
+      "move": "Movimiento",
+      "type": "Tipo",
+      "category": "Categoría",
+      "power": "Pot.",
+      "accuracy": "Prec.",
+      "pp": "PP"
+    },
+    "columnsFull": {
+      "power": "Potencia",
+      "accuracy": "Precisión",
+      "pp": "Puntos de poder"
+    },
+    "evolve": "Evo.",
+    "evolveFull": "Al evolucionar",
+    "machine": {
+      "tm": "MT{number}",
+      "tr": "DT{number}",
+      "hm": "MO{number}"
+    },
+    "categories": {
+      "physical": "Físico",
+      "special": "Especial",
+      "status": "Estado"
+    },
+    "noValue": "sin valor fijo",
+    "games": {
+      "scarlet-violet": "Escarlata y Púrpura",
+      "sword-shield": "Espada y Escudo",
+      "brilliant-diamond-shining-pearl": "Diamante Brillante y Perla Reluciente",
+      "ultra-sun-ultra-moon": "Ultrasol y Ultraluna",
+      "sun-moon": "Sol y Luna",
+      "omega-ruby-alpha-sapphire": "Rubí Omega y Zafiro Alfa",
+      "x-y": "X e Y"
+    },
+    "empty": "Todavía no tenemos los movimientos de {name}."
   }
 }

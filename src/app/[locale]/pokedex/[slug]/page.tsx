@@ -24,6 +24,8 @@ import { getEvolutionLinks } from "@/features/pokedex/server/get-evolution-links
 import { getPokedexEntries } from "@/features/pokedex/server/get-pokedex-entries";
 import { getRegionalForms } from "@/features/pokedex/server/get-regional-forms";
 import { getPokemonDetail } from "@/features/pokedex/server/get-pokemon-detail";
+import { MovesSection } from "@/features/moves/components/moves-section";
+import { getLearnset } from "@/features/moves/server/get-learnset";
 import { MatchupList } from "@/features/types/components/matchup-list";
 import { TypeBadge } from "@/features/types/components/type-badge";
 import {
@@ -93,6 +95,7 @@ export default async function PokemonPage({
     getFormatter(),
   ]);
   if (!pokemon) notFound();
+  const learnset = await getLearnset(pokemon.id, locale);
 
   const { previous, next } = neighbours(entries, pokemon.dexNumber);
   // Weaknesses and resistances (×1 left out: it says nothing useful here).
@@ -367,6 +370,12 @@ export default async function PokemonPage({
           )}
         </div>
       </section>
+
+      <MovesSection
+        learnset={learnset}
+        pokemonSlug={pokemon.slug}
+        pokemonName={pokemon.name}
+      />
 
       <div className="mt-16">
         <PokemonPager previous={previous} next={next} />

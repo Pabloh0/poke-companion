@@ -22,6 +22,13 @@ export const SOURCE_FILES = [
   "abilities",
   "ability_names",
   "pokemon_abilities",
+  "version_groups",
+  "moves",
+  "move_names",
+  "move_flavor_text",
+  "machines",
+  "items",
+  "pokemon_moves",
 ] as const;
 
 export type SourceFile = (typeof SOURCE_FILES)[number];

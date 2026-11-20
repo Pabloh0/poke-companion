@@ -133,8 +133,32 @@ Supabase, build de producción, Chrome):
   horizontal y con su carta marcada. Regresión de las 340 líneas evolutivas y
   del resto de páginas. Sin errores en consola.
 
-Tests unitarios actuales (`npm run test`, 82): transformación de datos de
-PokeAPI (12), conexión segura (4), filtros y rareza de la Pokédex (16, con
+Verificación de los movimientos (réplica de Supabase con la migración y la
+importación completa, build de producción, Chrome):
+
+- La importación real se paró en el primer intento: 17 movimientos traen
+  potencia `0` y 3 precisión `0`. La transacción se deshizo entera; ahora se
+  guardan como `null` (con test).
+- Datos: las 1025 especies y las formas regionales tienen lista. Pikachu en
+  Escarlata/Púrpura: 20 por nivel (de Impactrueno a Trueno, nivel 44) y 47 MT;
+  Mew, 229 MT (el máximo, 241 filas, cabe en una petición).
+- Diez fichas (Pikachu, Mew, Caterpie, Weedle, Patrat, Raichu de Alola, Meowth
+  de Galar, Eevee, Ditto, Smeargle) a 320, 375, 768, 1024 y 1280 px: sin
+  desbordamiento y siempre exactamente una tabla visible. Caterpie avisa de
+  Espada/Escudo y muestra «MT82»; Patrat (Ultrasol/Ultraluna) tiene cuatro
+  métodos.
+- Cambiar de método con clic y con las flechas del teclado, y también con
+  JavaScript desactivado (Eevee: Huevo → 8 filas, Máquinas → 28).
+- Versión en inglés (Caterpie: «Sword and Shield», columnas «Lv.», «Pow.»…) y
+  panel de filtros de la Pokédex igual que antes del cambio en
+  `SegmentedControl`. Sin errores en consola. La prueba destapó que un lector
+  de pantalla oía el número dos veces («Por nivel 20, 20 movimientos»).
+
+Tests unitarios actuales (`npm run test`, 103): transformación de datos de
+PokeAPI (13), importación de movimientos (11: juego más reciente, Let's Go
+ignorado, métodos, nivel 0, MT, duplicados, descripción más reciente, `0` →
+`null`, errores), listas de movimientos (9: orden por nivel y por número de
+máquina, agrupación, nombres de los juegos), conexión segura (4), filtros y rareza de la Pokédex (16, con
 formas regionales), formas regionales (9: lista, nombres, orden, línea
 evolutiva regional),
 lógica de la ficha (8), árbol evolutivo (10: líneas rectas, ramas, números

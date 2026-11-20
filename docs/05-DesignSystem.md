@@ -197,6 +197,28 @@ WCAG AA (`src/features/types/data/pokemon-types.ts`).
 - **Pasar hoja** (`PokemonPager`): anterior y siguiente con su sprite, como las
   páginas de una carpeta.
 
+### Movimientos de la ficha (`MovesSection`)
+
+Al final de la ficha, antes de «Pasar hoja», con el mismo esquema que las
+demás secciones (título a la izquierda desde `lg`).
+
+- La introducción dice de qué juego son («Lo que aprende en Pokémon
+  Escarlata y Púrpura»). Si no es Escarlata/Púrpura, explica por qué se
+  muestra otro.
+- Una casilla por método con movimientos (Por nivel, Máquinas, Huevo, Tutor,
+  Recordar) y su número; es el mismo `SegmentedControl` de los filtros, en
+  modo sin estado (`defaultValue`), así que funciona sin JavaScript (D-27).
+  Si solo hay un método, no hay casillas.
+- Tabla: Nv. o máquina | movimiento con su descripción | tipo | categoría |
+  Pot. | Prec. | PP. En móvil, tipo, categoría y números van en una línea bajo
+  el nombre y desaparecen las columnas.
+- Orden de los juegos: por nivel («Evo.» primero, al evolucionar), máquinas por
+  número (MT001 con tres cifras en Escarlata/Púrpura, MT01 en los anteriores)
+  y el resto por nombre.
+- Categoría con un punto del color que usan los juegos: naranja físico, azul
+  especial, gris estado. «—» cuando no hay valor fijo, con texto para lectores
+  de pantalla.
+
 ### Panel de filtros (`PokedexFilterBar`)
 
 Un único panel con una fila por filtro (Buscar, Generación, Tipos, Formas
@@ -295,6 +317,7 @@ del menú: subrayado grueso.
 | `PokedexFilterBar` | `src/features/pokedex/components/pokedex-filter-bar.tsx` | Client |
 | `SegmentedControl` | `src/components/ui/segmented-control.tsx`                | Server |
 | `EvolutionLine`    | `src/features/pokedex/components/evolution-line.tsx`     | Server |
+| `MovesSection`     | `src/features/moves/components/moves-section.tsx`        | Server |
 | `BrandMark`        | `src/components/layout/brand-mark.tsx`                   | Server |
 | `SiteHeader`       | `src/components/layout/site-header.tsx`                  | Server |
 | `MainNav`          | `src/components/layout/main-nav.tsx`                     | Client |

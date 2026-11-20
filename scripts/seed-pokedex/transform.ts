@@ -7,7 +7,11 @@
  * data silently.
  */
 import { POKEMON_TYPES } from "../../src/features/types/data/pokemon-types";
+import { buildMoveTables, type MoveTables } from "./moves";
 import type { CsvRow, RawData } from "./sources";
+import { cleanFlavorText } from "./text";
+
+export { cleanFlavorText };
 
 export type Locale = "es" | "en";
 
@@ -71,7 +75,7 @@ export type Dataset = {
     ability_id: number;
     is_hidden: boolean;
   }[];
-};
+} & MoveTables;
 
 // ---------------------------------------------------------------------------
 // Small parsing helpers
@@ -105,18 +109,6 @@ function localeOf(languageId: string | undefined): Locale | undefined {
   return languageId === undefined
     ? undefined
     : LOCALE_BY_LANGUAGE_ID[languageId];
-}
-
-/**
- * Pokédex entries come with the line breaks of the game's text box:
- * "\n", form feeds and soft hyphens that split words across lines.
- */
-export function cleanFlavorText(raw: string): string {
-  return raw
-    .replace(/­\s*/g, "") // soft hyphen + line break: rejoin the word
-    .replace(/-\n/g, "-") // real hyphen at a line break: keep it, drop the break
-    .replace(/\s+/g, " ") // newlines, form feeds, double spaces → one space
-    .trim();
 }
 
 /** For each (species, locale), keeps the entry from the most recent game. */
@@ -311,5 +303,10 @@ export function buildDataset(raw: RawData): Dataset {
     abilities,
     ability_translations,
     pokemon_abilities,
+    ...buildMoveTables(raw, {
+      pokemonIds,
+      typeIds,
+      generationIds: new Set(generations.map((generation) => generation.id)),
+    }),
   };
 }

@@ -90,4 +90,9 @@ export async function writeDataset(client: pg.ClientBase, data: Dataset) {
   await upsert(client, "abilities", data.abilities, ["id"]);
   await replace(client, "ability_translations", data.ability_translations);
   await replace(client, "pokemon_abilities", data.pokemon_abilities);
+
+  await upsert(client, "version_groups", data.version_groups, ["id"]);
+  await upsert(client, "moves", data.moves, ["id"]);
+  await replace(client, "move_translations", data.move_translations);
+  await replace(client, "pokemon_moves", data.pokemon_moves);
 }

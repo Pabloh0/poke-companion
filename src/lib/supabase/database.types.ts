@@ -79,6 +79,78 @@ export type Database = {
         };
         Relationships: [];
       };
+      move_translations: {
+        Row: {
+          description: string | null;
+          locale: string;
+          move_id: number;
+          name: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          description?: string | null;
+          locale: string;
+          move_id: number;
+          name: string;
+        };
+        Update: {
+          description?: string | null;
+          locale?: string;
+          move_id?: number;
+          name?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "move_translations_move_id_fkey";
+            columns: ["move_id"];
+            isOneToOne: false;
+            referencedRelation: "moves";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      moves: {
+        Row: {
+          accuracy: number | null;
+          damage_class: string;
+          id: number;
+          power: number | null;
+          pp: number | null;
+          priority: number;
+          slug: string;
+          type_id: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          accuracy?: number | null;
+          damage_class: string;
+          id: number;
+          power?: number | null;
+          pp?: number | null;
+          priority?: number;
+          slug: string;
+          type_id: number;
+        };
+        Update: {
+          accuracy?: number | null;
+          damage_class?: string;
+          id?: number;
+          power?: number | null;
+          pp?: number | null;
+          priority?: number;
+          slug?: string;
+          type_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "moves_type_id_fkey";
+            columns: ["type_id"];
+            isOneToOne: false;
+            referencedRelation: "types";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       pokemon: {
         Row: {
           base_experience: number | null;
@@ -158,6 +230,56 @@ export type Database = {
             columns: ["pokemon_id"];
             isOneToOne: false;
             referencedRelation: "pokemon";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      pokemon_moves: {
+        Row: {
+          level: number;
+          machine: string | null;
+          method: string;
+          move_id: number;
+          pokemon_id: number;
+          version_group_id: number;
+        };
+        ComputedFields: never;
+        Insert: {
+          level?: number;
+          machine?: string | null;
+          method: string;
+          move_id: number;
+          pokemon_id: number;
+          version_group_id: number;
+        };
+        Update: {
+          level?: number;
+          machine?: string | null;
+          method?: string;
+          move_id?: number;
+          pokemon_id?: number;
+          version_group_id?: number;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "pokemon_moves_move_id_fkey";
+            columns: ["move_id"];
+            isOneToOne: false;
+            referencedRelation: "moves";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pokemon_moves_pokemon_id_fkey";
+            columns: ["pokemon_id"];
+            isOneToOne: false;
+            referencedRelation: "pokemon";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "pokemon_moves_version_group_id_fkey";
+            columns: ["version_group_id"];
+            isOneToOne: false;
+            referencedRelation: "version_groups";
             referencedColumns: ["id"];
           },
         ];
@@ -364,6 +486,33 @@ export type Database = {
           slug?: string;
         };
         Relationships: [];
+      };
+      version_groups: {
+        Row: {
+          generation_id: number;
+          id: number;
+          slug: string;
+        };
+        ComputedFields: never;
+        Insert: {
+          generation_id: number;
+          id: number;
+          slug: string;
+        };
+        Update: {
+          generation_id?: number;
+          id?: number;
+          slug?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "version_groups_generation_id_fkey";
+            columns: ["generation_id"];
+            isOneToOne: false;
+            referencedRelation: "generations";
+            referencedColumns: ["id"];
+          },
+        ];
       };
     };
     Views: {

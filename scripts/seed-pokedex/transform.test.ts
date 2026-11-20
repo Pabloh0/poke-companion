@@ -160,6 +160,39 @@ function makeRaw(): RawData {
       { pokemon_id: "25", ability_id: "31", is_hidden: "1", slot: "3" },
       { pokemon_id: "172", ability_id: "10002", is_hidden: "0", slot: "1" },
     ],
+    // Moves are covered by moves.test.ts; here, one move is enough to prove
+    // the move tables are part of the dataset.
+    version_groups: [
+      { id: "25", identifier: "scarlet-violet", generation_id: "2" },
+    ],
+    moves: [
+      {
+        id: "84",
+        identifier: "thunder-shock",
+        type_id: "4",
+        damage_class_id: "3",
+        power: "40",
+        accuracy: "100",
+        pp: "30",
+        priority: "0",
+      },
+    ],
+    move_names: [
+      { move_id: "84", local_language_id: ES, name: "Impactrueno" },
+      { move_id: "84", local_language_id: EN, name: "Thunder Shock" },
+    ],
+    move_flavor_text: [],
+    machines: [],
+    items: [],
+    pokemon_moves: [
+      {
+        pokemon_id: "25",
+        version_group_id: "25",
+        move_id: "84",
+        pokemon_move_method_id: "1",
+        level: "1",
+      },
+    ],
   };
 }
 
@@ -219,6 +252,12 @@ describe("buildDataset", () => {
       flavor_text: null,
     });
     expect(data.pokemon.find((p) => p.id === 172)?.base_experience).toBeNull();
+  });
+
+  it("includes the move tables", () => {
+    const data = buildDataset(makeRaw());
+    expect(data.moves.map((move) => move.slug)).toEqual(["thunder-shock"]);
+    expect(data.pokemon_moves).toHaveLength(1);
   });
 
   it("keeps the six base stats and drops accuracy/evasion", () => {

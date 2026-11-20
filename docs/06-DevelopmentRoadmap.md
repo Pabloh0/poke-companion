@@ -47,6 +47,8 @@ pronto y no tienen riesgos de seguridad.
       («alola», «vulpix», «ardiente»), filtro por región y ficha propia.
 - [x] Filtros en un panel ordenado: una fila por filtro, todo alineado y en el
       mismo plano (sin pestañas).
+- [x] Movimientos en la ficha: los que aprende por nivel, por máquina, huevo,
+      tutor y recordador, del juego más reciente en que aparece cada Pokémon.
 - [ ] Otras formas alternativas (Mega, Gigamax…) en la ficha.
 
 ## Fase 3 · Calculadora de tipos ✅
