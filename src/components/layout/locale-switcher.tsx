@@ -26,7 +26,7 @@ export function LocaleSwitcher() {
                 aria-label={t(`languages.${locale}`)}
                 aria-current={isCurrent ? "true" : undefined}
                 className={cn(
-                  "inline-flex h-7 min-w-9 items-center justify-center rounded-[4px] px-2 font-bold condensed transition-colors",
+                  "inline-flex h-7 min-w-8 items-center justify-center rounded-[4px] px-1.5 font-bold condensed transition-colors sm:min-w-9 sm:px-2",
                   isCurrent
                     ? "bg-foreground text-background"
                     : "text-muted-foreground hover:text-foreground",
@@ -44,5 +44,10 @@ export function LocaleSwitcher() {
 
 /** Same footprint as the switcher, shown while the current URL resolves. */
 export function LocaleSwitcherFallback() {
-  return <div aria-hidden className="h-[34px] w-[78px] rounded-md border" />;
+  return (
+    <div
+      aria-hidden
+      className="h-[34px] w-[70px] rounded-md border sm:w-[78px]"
+    />
+  );
 }

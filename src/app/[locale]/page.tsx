@@ -13,7 +13,7 @@ const HAND = [1, 4, 151, 7, 25];
 // Order matches docs/06-DevelopmentRoadmap.md.
 const MODULES = [
   { id: "pokedex", status: "available", href: "/pokedex" },
-  { id: "typeCalculator", status: "planned" },
+  { id: "typeCalculator", status: "available", href: "/tipos" },
   { id: "evolutions", status: "planned" },
   { id: "database", status: "planned" },
   { id: "accounts", status: "planned" },

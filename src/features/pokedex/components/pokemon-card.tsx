@@ -47,7 +47,7 @@ export function PokemonCard({
       data-rarity={entry.rarity}
       style={frameStyle}
       className={cn(
-        "holo-card relative aspect-[5/7] rounded-[14px] bg-[linear-gradient(135deg,var(--t1),var(--t2))] p-[5px]",
+        "holo-card @container relative aspect-[5/7] rounded-[14px] bg-[linear-gradient(135deg,var(--t1),var(--t2))] p-[5px]",
         "shadow-[0_1px_1px_rgb(20_24_40/0.12),0_10px_24px_-10px_rgb(20_24_40/0.45)]",
         className,
       )}
@@ -84,23 +84,39 @@ export function PokemonCard({
         <div className="flex items-center justify-between gap-1 px-2 pt-2">
           <div className="flex min-w-0 gap-1">
             {entry.types.map((type) => (
-              <TypeBadge key={type} type={type} size="sm" />
+              <TypeBadge
+                key={type}
+                type={type}
+                size="sm"
+                // On the narrowest cards (small phones) two long types such as
+                // "Siniestro" + "Fantasma" only fit with Archivo's narrower
+                // widths.
+                className="@max-[9rem]:px-1 @max-[9rem]:condensed @max-[8rem]:text-[0.65rem] @max-[8rem]:extra-condensed"
+              />
             ))}
           </div>
-          <p className="shrink-0 text-[0.65rem] leading-none text-stock-ink-muted">
-            <span className="hidden sm:inline">{t("card.total")} </span>
-            <span
-              className="text-sm font-bold text-stock-ink condensed tabular-nums"
-              title={t("card.total")}
-            >
-              {entry.baseStatTotal}
-            </span>
-          </p>
+          {/* Two type badges and the total only fit side by side on wide
+              cards. The card decides by its OWN width (container query), not
+              the screen's, because it appears at several sizes: Pokédex grid,
+              evolution line, home fan. On narrow cards the total moves down
+              to the category line. */}
+          <StatTotal
+            value={entry.baseStatTotal}
+            label={t("card.total")}
+            className="hidden @[11.5rem]:block"
+          />
         </div>
 
-        <p className="min-h-[1.25rem] truncate px-2.5 pt-1 font-serif text-[0.8rem] text-stock-ink-muted italic">
-          {entry.genus}
-        </p>
+        <div className="flex min-h-[1.25rem] items-baseline gap-1.5 px-2.5 pt-1">
+          <p className="min-w-0 flex-1 truncate font-serif text-[0.8rem] text-stock-ink-muted italic">
+            {entry.genus}
+          </p>
+          <StatTotal
+            value={entry.baseStatTotal}
+            label={t("card.total")}
+            className="@[11.5rem]:hidden"
+          />
+        </div>
 
         <footer className="mt-1 flex items-center justify-between border-t border-stock-ink/10 bg-stock-shade px-2.5 py-1 text-[0.7rem] text-stock-ink-muted">
           <span
@@ -112,7 +128,9 @@ export function PokemonCard({
           >
             {formatDexNumber(entry.dexNumber)}/{COLLECTION_SIZE}
           </span>
-          <span>
+          {/* Dropped on the smallest cards (320 px phones) so the footer
+              stays on one line; the number and rarity remain. */}
+          <span className="@max-[8rem]:hidden">
             {t("card.generation", {
               generation: t(`generationShort.${entry.generation}`),
             })}
@@ -131,6 +149,34 @@ export function PokemonCard({
       </div>
       <div aria-hidden className="holo-foil" />
     </article>
+  );
+}
+
+/** Base stat total; the word "Total" only shows on the widest cards. */
+function StatTotal({
+  value,
+  label,
+  className,
+}: {
+  value: number;
+  label: string;
+  className?: string;
+}) {
+  return (
+    <span
+      className={cn(
+        "shrink-0 text-[0.65rem] leading-none text-stock-ink-muted",
+        className,
+      )}
+    >
+      <span className="hidden @[13rem]:inline">{label} </span>
+      <span
+        className="text-sm font-bold text-stock-ink not-italic condensed tabular-nums"
+        title={label}
+      >
+        {value}
+      </span>
+    </span>
   );
 }
 

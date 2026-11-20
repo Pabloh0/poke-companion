@@ -51,6 +51,10 @@ además el build.
 - Enlaces internos con `Link` de `@/i18n/navigation`, nunca de `next/link`
   (si no, se pierde el idioma).
 - Archivos `proxy.ts` (no `middleware.ts`, obsoleto en Next 16).
+- Un Server Component solo importa **componentes** de un archivo
+  `"use client"`. Las constantes o funciones que necesite el servidor van en
+  `lib/` o `data/`: importadas desde un archivo de cliente llegarían como
+  referencia de cliente, no como el valor.
 
 ## Textos e idiomas
 
@@ -70,6 +74,13 @@ además el build.
 - Clases completas en el código (Tailwind no detecta clases construidas con
   plantillas como `` `bg-type-${type}` ``).
 - Prettier ordena las clases automáticamente.
+- Una caja con scroll (`overflow-x-auto`) que contenga textos `sr-only` (u
+  otros elementos con `position: absolute`) necesita `relative`; si no, esos
+  elementos escapan de la caja y ensanchan toda la página.
+- En rejillas, `minmax(0, 1fr)` (o `grid-cols-1`) cuando una columna contenga
+  algo que se desliza: un `1fr` suelto crece hasta el ancho del contenido.
+- Si un componente aparece a varios tamaños, que se adapte a **su** ancho con
+  consultas de contenedor (`@container`), no al de la pantalla.
 
 ## Git
 

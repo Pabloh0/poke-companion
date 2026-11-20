@@ -4,11 +4,14 @@ import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
-const NAV_ITEMS = [{ href: "/pokedex", key: "pokedex" }] as const;
+const NAV_ITEMS = [
+  { href: "/pokedex", key: "pokedex" },
+  { href: "/tipos", key: "types" },
+] as const;
 
 function navLinkClass(active: boolean) {
   return cn(
-    "inline-flex h-9 items-center rounded-md px-2.5 text-[0.95rem] font-bold underline-offset-[10px] transition-colors",
+    "inline-flex h-9 items-center rounded-md px-2 text-[0.95rem] font-bold underline-offset-[10px] transition-colors sm:px-2.5",
     active
       ? "text-foreground underline decoration-[3px]"
       : "text-muted-foreground hover:text-foreground",
@@ -21,7 +24,7 @@ export function MainNav() {
 
   return (
     <nav aria-label={t("mainNav")}>
-      <ul className="flex items-center gap-1">
+      <ul className="flex items-center gap-0.5 sm:gap-1">
         {NAV_ITEMS.map((item) => {
           const active =
             pathname === item.href || pathname.startsWith(`${item.href}/`);

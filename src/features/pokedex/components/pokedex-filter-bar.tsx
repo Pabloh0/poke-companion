@@ -2,10 +2,7 @@
 
 import { SearchIcon } from "lucide-react";
 import { useTranslations } from "next-intl";
-import {
-  typeBackgroundClass,
-  typeTextClass,
-} from "@/features/types/components/type-badge";
+import { TypeToggle } from "@/features/types/components/type-toggle";
 import { POKEMON_TYPES } from "@/features/types/data/pokemon-types";
 import { cn } from "@/lib/utils";
 import { GENERATIONS, type Generation } from "../data/generations";
@@ -28,7 +25,6 @@ type FilterProps = {
  */
 export function PokedexFilterBar({ filters, onChange }: FilterProps) {
   const t = useTranslations("Pokedex");
-  const tTypes = useTranslations("Types");
   const disabled = !onChange;
   const typeLimitReached = filters.types.length >= MAX_TYPE_FILTERS;
 
@@ -75,39 +71,18 @@ export function PokedexFilterBar({ filters, onChange }: FilterProps) {
           {POKEMON_TYPES.map((type) => {
             const selected = filters.types.includes(type);
             return (
-              <button
+              <TypeToggle
                 key={type}
-                type="button"
-                aria-pressed={selected}
+                type={type}
+                selected={selected}
                 disabled={disabled || (!selected && typeLimitReached)}
-                onClick={() =>
+                onToggle={() =>
                   onChange?.({
                     ...filters,
                     types: toggleType(filters.types, type),
                   })
                 }
-                className={cn(
-                  "relative inline-flex h-9 items-center overflow-hidden rounded-[5px] border pr-3 pl-4 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40",
-                  selected
-                    ? cn(
-                        typeBackgroundClass(type),
-                        typeTextClass(type),
-                        "border-transparent shadow-[inset_0_-2px_0_rgb(0_0_0/0.15)]",
-                      )
-                    : "border-border bg-card hover:bg-accent",
-                )}
-              >
-                {!selected && (
-                  <span
-                    aria-hidden
-                    className={cn(
-                      "absolute inset-y-0 left-0 w-1.5",
-                      typeBackgroundClass(type),
-                    )}
-                  />
-                )}
-                {tTypes(type)}
-              </button>
+              />
             );
           })}
         </div>

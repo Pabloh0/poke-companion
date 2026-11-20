@@ -17,7 +17,8 @@
     },
     "mainNav": "Navegación principal",
     "nav": {
-      "pokedex": "Pokédex"
+      "pokedex": "Pokédex",
+      "types": "Tipos"
     }
   },
   "Footer": {
@@ -184,6 +185,65 @@
       "special-defense": "Def. Esp.",
       "speed": "Velocidad"
     },
-    "total": "Total"
+    "total": "Total",
+    "evolutionHeading": "Línea evolutiva",
+    "evolutionIntro": "Toca una carta para abrir la ficha de ese Pokémon.",
+    "evolvesInto": "evoluciona en",
+    "currentInLine": "(esta ficha)",
+    "noEvolution": "{name} no evoluciona: es la única carta de su familia.",
+    "matchupsHeading": "Debilidades y resistencias",
+    "matchupsNote": "Según sus tipos, sin contar habilidades: Levitación, por ejemplo, anula el daño de Tierra.",
+    "openInCalculator": "Abrir en la calculadora de tipos"
+  },
+  "TypeCalculator": {
+    "title": "Calculadora de tipos",
+    "metaDescription": "Debilidades, resistencias e inmunidades de cualquier tipo o pareja de tipos Pokémon, y la tabla completa de efectividades.",
+    "intro": "Qué tipos le hacen daño a tu Pokémon y contra cuáles pega fuerte cada ataque. Con la tabla actual de los juegos (desde la 6.ª generación).",
+    "calculatorHeading": "Calculadora",
+    "modeLabel": "Qué quieres calcular",
+    "modes": {
+      "defense": "Defensa",
+      "attack": "Ataque"
+    },
+    "typesLabel": "Tipos",
+    "hint": {
+      "defense": "Elige uno o dos: los de tu Pokémon.",
+      "attack": "Elige el tipo del movimiento."
+    },
+    "clear": "Quitar tipos",
+    "empty": {
+      "defense": "Elige uno o dos tipos para ver qué les hace daño y qué no.",
+      "attack": "Elige un tipo de ataque para ver contra qué tipos es eficaz."
+    },
+    "resultFor": {
+      "defense": "Un Pokémon de tipo",
+      "attack": "Un ataque de tipo"
+    },
+    "defense": {
+      "x4": "Muy débil",
+      "x2": "Débil",
+      "x1": "Daño normal",
+      "x05": "Resiste",
+      "x025": "Resiste mucho",
+      "x0": "Inmune"
+    },
+    "attack": {
+      "x2": "Muy eficaz contra",
+      "x1": "Normal contra",
+      "x05": "Poco eficaz contra",
+      "x0": "No afecta a"
+    },
+    "seeInPokedex": "Ver los Pokémon de este tipo en la Pokédex",
+    "chartHeading": "Tabla completa",
+    "chartIntro": "Cada fila es el tipo del ataque y cada columna el del Pokémon que lo recibe. En móvil, desliza la tabla hacia los lados.",
+    "chartCaption": "Multiplicador de daño de cada tipo de ataque (filas) contra cada tipo defensor (columnas). Las casillas sin número son daño normal, ×1.",
+    "axisAttack": "Ataque",
+    "axisDefense": "Defensa",
+    "legend": {
+      "x2": "Muy eficaz (×2)",
+      "x05": "Poco eficaz (×½)",
+      "x0": "No afecta (×0)",
+      "x1": "Normal (×1)"
+    }
   }
 }

@@ -145,6 +145,17 @@ WCAG AA (`src/features/types/data/pokemon-types.ts`).
   pantalla). Legendarios y singulares llevan brillo holográfico permanente.
 - Si falta la categoría en el idioma (127 especies recientes en español), la
   línea queda vacía para no descuadrar la carta.
+- **La carta se adapta a su propio ancho** (consultas de contenedor
+  `@container`), no al de la pantalla, porque aparece a varios tamaños:
+  - desde 13rem (208 px) se lee «Total 320»; desde 11,5rem, solo «320» junto a
+    los tipos;
+  - por debajo de 11,5rem el total baja a la línea de la categoría, que se
+    recorta con puntos suspensivos;
+  - por debajo de 9rem las etiquetas de tipo usan Archivo condensada, y por
+    debajo de 8rem (móviles de 320 px) extracondensada, y el pie oculta
+    «Gen. I» para no partirse en dos líneas.
+  - Comprobado midiendo las 1025 cartas de 320 a 1280 px: ningún tipo tapa el
+    total ni se sale de la carta.
 
 ### Efecto holográfico (`HoloSurface` + `.holo-card`)
 
@@ -168,6 +179,13 @@ WCAG AA (`src/features/types/data/pokemon-types.ts`).
   región y habilidades (la oculta, marcada en cursiva).
 - **Estadísticas base** (`StatBars`): barras del color del tipo principal sobre
   255, siempre con el número escrito al lado.
+- **Línea evolutiva** (`EvolutionLine`): las cartas de la familia dispuestas
+  como sobre una mesa, con flechas entre fases. En móvil las fases van de
+  arriba abajo; desde `sm`, de izquierda a derecha. Las ramas se muestran una
+  junto a otra (Wurmple → Silcoon/Cascoon, cada una con su siguiente fase) y,
+  si son más de tres, en una cuadrícula (las 8 de Eevee: 2 columnas, 3 en `md`
+  y `xl`). La carta de la ficha actual no es enlace: lleva un contorno de 3 px
+  y `aria-current="page"`. Si no evoluciona, una frase lo dice.
 - **Pasar hoja** (`PokemonPager`): anterior y siguiente con su sprite, como las
   páginas de una carpeta.
 
@@ -184,6 +202,32 @@ Rectángulos con una banda del color del tipo a la izquierda. Seleccionadas
 (`aria-pressed`), se rellenan con el color. Al llegar a dos tipos, el resto se
 deshabilita.
 
+Es un componente compartido (`TypeToggle`): la calculadora usa el mismo. Allí,
+al defender, un tercer tipo sustituye al segundo en vez de bloquearse, y al
+atacar solo hay uno.
+
+### Calculadora de tipos (`/tipos`)
+
+- Misma cabecera de «lomo de carpeta» que la Pokédex.
+- **Defensa / Ataque** como dos pestañas de carpeta (radios nativos: se cambian
+  con las flechas del teclado).
+- Pegatinas de tipo a la izquierda y el resultado a la derecha (debajo en
+  móvil). El resultado es una **ficha de referencia impresa** (`MatchupList`):
+  el multiplicador en cifras grandes condensadas (×4, ×2, ×1, ×½, ×¼, ×0), su
+  nombre debajo («Muy débil», «Inmune»…) y los tipos al lado. La fila ×1 va
+  atenuada porque es la menos útil. Las filas vacías no se muestran.
+- **Tabla 18 × 18** (`TypeChart`): `<table>` real con encabezados de tipo de
+  color (columnas en vertical). Casillas: «2» en cobalto, «½» en gris, «0» en
+  tinta y vacías para ×1. Cada casilla lleva su número, así que el color nunca
+  es la única pista. En móvil la tabla se desliza dentro de su caja, con la
+  columna de tipos de ataque fija.
+
+### Debilidades en la ficha
+
+La misma `MatchupList`, en tamaño pequeño y sin la fila ×1, debajo de los datos.
+Una nota aclara que no cuenta habilidades (Levitación anula Tierra) y enlaza a
+la calculadora con los tipos del Pokémon.
+
 ### Mano de cartas (`CardFan`)
 
 Cinco cartas reales en abanico en el inicio. Al cargar se "reparten" (la única
@@ -197,6 +241,9 @@ número `001/008`, casilla y nombre. La numeración es una secuencia real (orden
 de publicación).
 
 ### Cabecera
+
+Con dos enlaces en el menú, por debajo de `sm` los huecos y el selector de
+idioma se estrechan un poco para que todo quepa a 320 px.
 
 Fija arriba con fondo translúcido. Debajo de `sm` solo se ve el símbolo de la
 marca para que menú, idioma y tema quepan (comprobado a 360 px). Página actual

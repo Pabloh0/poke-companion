@@ -40,18 +40,28 @@ pronto y no tienen riesgos de seguridad.
       base, habilidades, altura, peso y navegación anterior/siguiente.
 - [x] Despliegue en Vercel (región París, `cdg1`):
       https://pokecompanion-app.vercel.app
+- [x] Línea evolutiva en la ficha (adelantada de la fase 4, ver abajo).
+- [x] Cartas legibles desde 320 px: la carta adapta su contenido a su propio
+      ancho (consultas de contenedor), no al de la pantalla.
 - [ ] Formas alternativas (regionales, Mega, Gigamax) en la ficha.
 
-## Fase 3 · Calculadora de tipos
+## Fase 3 · Calculadora de tipos ✅
 
-- [ ] Tabla de efectividades en base de datos.
-- [ ] Lógica pura de multiplicadores (con tests exhaustivos).
-- [ ] Interfaz: uno o dos tipos, ataque y defensa, tabla 18 × 18.
+- [x] Tabla de efectividades (en el código, generada de PokeAPI: D-22).
+- [x] Lógica pura de multiplicadores, con tests sobre las 171 combinaciones
+      posibles de tipos.
+- [x] Interfaz: uno o dos tipos, ataque y defensa, tabla 18 × 18, URL
+      compartible.
+- [x] Debilidades y resistencias en la ficha de cada Pokémon.
 
-## Fase 4 · Evoluciones
+## Fase 4 · Evoluciones 🚧
 
-- [ ] Cadenas evolutivas y métodos importados.
-- [ ] Componente de cadena (con ramificaciones) integrado en la ficha.
+- [x] Cadenas evolutivas: ya venían en la importación
+      (`evolves_from_species_id`, `evolution_chain_id`).
+- [x] Componente de línea evolutiva (con ramificaciones) integrado en la ficha.
+- [ ] Método de cada evolución (nivel, objeto, amistad, intercambio…): tabla
+      nueva, importación y texto entre carta y carta.
+- [ ] Formas regionales en la línea (p. ej. Meowth de Galar → Perrserker).
 
 ## Fase 5 · Movimientos, habilidades y objetos
 

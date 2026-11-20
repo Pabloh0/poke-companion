@@ -4,15 +4,24 @@ import { notFound } from "next/navigation";
 import { locale as rootLocale } from "next/root-params";
 import { hasLocale } from "next-intl";
 import { getFormatter, getLocale, getTranslations } from "next-intl/server";
+import { EvolutionLine } from "@/features/pokedex/components/evolution-line";
 import { HoloSurface } from "@/features/pokedex/components/holo-surface";
 import { PokemonHeroCard } from "@/features/pokedex/components/pokemon-hero-card";
 import { PokemonPager } from "@/features/pokedex/components/pokemon-pager";
 import { StatBars } from "@/features/pokedex/components/stat-bars";
 import { neighbours } from "@/features/pokedex/lib/detail";
+import { buildEvolutionTree } from "@/features/pokedex/lib/evolution";
 import { formatDexNumber } from "@/features/pokedex/lib/filters";
+import { getEvolutionLinks } from "@/features/pokedex/server/get-evolution-links";
 import { getPokedexEntries } from "@/features/pokedex/server/get-pokedex-entries";
 import { getPokemonDetail } from "@/features/pokedex/server/get-pokemon-detail";
+import { MatchupList } from "@/features/types/components/matchup-list";
 import { TypeBadge } from "@/features/types/components/type-badge";
+import {
+  DEFENSE_ORDER,
+  defensiveProfile,
+  MULTIPLIER_KEY,
+} from "@/features/types/lib/effectiveness";
 import { Link } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 
@@ -49,16 +58,33 @@ export default async function PokemonPage({
 }: PageProps<"/[locale]/pokedex/[slug]">) {
   const { slug } = await params;
   const locale = await getLocale();
-  const [pokemon, entries, t, tDex, format] = await Promise.all([
-    getPokemonDetail(slug, locale),
-    getPokedexEntries(locale),
-    getTranslations("Pokemon"),
-    getTranslations("Pokedex"),
-    getFormatter(),
-  ]);
+  const [pokemon, entries, evolutionLinks, t, tDex, tCalc, format] =
+    await Promise.all([
+      getPokemonDetail(slug, locale),
+      getPokedexEntries(locale),
+      getEvolutionLinks(),
+      getTranslations("Pokemon"),
+      getTranslations("Pokedex"),
+      getTranslations("TypeCalculator"),
+      getFormatter(),
+    ]);
   if (!pokemon) notFound();
 
   const { previous, next } = neighbours(entries, pokemon.dexNumber);
+  // Weaknesses and resistances (×1 left out: it says nothing useful here).
+  const matchups = defensiveProfile(pokemon.types);
+  const matchupRows = DEFENSE_ORDER.filter(
+    (multiplier) => multiplier !== 1,
+  ).map((multiplier) => ({
+    multiplier,
+    label: tCalc(`defense.${MULTIPLIER_KEY[multiplier]}`),
+    types: matchups[multiplier],
+  }));
+  const evolution = buildEvolutionTree(
+    evolutionLinks,
+    entries,
+    pokemon.dexNumber,
+  );
   const [mainType] = pokemon.types;
   const measure = (value: number, unit: "meter" | "kilogram") =>
     format.number(value, { style: "unit", unit, maximumFractionDigits: 1 });
@@ -191,6 +217,27 @@ export default async function PokemonPage({
               </div>
             </dl>
           </section>
+
+          <section aria-labelledby="matchups-heading" className="mt-10">
+            <h2
+              id="matchups-heading"
+              className="text-sm font-bold text-muted-foreground"
+            >
+              {t("matchupsHeading")}
+            </h2>
+            <div className="mt-3">
+              <MatchupList rows={matchupRows} size="sm" />
+            </div>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {t("matchupsNote")}{" "}
+              <Link
+                href={`/tipos?types=${pokemon.types.join(",")}`}
+                className="font-semibold text-foreground underline decoration-2 underline-offset-4 hover:text-highlight"
+              >
+                {t("openInCalculator")}
+              </Link>
+            </p>
+          </section>
         </div>
       </div>
 
@@ -215,6 +262,39 @@ export default async function PokemonPage({
             total={pokemon.baseStatTotal}
             type={mainType ?? "normal"}
           />
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="evolution-heading"
+        className="mt-16 border-t-[3px] border-foreground pt-10"
+      >
+        <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
+          <div>
+            <h2
+              id="evolution-heading"
+              className="text-3xl font-black tracking-tight condensed"
+            >
+              {t("evolutionHeading")}
+            </h2>
+            {evolution && evolution.children.length > 0 && (
+              <p className="mt-3 font-serif text-lg leading-snug text-muted-foreground">
+                {t("evolutionIntro")}
+              </p>
+            )}
+          </div>
+          {evolution && evolution.children.length > 0 ? (
+            <HoloSurface className="flex min-w-0 justify-center sm:justify-start">
+              <EvolutionLine
+                tree={evolution}
+                currentDexNumber={pokemon.dexNumber}
+              />
+            </HoloSurface>
+          ) : (
+            <p className="font-serif text-lg text-muted-foreground lg:pt-1.5">
+              {t("noEvolution", { name: pokemon.name })}
+            </p>
+          )}
         </div>
       </section>
 

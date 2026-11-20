@@ -132,7 +132,7 @@ export function PokedexExplorer({
 /** The page of the binder the cards sit on, under the generation tabs. */
 function BinderPage({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-xl rounded-tl-none border bg-card p-4 sm:p-6">
+    <div className="rounded-xl rounded-tl-none border bg-card p-3 sm:p-6">
       {children}
     </div>
   );

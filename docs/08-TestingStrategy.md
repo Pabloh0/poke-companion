@@ -76,9 +76,48 @@ Verificación de la ficha (réplica de Supabase, build de producción, Chrome):
 - En producción (Vercel): portada, Pokédex (1025 cartas, Pecharunt incluido) y
   versión inglesa responden; la URL pública no pide iniciar sesión.
 
-Tests unitarios actuales (`npm run test`, 36): transformación de datos de
-PokeAPI (12), conexión segura (4), filtros y rareza de la Pokédex (12) y
-lógica de la ficha (8).
+Verificación de la línea evolutiva (réplica de Supabase, build de producción,
+Chrome):
+
+- Las 340 familias que evolucionan, a 320, 360, 390, 640, 768, 1024 y 1280 px:
+  sin scroll horizontal, ninguna carta se sale de la sección y siempre hay
+  exactamente una carta marcada como actual.
+- Las 1025 cartas de la rejilla a esas siete anchuras y las de todas las líneas
+  a 320, 360, 640 y 1280 px: ningún tipo tapa el total ni se sale de la carta,
+  y el pie ocupa una sola línea. Esta medición destapó que en móvil el segundo
+  tipo tapaba el total en 392 cartas (y se cortaba a 320 px); corregido.
+- Ivysaur: enlaces a Bulbasaur y Venusaur; Enter en Venusaur abre su ficha y
+  el botón Atrás vuelve. Tauros: «no evoluciona». Sin errores en consola.
+
+Verificación de la calculadora de tipos (réplica de Supabase, build de
+producción, Chrome):
+
+- `/tipos` y `/en/tipos` se prerenderizan como estáticas.
+- Las 324 casillas de la tabla 18 × 18 de la página coinciden con el
+  `type_efficacy.csv` original de PokeAPI (comprobación independiente del
+  código).
+- Fuego + Volador: ×4 Roca, ×2 Agua y Eléctrico, ×¼ Planta y Bicho, ×0 Tierra;
+  la URL pasa a `?types=fire,flying`; un tercer tipo sustituye al segundo.
+- Modo ataque (también con las flechas del teclado) conserva el primer tipo;
+  Tierra: ×2 a Fuego, Eléctrico, Veneno, Roca y Acero, ×0 a Volador. La URL
+  abierta directamente restaura el estado.
+- «Ver en la Pokédex» con Fuego + Agua → Volcanion. Ficha de Charizard → su
+  sección de debilidades → «Abrir en la calculadora» llega con sus tipos.
+- Sin scroll horizontal en `/tipos` (vacía, defensa y ataque, ambos idiomas) a
+  320, 360, 390, 640, 768, 1024 y 1280 px: en móvil solo se desliza la tabla.
+  Esta prueba destapó dos fallos ya corregidos: la columna de la rejilla crecía
+  con la tabla y los textos `sr-only` de las casillas escapaban de la caja.
+- Cabecera con dos enlaces sin desbordar ni solaparse a esas anchuras; las
+  1025 fichas sin scroll horizontal a 320, 390 y 1280 px. Sin errores en
+  consola.
+
+Tests unitarios actuales (`npm run test`, 69): transformación de datos de
+PokeAPI (12), conexión segura (4), filtros y rareza de la Pokédex (12),
+lógica de la ficha (8), árbol evolutivo (10: líneas rectas, ramas, números
+desordenados como Pichu → Pikachu, especies sin evolución, cadenas
+circulares), efectividades de tipos (13: totales e inmunidades de la tabla,
+las 171 combinaciones de tipos, Charizard) y estado de la calculadora en la
+URL (10).
 
 ## Qué se añadirá y cuándo
 

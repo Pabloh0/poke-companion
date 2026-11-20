@@ -45,6 +45,14 @@ pokedex_entries (vista)  ← una fila por (especie, idioma): dex_number, slug,
                            is_legendary, is_mythical, base_stat_total
 ```
 
+La línea evolutiva de la ficha usa dos columnas de `pokemon_species`:
+`evolves_from_species_id` (de quién evoluciona; puede apuntar a un número
+mayor, como Pikachu #25 ← Pichu #172) y `evolution_chain_id` (la familia). Con
+ellas se reconstruye el árbol completo, ramas incluidas, sin tablas extra.
+
+La tabla de efectividades de tipos **no** está en la base de datos: vive en el
+código (ver `03-Architecture.md`, D-22).
+
 La vista `pokedex_entries` (migración `20261120130000_pokedex_entries_view.sql`)
 da a la web todo lo que necesita el listado en una sola consulta. Tiene
 `security_invoker = true`: se ejecuta con los permisos de quien consulta

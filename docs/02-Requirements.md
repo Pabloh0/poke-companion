@@ -14,7 +14,7 @@ commits. Estado: ✅ hecho · 🔜 siguiente · ⏳ pendiente.
 | RF-G01 | La web está disponible en español (principal) e inglés.                  | ✅     |
 | RF-G02 | El idioma se detecta del navegador la primera vez y se recuerda después. | ✅     |
 | RF-G03 | El usuario puede cambiar de idioma sin perder la página en la que está.  | ✅     |
-| RF-G04 | Tema oscuro por defecto y tema claro; la elección se recuerda.           | ✅     |
+| RF-G04 | Tema claro por defecto y tema oscuro; la elección se recuerda.           | ✅     |
 | RF-G05 | Las direcciones inexistentes muestran una página 404 útil.               | ✅     |
 | RF-G06 | Búsqueda global de Pokémon, movimientos, habilidades y objetos.          | ⏳     |
 
@@ -33,16 +33,17 @@ commits. Estado: ✅ hecho · 🔜 siguiente · ⏳ pendiente.
 
 | ID     | Requisito                                                          | Estado |
 | ------ | ------------------------------------------------------------------ | ------ |
-| RF-T01 | Elegir uno o dos tipos defensivos y ver multiplicadores recibidos. | ⏳     |
-| RF-T02 | Elegir un tipo de ataque y ver su efectividad contra cada tipo.    | ⏳     |
-| RF-T03 | Tabla completa de efectividades 18 × 18.                           | ⏳     |
+| RF-T01 | Elegir uno o dos tipos defensivos y ver multiplicadores recibidos. | ✅     |
+| RF-T02 | Elegir un tipo de ataque y ver su efectividad contra cada tipo.    | ✅     |
+| RF-T03 | Tabla completa de efectividades 18 × 18.                           | ✅     |
+| RF-T04 | Debilidades y resistencias en la ficha de cada Pokémon.            | ✅     |
 
 ### Evoluciones (RF-E)
 
 | ID     | Requisito                                                               | Estado |
 | ------ | ----------------------------------------------------------------------- | ------ |
-| RF-E01 | Cadena evolutiva completa, incluidas ramificaciones (p. ej. Eevee).     | ⏳     |
-| RF-E02 | Método exacto de cada evolución (nivel, objeto, amistad, intercambio…). | ⏳     |
+| RF-E01 | Cadena evolutiva completa, incluidas ramificaciones (p. ej. Eevee).     | ✅     |
+| RF-E02 | Método exacto de cada evolución (nivel, objeto, amistad, intercambio…). | 🔜     |
 
 ### Base de datos de movimientos, habilidades y objetos (RF-D)
 

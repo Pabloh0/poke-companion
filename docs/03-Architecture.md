@@ -32,6 +32,7 @@ src/
 │   │   ├── page.tsx          Inicio
 │   │   ├── pokedex/page.tsx  Pokédex (listado con búsqueda y filtros)
 │   │   ├── pokedex/[slug]/   Ficha de cada Pokémon (/pokedex/pikachu)
+│   │   ├── tipos/page.tsx    Calculadora de tipos (/tipos, /en/tipos)
 │   │   └── not-found.tsx     404 dentro de la web (notFound() en una página)
 │   ├── global-not-found.tsx  404 para direcciones que no existen en absoluto
 │   └── globals.css           Tokens de diseño y Tailwind
@@ -40,7 +41,7 @@ src/
 │   └── layout/               Cabecera, pie, selector de idioma, tema
 ├── features/                 Una carpeta por funcionalidad
 │   ├── pokedex/              components/, data/, lib/ (lógica pura), server/ (consultas)
-│   └── types/                Tipos Pokémon: datos y componentes (TypeBadge)
+│   └── types/                Tipos Pokémon: tabla de efectividades, cálculo y calculadora
 ├── fonts/                    Tipografías autoalojadas
 ├── i18n/                     routing.ts, navigation.ts, request.ts
 ├── messages/                 es.json (referencia) y en.json
@@ -172,11 +173,41 @@ lee Supabase para prerenderizar.
 - `generateStaticParams` devuelve los 1025 slugs: se prerenderizan **2050
   páginas** (dos idiomas). En el build de prueba tardó 74 s; es asumible y a
   cambio cada ficha se sirve estática al instante.
+- **Línea evolutiva**: `getEvolutionLinks()` lee de `pokemon_species` las
+  1025 parejas «quién evoluciona de quién» (`evolves_from_species_id`,
+  `evolution_chain_id`) en **una consulta compartida** por todas las fichas y
+  ambos idiomas (caché de un día), en vez de una por ficha. La función pura
+  `buildEvolutionTree` (`lib/evolution.ts`, con tests) sube hasta la primera
+  fase y construye el árbol con sus ramas; los nombres y tipos salen de
+  `getPokedexEntries`, que la ficha ya cargaba.
 - Limitación conocida: un slug inexistente (`/pokedex/inventado`) muestra la
   página 404 de la web, pero con código 200 + `noindex` (comportamiento
   documentado de Next con Cache Components; `dynamicParams = false` no está
   disponible en ese modo). Para un 404 estricto habría que validar el slug en
   el proxy contra la lista de slugs. Pendiente si llega a importar.
+
+### Calculadora de tipos (`/tipos`)
+
+- La tabla de efectividades vive en el código
+  (`features/types/data/type-chart.ts`), generada del `type_efficacy.csv` de
+  PokeAPI en el mismo commit fijado que la importación. Solo se escriben las
+  120 combinaciones que no son ×1. Ver D-22.
+- `lib/effectiveness.ts` (puro, con tests): multiplicador de un ataque contra
+  uno o dos tipos (se multiplican: Roca contra Fuego/Volador = 2 × 2 = ×4) y
+  perfiles agrupados por multiplicador para defensa y ataque.
+- `lib/calculator.ts`: estado de la calculadora y su forma en la URL
+  (`/tipos?types=fire,flying`, `/tipos?mode=attack&types=ground`). Usa el mismo
+  parámetro `types` que la Pokédex, así que los enlaces entre ambas funcionan
+  sin traducir nada.
+- La página no consulta la base de datos: es estática en los dos idiomas. La
+  calculadora es un Client Component que calcula en el navegador y refleja el
+  estado en la URL con `history.replaceState`, como los filtros de la Pokédex.
+  La tabla 18 × 18 es una `<table>` renderizada en el servidor.
+- La ficha de cada Pokémon reutiliza la misma lógica para su sección
+  «Debilidades y resistencias» y enlaza a la calculadora con sus tipos.
+- La ruta es `/tipos` en los dos idiomas (`/en/tipos`): traducir rutas con
+  `pathnames` de next-intl obligaría a cambiar todos los enlaces dinámicos.
+  Ver D-23.
 
 ### Importación
 
@@ -200,24 +231,28 @@ Diseño detallado de la base de datos en [04-DatabaseDesign.md](04-DatabaseDesig
 
 ## Registro de decisiones
 
-| ID   | Decisión                                                     | Motivo                                                                                                                                                                        |
-| ---- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| D-01 | Next.js 16 con Cache Components activado                     | Es el valor por defecto de la versión y el futuro del framework; adoptarlo ahora evita una migración después.                                                                 |
-| D-02 | next-intl con español en la raíz                             | El español es el idioma principal; inglés bajo `/en`. Librería madura, compatible con `next/root-params`.                                                                     |
-| D-03 | Tema sin librerías (`data-theme` + script en línea)          | Patrón oficial de Next.js, una dependencia menos, sin parpadeo.                                                                                                               |
-| D-04 | Tipografías autoalojadas (`next/font/local`)                 | El build no depende de Google Fonts y los visitantes no hacen peticiones a terceros. Ambas tienen licencia OFL.                                                               |
-| D-05 | Componentes de shadcn/ui escritos a mano en la fase 1        | El registro de shadcn no era accesible desde el entorno de desarrollo. `components.json` está listo para usar `npx shadcn add` normalmente.                                   |
-| D-06 | `global-not-found` (experimental) para 404 reales            | El layout raíz vive dentro de `[locale]`; es el caso exacto para el que Next documenta esta opción. Descartado: lista de rutas en el proxy.                                   |
-| D-07 | Datos de PokeAPI importados a Supabase; imágenes enlazadas   | Búsquedas y filtros rápidos, sin depender de un servicio externo en cada visita; no redistribuimos imágenes con derechos.                                                     |
-| D-08 | `noUncheckedIndexedAccess` en TypeScript                     | Con muchos arrays e índices (Pokémon, movimientos…), obliga a comprobar que un elemento existe antes de usarlo.                                                               |
-| D-09 | Importación con script propio (`pg`) en una transacción      | Atómica e idempotente. Descartado `seed.sql` + `db push --include-seed`: el CLI no vuelve a ejecutar un seed modificado.                                                      |
-| D-10 | TLS con verificación completa al conectar a la BD            | Recomendación de Supabase (`verify-full`): evita que alguien en medio suplante a la base de datos.                                                                            |
-| D-11 | Node.js 22.12 como mínimo                                    | Requisito de Vitest 5; Node 20 terminó su soporte en abril de 2026.                                                                                                           |
-| D-12 | Pokédex prerenderizada + filtrado en el navegador            | 1025 entradas pequeñas: filtrar en el cliente es instantáneo y la página se sirve estática. Descartado: filtrar en el servidor en cada tecla.                                 |
-| D-13 | Sprites sin el optimizador de imágenes de Next               | Son PNG pixel art de 0,5–7 KB: optimizarlos no aporta y gastaría la cuota de optimización de Vercel.                                                                          |
-| D-14 | Vista `pokedex_entries` con `security_invoker`               | Una consulta simple para la web sin saltarse RLS (por defecto, una vista se ejecuta con los permisos de su dueño).                                                            |
-| D-15 | Rediseño «carpeta del coleccionista», tema claro por defecto | Identidad propia ligada al coleccionismo de cartas; las cartas y los colores de tipo destacan más sobre páginas claras. Diseño de carta original (no imita la carta oficial). |
-| D-16 | Archivo (con eje de anchura) + Newsreader                    | Una sola familia de palo seco cubre interfaz y titulares condensados; la serif da el tono de texto impreso. Sustituyen a Unbounded y Atkinson.                                |
-| D-17 | Efecto holográfico con delegación de eventos y variables CSS | Un solo par de listeners para toda la rejilla y el dibujo en CSS: barato con cientos de cartas y respeta «reducir movimiento».                                                |
-| D-18 | Prerenderizar las 1025 fichas en el build                    | 2050 páginas en ~74 s de build; a cambio, cada ficha se sirve estática. Alternativa: prerenderizar un subconjunto y generar el resto en la primera visita.                    |
-| D-19 | Ficha con una sola consulta con relaciones incrustadas       | Menos idas y vueltas a la base de datos y tipos inferidos del esquema; sin vistas extra.                                                                                      |
+| ID   | Decisión                                                                | Motivo                                                                                                                                                                                                                                |
+| ---- | ----------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D-01 | Next.js 16 con Cache Components activado                                | Es el valor por defecto de la versión y el futuro del framework; adoptarlo ahora evita una migración después.                                                                                                                         |
+| D-02 | next-intl con español en la raíz                                        | El español es el idioma principal; inglés bajo `/en`. Librería madura, compatible con `next/root-params`.                                                                                                                             |
+| D-03 | Tema sin librerías (`data-theme` + script en línea)                     | Patrón oficial de Next.js, una dependencia menos, sin parpadeo.                                                                                                                                                                       |
+| D-04 | Tipografías autoalojadas (`next/font/local`)                            | El build no depende de Google Fonts y los visitantes no hacen peticiones a terceros. Ambas tienen licencia OFL.                                                                                                                       |
+| D-05 | Componentes de shadcn/ui escritos a mano en la fase 1                   | El registro de shadcn no era accesible desde el entorno de desarrollo. `components.json` está listo para usar `npx shadcn add` normalmente.                                                                                           |
+| D-06 | `global-not-found` (experimental) para 404 reales                       | El layout raíz vive dentro de `[locale]`; es el caso exacto para el que Next documenta esta opción. Descartado: lista de rutas en el proxy.                                                                                           |
+| D-07 | Datos de PokeAPI importados a Supabase; imágenes enlazadas              | Búsquedas y filtros rápidos, sin depender de un servicio externo en cada visita; no redistribuimos imágenes con derechos.                                                                                                             |
+| D-08 | `noUncheckedIndexedAccess` en TypeScript                                | Con muchos arrays e índices (Pokémon, movimientos…), obliga a comprobar que un elemento existe antes de usarlo.                                                                                                                       |
+| D-09 | Importación con script propio (`pg`) en una transacción                 | Atómica e idempotente. Descartado `seed.sql` + `db push --include-seed`: el CLI no vuelve a ejecutar un seed modificado.                                                                                                              |
+| D-10 | TLS con verificación completa al conectar a la BD                       | Recomendación de Supabase (`verify-full`): evita que alguien en medio suplante a la base de datos.                                                                                                                                    |
+| D-11 | Node.js 22.12 como mínimo                                               | Requisito de Vitest 5; Node 20 terminó su soporte en abril de 2026.                                                                                                                                                                   |
+| D-12 | Pokédex prerenderizada + filtrado en el navegador                       | 1025 entradas pequeñas: filtrar en el cliente es instantáneo y la página se sirve estática. Descartado: filtrar en el servidor en cada tecla.                                                                                         |
+| D-13 | Sprites sin el optimizador de imágenes de Next                          | Son PNG pixel art de 0,5–7 KB: optimizarlos no aporta y gastaría la cuota de optimización de Vercel.                                                                                                                                  |
+| D-14 | Vista `pokedex_entries` con `security_invoker`                          | Una consulta simple para la web sin saltarse RLS (por defecto, una vista se ejecuta con los permisos de su dueño).                                                                                                                    |
+| D-15 | Rediseño «carpeta del coleccionista», tema claro por defecto            | Identidad propia ligada al coleccionismo de cartas; las cartas y los colores de tipo destacan más sobre páginas claras. Diseño de carta original (no imita la carta oficial).                                                         |
+| D-16 | Archivo (con eje de anchura) + Newsreader                               | Una sola familia de palo seco cubre interfaz y titulares condensados; la serif da el tono de texto impreso. Sustituyen a Unbounded y Atkinson.                                                                                        |
+| D-17 | Efecto holográfico con delegación de eventos y variables CSS            | Un solo par de listeners para toda la rejilla y el dibujo en CSS: barato con cientos de cartas y respeta «reducir movimiento».                                                                                                        |
+| D-18 | Prerenderizar las 1025 fichas en el build                               | 2050 páginas en ~74 s de build; a cambio, cada ficha se sirve estática. Alternativa: prerenderizar un subconjunto y generar el resto en la primera visita.                                                                            |
+| D-19 | Ficha con una sola consulta con relaciones incrustadas                  | Menos idas y vueltas a la base de datos y tipos inferidos del esquema; sin vistas extra.                                                                                                                                              |
+| D-20 | Línea evolutiva con los datos ya importados, en una consulta compartida | Sin migración ni nueva importación; dos peticiones en todo el build en vez de 2050. Los métodos de evolución (nivel, objeto…) sí necesitarán tabla nueva.                                                                             |
+| D-21 | La carta se adapta a su propio ancho (consultas de contenedor)          | La misma carta aparece a varios tamaños (rejilla, línea evolutiva, abanico); decidir por el ancho de pantalla dejaba tipos tapando el total en móviles.                                                                               |
+| D-22 | Tabla de efectividades en el código, no en la base de datos             | 324 números que solo cambian cuando una generación añade un tipo (la última vez, Hada en 2013); la calculadora los necesita en el navegador para responder al instante y sin red. Generada del CSV de PokeAPI y comprobada con tests. |
+| D-23 | Ruta `/tipos` igual en ambos idiomas                                    | El español es el idioma principal; traducir rutas (`/en/types`) con `pathnames` exigiría reescribir todos los enlaces dinámicos. Revisable si importa para el SEO en inglés.                                                          |

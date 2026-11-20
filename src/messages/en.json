@@ -17,7 +17,8 @@
     },
     "mainNav": "Main navigation",
     "nav": {
-      "pokedex": "Pokédex"
+      "pokedex": "Pokédex",
+      "types": "Types"
     }
   },
   "Footer": {
@@ -184,6 +185,65 @@
       "special-defense": "Sp. Def",
       "speed": "Speed"
     },
-    "total": "Total"
+    "total": "Total",
+    "evolutionHeading": "Evolution line",
+    "evolutionIntro": "Tap a card to open that Pokémon's page.",
+    "evolvesInto": "evolves into",
+    "currentInLine": "(this page)",
+    "noEvolution": "{name} does not evolve: it is the only card in its family.",
+    "matchupsHeading": "Weaknesses and resistances",
+    "matchupsNote": "Based on its types, not counting abilities: Levitate, for example, cancels Ground damage.",
+    "openInCalculator": "Open in the type calculator"
+  },
+  "TypeCalculator": {
+    "title": "Type calculator",
+    "metaDescription": "Weaknesses, resistances and immunities of any Pokémon type or pair of types, plus the full type chart.",
+    "intro": "Which types hurt your Pokémon and which ones each attack hits hard. Using the chart current games use (Generation VI onwards).",
+    "calculatorHeading": "Calculator",
+    "modeLabel": "What to calculate",
+    "modes": {
+      "defense": "Defense",
+      "attack": "Attack"
+    },
+    "typesLabel": "Types",
+    "hint": {
+      "defense": "Pick one or two: your Pokémon's.",
+      "attack": "Pick the move's type."
+    },
+    "clear": "Clear types",
+    "empty": {
+      "defense": "Pick one or two types to see what hurts them and what doesn't.",
+      "attack": "Pick an attacking type to see which types it is effective against."
+    },
+    "resultFor": {
+      "defense": "A Pokémon of type",
+      "attack": "An attack of type"
+    },
+    "defense": {
+      "x4": "Very weak",
+      "x2": "Weak",
+      "x1": "Normal damage",
+      "x05": "Resists",
+      "x025": "Strongly resists",
+      "x0": "Immune"
+    },
+    "attack": {
+      "x2": "Super effective against",
+      "x1": "Normal against",
+      "x05": "Not very effective against",
+      "x0": "No effect on"
+    },
+    "seeInPokedex": "See Pokémon of this type in the Pokédex",
+    "chartHeading": "Full chart",
+    "chartIntro": "Each row is the attacking type and each column the type of the Pokémon taking the hit. On a phone, swipe the chart sideways.",
+    "chartCaption": "Damage multiplier of each attacking type (rows) against each defending type (columns). Cells without a number are normal damage, ×1.",
+    "axisAttack": "Attack",
+    "axisDefense": "Defense",
+    "legend": {
+      "x2": "Super effective (×2)",
+      "x05": "Not very effective (×½)",
+      "x0": "No effect (×0)",
+      "x1": "Normal (×1)"
+    }
   }
 }
