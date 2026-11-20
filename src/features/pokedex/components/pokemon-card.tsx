@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { TypeBadge } from "@/features/types/components/type-badge";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 import { formatDexNumber, type PokedexEntry } from "../lib/filters";
 import { spriteUrl } from "../lib/sprites";
@@ -9,7 +10,11 @@ import { spriteUrl } from "../lib/sprites";
 /** National Pokédex size: the "set" every card belongs to. */
 export const COLLECTION_SIZE = 1025;
 
-const RARITY_MARK = { common: "●", legendary: "★", mythical: "✦" } as const;
+export const RARITY_MARK = {
+  common: "●",
+  legendary: "★",
+  mythical: "✦",
+} as const;
 
 /**
  * A Pokémon as a collectible card (original design, 5:7 like any trading
@@ -129,12 +134,35 @@ export function PokemonCard({
   );
 }
 
+/**
+ * A card that opens the Pokémon's page. The link wraps the whole card; its
+ * accessible name is just "Name, number" instead of every text on the card.
+ */
+export function PokemonCardLink({
+  entry,
+  priority = false,
+}: {
+  entry: PokedexEntry;
+  priority?: boolean;
+}) {
+  const t = useTranslations("Pokedex");
+  return (
+    <Link
+      href={`/pokedex/${entry.slug}`}
+      aria-label={`${entry.name}, ${t("card.setNumber", { number: entry.dexNumber, total: COLLECTION_SIZE })}`}
+      className="holo-link block rounded-[14px] outline-offset-4"
+    >
+      <PokemonCard entry={entry} priority={priority} />
+    </Link>
+  );
+}
+
 export function PokemonGrid({ entries }: { entries: readonly PokedexEntry[] }) {
   return (
     <ul className="grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 lg:grid-cols-5">
       {entries.map((entry, index) => (
         <li key={entry.dexNumber}>
-          <PokemonCard entry={entry} priority={index < 10} />
+          <PokemonCardLink entry={entry} priority={index < 10} />
         </li>
       ))}
     </ul>

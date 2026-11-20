@@ -145,6 +145,45 @@
         "legendary": "Legendary",
         "mythical": "Mythical"
       }
+    },
+    "regions": {
+      "1": "Kanto",
+      "2": "Johto",
+      "3": "Hoenn",
+      "4": "Sinnoh",
+      "5": "Unova",
+      "6": "Kalos",
+      "7": "Alola",
+      "8": "Galar",
+      "9": "Paldea"
     }
+  },
+  "Pokemon": {
+    "metaDescription": "{name}: types, base stats, abilities and Pokédex entry.",
+    "backToPokedex": "Pokédex",
+    "breadcrumb": "Breadcrumb",
+    "pager": "Previous and next Pokémon",
+    "previous": "Previous",
+    "next": "Next",
+    "entryHeading": "Pokédex entry",
+    "onlyInEnglish": "Only available in English",
+    "noEntry": "There is no entry for this Pokémon yet.",
+    "dataHeading": "Data",
+    "height": "Height",
+    "weight": "Weight",
+    "abilities": "Abilities",
+    "hiddenAbility": "hidden",
+    "region": "Region",
+    "statsHeading": "Base stats",
+    "statsIntro": "The base value of each stat, out of a maximum of 255. Every member of the species shares them.",
+    "stats": {
+      "hp": "HP",
+      "attack": "Attack",
+      "defense": "Defense",
+      "special-attack": "Sp. Atk",
+      "special-defense": "Sp. Def",
+      "speed": "Speed"
+    },
+    "total": "Total"
   }
 }

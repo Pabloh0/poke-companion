@@ -61,8 +61,24 @@ Chrome):
   tapa el texto.
 - Sin errores en consola ni respuestas fallidas al cargar inicio y Pokédex.
 
-Tests unitarios actuales (`npm run test`, 28): transformación de datos de
-PokeAPI (12), conexión segura (4) y filtros y rareza de la Pokédex (12).
+Verificación de la ficha (réplica de Supabase, build de producción, Chrome):
+
+- Build con 2062 páginas prerenderizadas en 74 s.
+- Pikachu: categoría, habilidades (Electricidad Estática, Pararrayos oculta),
+  `0,4 m` y `6 kg`, región Kanto, anterior Arbok y siguiente Raichu.
+- Pecharunt (#1025): entrada en inglés marcada con `lang="en"` y sin
+  «siguiente»; Bulbasaur sin «anterior».
+- Clic en una carta del listado → ficha; con teclado, el foco ilumina la lámina
+  y Enter abre la ficha; el botón Atrás del navegador funciona.
+- Sin scroll horizontal a 360 y 390 px con los 12 nombres más largos en ambos
+  idiomas (p. ej. Crabominable, Ferropaladín, Brute Bonnet).
+- Sin errores en consola ni respuestas fallidas.
+- En producción (Vercel): portada, Pokédex (1025 cartas, Pecharunt incluido) y
+  versión inglesa responden; la URL pública no pide iniciar sesión.
+
+Tests unitarios actuales (`npm run test`, 36): transformación de datos de
+PokeAPI (12), conexión segura (4), filtros y rareza de la Pokédex (12) y
+lógica de la ficha (8).
 
 ## Qué se añadirá y cuándo
 

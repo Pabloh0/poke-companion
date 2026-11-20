@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import type { PokedexEntry } from "../lib/filters";
 import { HoloSurface } from "./holo-surface";
-import { PokemonCard } from "./pokemon-card";
+import { PokemonCardLink } from "./pokemon-card";
 
 /**
  * A hand of cards opened like a fan. The middle card sits in front.
@@ -33,7 +33,7 @@ export function CardFan({
               style={style}
               className="absolute bottom-[4%] left-1/2 w-[34%] origin-bottom animate-deal"
             >
-              <PokemonCard entry={entry} priority />
+              <PokemonCardLink entry={entry} priority />
             </li>
           );
         })}

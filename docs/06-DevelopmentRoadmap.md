@@ -21,7 +21,7 @@ pronto y no tienen riesgos de seguridad.
 - [x] Cabecera, pie con aviso legal, inicio, 404.
 - [x] CI en GitHub Actions.
 - [x] Repositorio en GitHub y primer push.
-- [ ] Proyecto conectado en Vercel y primer despliegue.
+- [x] Proyecto conectado en Vercel y primer despliegue.
 
 ## Fase 2 · Pokédex 🚧
 
@@ -36,8 +36,11 @@ pronto y no tienen riesgos de seguridad.
       dos tipos y por generación, URL compartible.
 - [x] Rediseño visual «carpeta del coleccionista»: cartas con marco por tipo,
       efecto holográfico, filtros como pestañas de carpeta, nuevo inicio.
-- [ ] Ficha de Pokémon (estadísticas, habilidades, descripción, formas).
-- [ ] Despliegue en Vercel (región París, `cdg1`).
+- [x] Ficha de Pokémon: carta grande, entrada de la Pokédex, estadísticas
+      base, habilidades, altura, peso y navegación anterior/siguiente.
+- [x] Despliegue en Vercel (región París, `cdg1`):
+      https://pokecompanion-app.vercel.app
+- [ ] Formas alternativas (regionales, Mega, Gigamax) en la ficha.
 
 ## Fase 3 · Calculadora de tipos
 

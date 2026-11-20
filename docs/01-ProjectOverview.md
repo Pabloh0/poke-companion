@@ -83,4 +83,7 @@ Lo que existe hoy y funciona (verificado con build de producción):
 - Identidad visual propia («La carpeta del coleccionista»), ver
   [05-DesignSystem.md](05-DesignSystem.md).
 
-Todavía **no** hay ficha de cada Pokémon ni autenticación.
+- Ficha de cada Pokémon con estadísticas, habilidades y descripción.
+- Publicada en **https://pokecompanion-app.vercel.app** (Vercel, París).
+
+Todavía **no** hay autenticación ni formas alternativas.

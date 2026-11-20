@@ -155,6 +155,22 @@ WCAG AA (`src/features/types/data/pokemon-types.ts`).
 - Solo con ratón (en pantallas táctiles, inclinar al hacer scroll molesta).
 - Con «reducir movimiento», la carta no se inclina.
 
+### Ficha (`/pokedex/[slug]`)
+
+- **Carta grande** (`PokemonHeroCard`): el mismo diseño que la del listado,
+  impresa en grande con el artwork oficial, y con efecto holográfico.
+- **Cabecera**: número `#0025` en cobalto, nombre gigante en Archivo condensada
+  (tamaño fluido con `clamp` para que los nombres de 12 letras quepan a 360 px)
+  y categoría en serif cursiva.
+- **Entrada de la Pokédex**: cita en serif cursiva grande, con una regla
+  vertical del color del tipo principal.
+- **Datos**: altura y peso formateados según el idioma (`0,4 m` / `0.4 m`),
+  región y habilidades (la oculta, marcada en cursiva).
+- **Estadísticas base** (`StatBars`): barras del color del tipo principal sobre
+  255, siempre con el número escrito al lado.
+- **Pasar hoja** (`PokemonPager`): anterior y siguiente con su sprite, como las
+  páginas de una carpeta.
+
 ### Pestañas de carpeta (`GenerationTabs`)
 
 Las generaciones (Todas, I–IX) son pestañas unidas a la página de la carpeta
@@ -201,6 +217,10 @@ del menú: subrayado grueso.
 | `Button`           | `src/components/ui/button.tsx` (shadcn)                  | Server |
 | `TypeBadge`        | `src/features/types/components/type-badge.tsx`           | Server |
 | `PokemonCard`      | `src/features/pokedex/components/pokemon-card.tsx`       | Server |
+| `PokemonCardLink`  | `src/features/pokedex/components/pokemon-card.tsx`       | Server |
+| `PokemonHeroCard`  | `src/features/pokedex/components/pokemon-hero-card.tsx`  | Server |
+| `StatBars`         | `src/features/pokedex/components/stat-bars.tsx`          | Server |
+| `PokemonPager`     | `src/features/pokedex/components/pokemon-pager.tsx`      | Server |
 | `HoloSurface`      | `src/features/pokedex/components/holo-surface.tsx`       | Client |
 | `CardFan`          | `src/features/pokedex/components/card-fan.tsx`           | Server |
 | `PokedexFilterBar` | `src/features/pokedex/components/pokedex-filter-bar.tsx` | Client |

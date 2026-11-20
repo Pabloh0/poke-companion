@@ -4,20 +4,20 @@
 
 ## Stack y versiones
 
-| Pieza          | Versión           | Notas                                                                     |
-| -------------- | ----------------- | ------------------------------------------------------------------------- |
-| Node.js        | ≥ 22.12           | Lo exige Vitest 5; Node 20 ya no tiene soporte                            |
-| Next.js        | 16.4.6            | App Router, Turbopack, Cache Components activado                          |
-| React          | 19.3              |                                                                           |
-| TypeScript     | 5.x               | `strict` + `noUncheckedIndexedAccess`                                     |
-| Tailwind CSS   | 4.3               | Configuración en CSS (`globals.css`), sin `tailwind.config`               |
-| shadcn/ui      | estilo `new-york` | Componentes copiados en `src/components/ui`                               |
-| next-intl      | 4.15              | Rutas y traducciones                                                      |
-| Supabase       | PostgreSQL 17     | Proyecto en West EU (París). Datos de referencia; autenticación en fase 6 |
-| supabase-js    | 2.x               | Lectura desde la web con la clave publicable                              |
-| Vitest         | 5.x               | Tests unitarios                                                           |
-| Vercel         | Hobby             | Funciones en París (`cdg1`, `vercel.json`), junto a la base de datos      |
-| GitHub Actions | —                 | CI: lint, tipos, formato, tests y build                                   |
+| Pieza          | Versión           | Notas                                                                             |
+| -------------- | ----------------- | --------------------------------------------------------------------------------- |
+| Node.js        | ≥ 22.12           | Lo exige Vitest 5; Node 20 ya no tiene soporte                                    |
+| Next.js        | 16.4.6            | App Router, Turbopack, Cache Components activado                                  |
+| React          | 19.3              |                                                                                   |
+| TypeScript     | 5.x               | `strict` + `noUncheckedIndexedAccess`                                             |
+| Tailwind CSS   | 4.3               | Configuración en CSS (`globals.css`), sin `tailwind.config`                       |
+| shadcn/ui      | estilo `new-york` | Componentes copiados en `src/components/ui`                                       |
+| next-intl      | 4.15              | Rutas y traducciones                                                              |
+| Supabase       | PostgreSQL 17     | Proyecto en West EU (París). Datos de referencia; autenticación en fase 6         |
+| supabase-js    | 2.x               | Lectura desde la web con la clave publicable                                      |
+| Vitest         | 5.x               | Tests unitarios                                                                   |
+| Vercel         | Hobby             | En producción: https://pokecompanion-app.vercel.app · funciones en París (`cdg1`) |
+| GitHub Actions | —                 | CI: lint, tipos, formato, tests y build                                           |
 
 ## Estructura de carpetas
 
@@ -31,6 +31,7 @@ src/
 │   │   ├── layout.tsx        Layout raíz: <html>, fuentes, tema, cabecera, pie
 │   │   ├── page.tsx          Inicio
 │   │   ├── pokedex/page.tsx  Pokédex (listado con búsqueda y filtros)
+│   │   ├── pokedex/[slug]/   Ficha de cada Pokémon (/pokedex/pikachu)
 │   │   └── not-found.tsx     404 dentro de la web (notFound() en una página)
 │   ├── global-not-found.tsx  404 para direcciones que no existen en absoluto
 │   └── globals.css           Tokens de diseño y Tailwind
@@ -159,6 +160,24 @@ Consecuencia para CI y Vercel: **el build necesita las variables
 `NEXT_PUBLIC_SUPABASE_URL` y `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`**, porque
 lee Supabase para prerenderizar.
 
+### Ficha de cada Pokémon (`/pokedex/[slug]`)
+
+- `getPokemonDetail(slug, locale)` trae en **una sola petición** la forma por
+  defecto con su especie, traducciones, tipos, estadísticas y habilidades: la
+  API de Supabase (PostgREST) sigue las claves foráneas e incrusta las filas
+  relacionadas. Los tipos de TypeScript del resultado se infieren del esquema.
+- Textos con respaldo: si falta la categoría o la descripción en español, se
+  muestra la inglesa marcada con `lang="en"` y el aviso «Solo disponible en
+  inglés».
+- `generateStaticParams` devuelve los 1025 slugs: se prerenderizan **2050
+  páginas** (dos idiomas). En el build de prueba tardó 74 s; es asumible y a
+  cambio cada ficha se sirve estática al instante.
+- Limitación conocida: un slug inexistente (`/pokedex/inventado`) muestra la
+  página 404 de la web, pero con código 200 + `noindex` (comportamiento
+  documentado de Next con Cache Components; `dynamicParams = false` no está
+  disponible en ese modo). Para un 404 estricto habría que validar el slug en
+  el proxy contra la lista de slugs. Pendiente si llega a importar.
+
 ### Importación
 
 - **Fuente**: los datos de PokeAPI (licencia BSD-3) se importan con
@@ -173,7 +192,8 @@ lee Supabase para prerenderizar.
 - Se enlazan desde el repositorio público de sprites de PokeAPI
   (`raw.githubusercontent.com/PokeAPI/sprites`), las mismas URLs que devuelve
   la propia PokeAPI. No se copian a nuestro almacenamiento.
-- En el listado se usan los sprites pixel art de 96 px (0,5–7 KB).
+- En el listado se usan los sprites pixel art de 96 px (0,5–7 KB); en la ficha,
+  el artwork oficial de 475 px (100–200 KB), sin optimizador (D-13).
 - Supabase Storage queda para contenido de los usuarios (avatares).
 
 Diseño detallado de la base de datos en [04-DatabaseDesign.md](04-DatabaseDesign.md).
@@ -199,3 +219,5 @@ Diseño detallado de la base de datos en [04-DatabaseDesign.md](04-DatabaseDesig
 | D-15 | Rediseño «carpeta del coleccionista», tema claro por defecto | Identidad propia ligada al coleccionismo de cartas; las cartas y los colores de tipo destacan más sobre páginas claras. Diseño de carta original (no imita la carta oficial). |
 | D-16 | Archivo (con eje de anchura) + Newsreader                    | Una sola familia de palo seco cubre interfaz y titulares condensados; la serif da el tono de texto impreso. Sustituyen a Unbounded y Atkinson.                                |
 | D-17 | Efecto holográfico con delegación de eventos y variables CSS | Un solo par de listeners para toda la rejilla y el dibujo en CSS: barato con cientos de cartas y respeta «reducir movimiento».                                                |
+| D-18 | Prerenderizar las 1025 fichas en el build                    | 2050 páginas en ~74 s de build; a cambio, cada ficha se sirve estática. Alternativa: prerenderizar un subconjunto y generar el resto en la primera visita.                    |
+| D-19 | Ficha con una sola consulta con relaciones incrustadas       | Menos idas y vueltas a la base de datos y tipos inferidos del esquema; sin vistas extra.                                                                                      |

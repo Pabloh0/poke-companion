@@ -145,6 +145,45 @@
         "legendary": "Legendario",
         "mythical": "Singular"
       }
+    },
+    "regions": {
+      "1": "Kanto",
+      "2": "Johto",
+      "3": "Hoenn",
+      "4": "Sinnoh",
+      "5": "Teselia",
+      "6": "Kalos",
+      "7": "Alola",
+      "8": "Galar",
+      "9": "Paldea"
     }
+  },
+  "Pokemon": {
+    "metaDescription": "{name}: tipos, estadísticas base, habilidades y entrada de la Pokédex.",
+    "backToPokedex": "Pokédex",
+    "breadcrumb": "Ruta de navegación",
+    "pager": "Pokémon anterior y siguiente",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "entryHeading": "Entrada de la Pokédex",
+    "onlyInEnglish": "Solo disponible en inglés",
+    "noEntry": "Todavía no hay una entrada para este Pokémon.",
+    "dataHeading": "Datos",
+    "height": "Altura",
+    "weight": "Peso",
+    "abilities": "Habilidades",
+    "hiddenAbility": "oculta",
+    "region": "Región",
+    "statsHeading": "Estadísticas base",
+    "statsIntro": "Los valores base de cada estadística, sobre un máximo de 255. Son iguales en todos los ejemplares de la especie.",
+    "stats": {
+      "hp": "PS",
+      "attack": "Ataque",
+      "defense": "Defensa",
+      "special-attack": "At. Esp.",
+      "special-defense": "Def. Esp.",
+      "speed": "Velocidad"
+    },
+    "total": "Total"
   }
 }

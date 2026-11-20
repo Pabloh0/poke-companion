@@ -4,6 +4,8 @@ Plataforma web para jugadores de Pokémon: Pokédex, constructor de equipos,
 calculadora de tipos, registro de colección y más. Proyecto de fans
 independiente, en desarrollo.
 
+**En producción:** https://pokecompanion-app.vercel.app
+
 > PokéCompanion no está afiliado, respaldado ni patrocinado por Nintendo,
 > Game Freak, Creatures Inc. ni The Pokémon Company. Pokémon y los nombres de
 > los Pokémon son marcas de sus respectivos propietarios.

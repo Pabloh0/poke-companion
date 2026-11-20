@@ -230,6 +230,10 @@
 .holo-card[data-active] .holo-foil {
   opacity: 1;
 }
+/* Keyboard focus on a card link lights the foil too (no tilt). */
+.holo-link:focus-visible .holo-foil {
+  opacity: 0.8;
+}
 /* Legendary and mythical cards are foil all the time. */
 .holo-card[data-rarity="legendary"] .holo-foil,
 .holo-card[data-rarity="mythical"] .holo-foil {

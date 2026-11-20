@@ -10,3 +10,8 @@ const SPRITES_BASE =
 export function spriteUrl(pokemonId: number): string {
   return `${SPRITES_BASE}/${pokemonId}.png`;
 }
+
+/** Official artwork, 475×475 PNG (≈100–200 KB): for the detail page. */
+export function artworkUrl(pokemonId: number): string {
+  return `${SPRITES_BASE}/other/official-artwork/${pokemonId}.png`;
+}
