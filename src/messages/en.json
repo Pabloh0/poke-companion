@@ -1,0 +1,93 @@
+{
+  "Metadata": {
+    "title": "PokéCompanion",
+    "description": "Tools for Pokémon players: Pokédex, team builder, type calculator and collection tracker."
+  },
+  "Common": {
+    "skipToContent": "Skip to content",
+    "home": "Home"
+  },
+  "Header": {
+    "homeLink": "PokéCompanion, go to home",
+    "toggleTheme": "Switch between light and dark mode",
+    "language": "Language",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "Footer": {
+    "disclaimer": "PokéCompanion is an independent fan project. It is not affiliated with, endorsed or sponsored by Nintendo, Game Freak, Creatures Inc. or The Pokémon Company. Pokémon and Pokémon character names are trademarks of their respective owners."
+  },
+  "Home": {
+    "title": "Pokédex, teams and collection in one place",
+    "intro": "PokéCompanion brings together the tools you reach for while playing: look up a Pokémon, check which types hit it hard, build a team and keep track of what you've caught.",
+    "typesHeading": "The 18 types",
+    "typesIntro": "The foundation of almost everything: each type has its own colour, and you'll see it the same way in the Pokédex, in teams and in the calculator.",
+    "roadmapHeading": "What we're building",
+    "roadmapIntro": "The site ships in stages. This is the order the tools will arrive in:",
+    "status": {
+      "next": "Up next",
+      "planned": "Later"
+    },
+    "modules": {
+      "pokedex": {
+        "name": "Pokédex",
+        "description": "A full entry for every Pokémon: stats, types, abilities and moves."
+      },
+      "typeCalculator": {
+        "name": "Type calculator",
+        "description": "Pick one or two types and see their weaknesses and resistances at a glance."
+      },
+      "evolutions": {
+        "name": "Evolutions",
+        "description": "Evolution chains with the exact method: level, item, friendship or trade."
+      },
+      "database": {
+        "name": "Moves, abilities and items",
+        "description": "Search any move, ability or item and find out which Pokémon use it."
+      },
+      "accounts": {
+        "name": "Trainer profile",
+        "description": "Your account, your preferences and a dashboard with your activity."
+      },
+      "teamBuilder": {
+        "name": "Team builder",
+        "description": "Build teams of six and spot coverage gaps before you battle."
+      },
+      "collection": {
+        "name": "Collection",
+        "description": "Mark the Pokémon you own, including shinies and regional forms."
+      },
+      "community": {
+        "name": "Community",
+        "description": "Share teams and collections with other trainers."
+      }
+    }
+  },
+  "NotFound": {
+    "title": "Nothing here",
+    "description": "The page you're looking for doesn't exist or has moved.",
+    "backHome": "Back to home"
+  },
+  "Types": {
+    "normal": "Normal",
+    "fire": "Fire",
+    "water": "Water",
+    "electric": "Electric",
+    "grass": "Grass",
+    "ice": "Ice",
+    "fighting": "Fighting",
+    "poison": "Poison",
+    "ground": "Ground",
+    "flying": "Flying",
+    "psychic": "Psychic",
+    "bug": "Bug",
+    "rock": "Rock",
+    "ghost": "Ghost",
+    "dragon": "Dragon",
+    "dark": "Dark",
+    "steel": "Steel",
+    "fairy": "Fairy"
+  }
+}

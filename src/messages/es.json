@@ -1,0 +1,93 @@
+{
+  "Metadata": {
+    "title": "PokéCompanion",
+    "description": "Herramientas para jugadores de Pokémon: Pokédex, constructor de equipos, calculadora de tipos y registro de tu colección."
+  },
+  "Common": {
+    "skipToContent": "Saltar al contenido",
+    "home": "Inicio"
+  },
+  "Header": {
+    "homeLink": "PokéCompanion, ir al inicio",
+    "toggleTheme": "Cambiar entre modo claro y oscuro",
+    "language": "Idioma",
+    "languages": {
+      "es": "Español",
+      "en": "English"
+    }
+  },
+  "Footer": {
+    "disclaimer": "PokéCompanion es un proyecto de fans independiente. No está afiliado, respaldado ni patrocinado por Nintendo, Game Freak, Creatures Inc. ni The Pokémon Company. Pokémon y los nombres de los Pokémon son marcas de sus respectivos propietarios."
+  },
+  "Home": {
+    "title": "Pokédex, equipos y colección en un solo sitio",
+    "intro": "PokéCompanion reúne las herramientas que usas mientras juegas: consultar un Pokémon, ver qué tipos le hacen daño, preparar un equipo y llevar la cuenta de lo que ya has capturado.",
+    "typesHeading": "Los 18 tipos",
+    "typesIntro": "La base de casi todo: cada tipo tiene su color, y lo verás igual en la Pokédex, en los equipos y en la calculadora.",
+    "roadmapHeading": "Lo que estamos construyendo",
+    "roadmapIntro": "La web se publica por partes. Este es el orden en el que llegarán las herramientas:",
+    "status": {
+      "next": "Lo siguiente",
+      "planned": "Más adelante"
+    },
+    "modules": {
+      "pokedex": {
+        "name": "Pokédex",
+        "description": "Ficha completa de cada Pokémon: estadísticas, tipos, habilidades y movimientos."
+      },
+      "typeCalculator": {
+        "name": "Calculadora de tipos",
+        "description": "Elige uno o dos tipos y mira de un vistazo sus debilidades y resistencias."
+      },
+      "evolutions": {
+        "name": "Evoluciones",
+        "description": "Cadenas evolutivas con el método exacto: nivel, objeto, amistad o intercambio."
+      },
+      "database": {
+        "name": "Movimientos, habilidades y objetos",
+        "description": "Busca cualquier movimiento, habilidad u objeto y descubre qué Pokémon lo usan."
+      },
+      "accounts": {
+        "name": "Perfil de entrenador",
+        "description": "Tu cuenta, tus preferencias y un panel con tu actividad."
+      },
+      "teamBuilder": {
+        "name": "Constructor de equipos",
+        "description": "Monta equipos de seis y detecta los huecos de cobertura antes de combatir."
+      },
+      "collection": {
+        "name": "Colección",
+        "description": "Marca los Pokémon que tienes, incluidos variocolores y formas regionales."
+      },
+      "community": {
+        "name": "Comunidad",
+        "description": "Comparte equipos y colecciones con otros entrenadores."
+      }
+    }
+  },
+  "NotFound": {
+    "title": "Aquí no hay nada",
+    "description": "La página que buscas no existe o ha cambiado de dirección.",
+    "backHome": "Volver al inicio"
+  },
+  "Types": {
+    "normal": "Normal",
+    "fire": "Fuego",
+    "water": "Agua",
+    "electric": "Eléctrico",
+    "grass": "Planta",
+    "ice": "Hielo",
+    "fighting": "Lucha",
+    "poison": "Veneno",
+    "ground": "Tierra",
+    "flying": "Volador",
+    "psychic": "Psíquico",
+    "bug": "Bicho",
+    "rock": "Roca",
+    "ghost": "Fantasma",
+    "dragon": "Dragón",
+    "dark": "Siniestro",
+    "steel": "Acero",
+    "fairy": "Hada"
+  }
+}

@@ -1,0 +1,162 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+ * PokéCompanion design tokens. Full documentation: docs/05-DesignSystem.md
+ *
+ * Theme lives in the `data-theme` attribute on <html> ("dark" | "light").
+ * Dark is the default; an inline script in the root layout applies the saved
+ * preference before first paint (no flash).
+ */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ---------- Dark theme (default): "night route" ---------- */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #141833; /* Noche */
+  --foreground: #eceefb; /* Luna */
+  --card: #1c2147; /* Superficie */
+  --card-foreground: #eceefb;
+  --popover: #1c2147;
+  --popover-foreground: #eceefb;
+  --primary: #ffc93c; /* Voltio: brand accent */
+  --primary-foreground: #1a1630;
+  --secondary: #262c5c;
+  --secondary-foreground: #eceefb;
+  --muted: #20254f;
+  --muted-foreground: #a3a9d1; /* Niebla */
+  --accent: #2a3166;
+  --accent-foreground: #eceefb;
+  --destructive: #ff6b6b;
+  --destructive-foreground: #1a1630;
+  --border: #2e3566; /* Trazo */
+  --input: #343b70;
+  --ring: #ffc93c;
+  /* Text-safe version of the brand colour (links, highlighted numbers) */
+  --highlight: #ffc93c;
+}
+
+/* ---------- Light theme: "day route" ---------- */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --background: #f2f3f9;
+  --foreground: #161a3a;
+  --card: #ffffff;
+  --card-foreground: #161a3a;
+  --popover: #ffffff;
+  --popover-foreground: #161a3a;
+  --primary: #ffc21a;
+  --primary-foreground: #161a3a;
+  --secondary: #e3e6f3;
+  --secondary-foreground: #161a3a;
+  --muted: #e8eaf4;
+  --muted-foreground: #565c85;
+  --accent: #dde1f2;
+  --accent-foreground: #161a3a;
+  --destructive: #c62828;
+  --destructive-foreground: #ffffff;
+  --border: #d3d7ea;
+  --input: #c9cee6;
+  --ring: #3a44a0;
+  --highlight: #8a5a00;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-highlight: var(--highlight);
+
+  --font-sans: var(--font-body);
+  --font-display: var(--font-heading);
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.875rem;
+  --radius-xl: 1.25rem;
+}
+
+/*
+ * The 18 types. Same colour in both themes: they are data, not decoration.
+ * Text colour on each chip is chosen per type for WCAG AA contrast
+ * (see src/features/types/data/pokemon-types.ts).
+ */
+@theme {
+  --color-type-normal: #a8a77a;
+  --color-type-fire: #ee8130;
+  --color-type-water: #6390f0;
+  --color-type-electric: #f7d02c;
+  --color-type-grass: #7ac74c;
+  --color-type-ice: #96d9d6;
+  --color-type-fighting: #c22e28;
+  --color-type-poison: #a33ea1;
+  --color-type-ground: #e2bf65;
+  --color-type-flying: #a98ff3;
+  --color-type-psychic: #f95587;
+  --color-type-bug: #a6b91a;
+  --color-type-rock: #b6a136;
+  --color-type-ghost: #735797;
+  --color-type-dragon: #6f35fc;
+  --color-type-dark: #705746;
+  --color-type-steel: #b7b7ce;
+  --color-type-fairy: #d685ad;
+
+  --color-ink: #161a3a; /* dark text on light type chips */
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply bg-background text-foreground;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply font-sans antialiased;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
