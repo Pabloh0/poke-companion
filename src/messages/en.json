@@ -205,7 +205,20 @@
     "openInCalculator": "Open in the type calculator",
     "formsHeading": "Regional forms",
     "formsIntro": "The same species in other regions: a different look, different types and different stats.",
-    "noFormEntry": "This regional form has no Pokédex entry in our data yet."
+    "noFormEntry": "This regional form has no Pokédex entry in our data yet.",
+    "entryBar": {
+      "label": "On this page",
+      "previousPokemon": "Previous: {name} (← key)",
+      "nextPokemon": "Next: {name} (→ key)",
+      "sections": {
+        "overview": "Data",
+        "matchups": "Weaknesses",
+        "stats": "Stats",
+        "forms": "Forms",
+        "evolution": "Evolution",
+        "moves": "Moves"
+      }
+    }
   },
   "TypeCalculator": {
     "title": "Type calculator",

@@ -9,6 +9,8 @@ import {
   LineCard,
 } from "@/features/pokedex/components/evolution-line";
 import { REGIONAL_FORMS } from "@/features/pokedex/data/regional-forms";
+import { EntryBar } from "@/features/pokedex/components/entry-bar";
+import { SECTION_SCROLL_MARGIN } from "@/features/pokedex/lib/entry-sections";
 import { HoloSurface } from "@/features/pokedex/components/holo-surface";
 import { PokemonHeroCard } from "@/features/pokedex/components/pokemon-hero-card";
 import { PokemonPager } from "@/features/pokedex/components/pokemon-pager";
@@ -34,6 +36,7 @@ import {
   MULTIPLIER_KEY,
 } from "@/features/types/lib/effectiveness";
 import { Link } from "@/i18n/navigation";
+import { cn } from "@/lib/utils";
 import { routing } from "@/i18n/routing";
 
 /**
@@ -121,264 +124,315 @@ export default async function PokemonPage({
   // The original and its regional forms (only shown when there are some).
   const family = familyOfForms(pokemon.dexNumber, entries, forms);
   const [mainType] = pokemon.types;
+  const pageLink = (
+    entry: typeof previous,
+    key: "previousPokemon" | "nextPokemon",
+  ) =>
+    entry && {
+      href: `/pokedex/${entry.slug}`,
+      label: `#${formatDexNumber(entry.dexNumber)} ${entry.name}`,
+      description: t(`entryBar.${key}`, { name: entry.name }),
+    };
+  const sectionIds = [
+    "overview",
+    "matchups",
+    "stats",
+    ...(family.length > 1 ? (["forms"] as const) : []),
+    "evolution",
+    "moves",
+  ] as const;
   const measure = (value: number, unit: "meter" | "kilogram") =>
     format.number(value, { style: "unit", unit, maximumFractionDigits: 1 });
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-8 pb-16 sm:px-6">
-      <nav aria-label={t("breadcrumb")} className="text-sm font-semibold">
-        <ol className="flex items-center gap-2 text-muted-foreground">
-          <li>
-            <Link href="/pokedex" className="hover:text-foreground">
-              {t("backToPokedex")}
-            </Link>
-          </li>
-          <li aria-hidden>/</li>
-          <li aria-current="page" className="text-foreground">
-            {pokemon.name}
-          </li>
-        </ol>
-      </nav>
-
-      <div className="mt-8 grid grid-cols-1 gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,23rem)_minmax(0,1fr)]">
-        <HoloSurface>
-          <PokemonHeroCard pokemon={pokemon} />
-        </HoloSurface>
-
-        <div className="min-w-0">
-          <p className="font-display text-2xl font-bold text-highlight condensed tabular-nums">
-            #{formatDexNumber(pokemon.dexNumber)}
-          </p>
-          <h1 className="mt-1 text-[clamp(3rem,14vw,6rem)] leading-[0.85] font-black tracking-tight [overflow-wrap:anywhere] condensed">
-            {pokemon.name}
-          </h1>
-          {pokemon.genus && (
-            <p
-              lang={pokemon.genus.locale}
-              className="mt-3 font-serif text-2xl text-muted-foreground italic"
-            >
-              {pokemon.genus.text}
-            </p>
-          )}
-          <div className="mt-5 flex flex-wrap items-center gap-2">
-            {pokemon.types.map((type) => (
-              <TypeBadge key={type} type={type} />
-            ))}
-            {pokemon.rarity !== "common" && (
-              <span className="ml-1 text-sm font-semibold">
-                {tDex(`card.rarity.${pokemon.rarity}`)}
-              </span>
-            )}
-            {pokemon.form && (
-              <span className="ml-1 text-sm font-semibold">
-                {tForms("formOf", { region: pokemon.form.regionLabel })}
-                {pokemon.form.variantLabel && ` · ${pokemon.form.variantLabel}`}
-              </span>
-            )}
-          </div>
-
-          <section aria-labelledby="entry-heading" className="mt-10">
-            <h2
-              id="entry-heading"
-              className="text-sm font-bold text-muted-foreground"
-            >
-              {t("entryHeading")}
-            </h2>
-            {pokemon.flavorText ? (
-              <blockquote
-                lang={pokemon.flavorText.locale}
-                className="mt-3 max-w-[52ch] border-l-[3px] border-(--entry) pl-5 font-serif text-2xl leading-snug italic"
-                style={
-                  {
-                    "--entry": `var(--color-type-${mainType})`,
-                  } as CSSProperties
-                }
-              >
-                {pokemon.flavorText.text}
-              </blockquote>
-            ) : (
-              <p className="mt-3 max-w-[52ch] font-serif text-lg text-muted-foreground">
-                {pokemon.form ? t("noFormEntry") : t("noEntry")}
-              </p>
-            )}
-            {pokemon.flavorText && pokemon.flavorText.locale !== locale && (
-              <p className="mt-2 pl-5 text-sm text-muted-foreground">
-                {t("onlyInEnglish")}
-              </p>
-            )}
-          </section>
-
-          <section aria-labelledby="data-heading" className="mt-10">
-            <h2 id="data-heading" className="sr-only">
-              {t("dataHeading")}
-            </h2>
-            <dl className="grid grid-cols-2 gap-x-6 gap-y-6 border-t border-foreground/15 pt-6 sm:grid-cols-4">
-              <div>
-                <dt className="text-sm font-semibold text-muted-foreground">
-                  {t("height")}
-                </dt>
-                <dd className="mt-1 font-display text-2xl font-bold condensed">
-                  {measure(pokemon.heightM, "meter")}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-sm font-semibold text-muted-foreground">
-                  {t("weight")}
-                </dt>
-                <dd className="mt-1 font-display text-2xl font-bold condensed">
-                  {measure(pokemon.weightKg, "kilogram")}
-                </dd>
-              </div>
-              <div>
-                <dt className="text-sm font-semibold text-muted-foreground">
-                  {t("region")}
-                </dt>
-                <dd className="mt-1 font-display text-2xl font-bold condensed">
-                  {pokemon.form
-                    ? pokemon.form.regionLabel
-                    : tDex(`regions.${pokemon.generation}`)}
-                </dd>
-              </div>
-              <div className="col-span-2 sm:col-span-1">
-                <dt className="text-sm font-semibold text-muted-foreground">
-                  {t("abilities")}
-                </dt>
-                <dd className="mt-1">
-                  <ul className="space-y-0.5">
-                    {pokemon.abilities.map((ability) => (
-                      <li key={ability.slug} className="font-semibold">
-                        {ability.name}
-                        {ability.isHidden && (
-                          <span className="ml-1.5 font-serif text-sm font-normal text-muted-foreground italic">
-                            ({t("hiddenAbility")})
-                          </span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                </dd>
-              </div>
-            </dl>
-          </section>
-
-          <section aria-labelledby="matchups-heading" className="mt-10">
-            <h2
-              id="matchups-heading"
-              className="text-sm font-bold text-muted-foreground"
-            >
-              {t("matchupsHeading")}
-            </h2>
-            <div className="mt-3">
-              <MatchupList rows={matchupRows} size="sm" />
-            </div>
-            <p className="mt-3 text-sm text-muted-foreground">
-              {t("matchupsNote")}{" "}
-              <Link
-                href={`/tipos?types=${pokemon.types.join(",")}`}
-                className="font-semibold text-foreground underline decoration-2 underline-offset-4 hover:text-highlight"
-              >
-                {t("openInCalculator")}
+    <div data-entry-page>
+      <EntryBar
+        label={t("entryBar.label")}
+        previous={pageLink(previous, "previousPokemon")}
+        next={pageLink(next, "nextPokemon")}
+        sections={sectionIds.map((id) => ({
+          id,
+          label: t(`entryBar.sections.${id}`),
+        }))}
+      />
+      <div className="mx-auto max-w-6xl px-4 pt-8 pb-16 sm:px-6">
+        <nav aria-label={t("breadcrumb")} className="text-sm font-semibold">
+          <ol className="flex items-center gap-2 text-muted-foreground">
+            <li>
+              <Link href="/pokedex" className="hover:text-foreground">
+                {t("backToPokedex")}
               </Link>
-            </p>
-          </section>
-        </div>
-      </div>
+            </li>
+            <li aria-hidden>/</li>
+            <li aria-current="page" className="text-foreground">
+              {pokemon.name}
+            </li>
+          </ol>
+        </nav>
 
-      <section
-        aria-labelledby="stats-heading"
-        className="mt-16 border-t-[3px] border-foreground pt-10"
-      >
-        <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
-          <div>
-            <h2
-              id="stats-heading"
-              className="text-3xl font-black tracking-tight condensed"
+        <div
+          id="overview"
+          className={cn(
+            SECTION_SCROLL_MARGIN,
+            "mt-8 grid grid-cols-1 gap-x-14 gap-y-10 lg:grid-cols-[minmax(0,23rem)_minmax(0,1fr)]",
+          )}
+        >
+          <HoloSurface>
+            <PokemonHeroCard pokemon={pokemon} />
+          </HoloSurface>
+
+          <div className="min-w-0">
+            <p className="font-display text-2xl font-bold text-highlight condensed tabular-nums">
+              #{formatDexNumber(pokemon.dexNumber)}
+            </p>
+            <h1 className="mt-1 text-[clamp(3rem,14vw,6rem)] leading-[0.85] font-black tracking-tight [overflow-wrap:anywhere] condensed">
+              {pokemon.name}
+            </h1>
+            {pokemon.genus && (
+              <p
+                lang={pokemon.genus.locale}
+                className="mt-3 font-serif text-2xl text-muted-foreground italic"
+              >
+                {pokemon.genus.text}
+              </p>
+            )}
+            <div className="mt-5 flex flex-wrap items-center gap-2">
+              {pokemon.types.map((type) => (
+                <TypeBadge key={type} type={type} />
+              ))}
+              {pokemon.rarity !== "common" && (
+                <span className="ml-1 text-sm font-semibold">
+                  {tDex(`card.rarity.${pokemon.rarity}`)}
+                </span>
+              )}
+              {pokemon.form && (
+                <span className="ml-1 text-sm font-semibold">
+                  {tForms("formOf", { region: pokemon.form.regionLabel })}
+                  {pokemon.form.variantLabel &&
+                    ` · ${pokemon.form.variantLabel}`}
+                </span>
+              )}
+            </div>
+
+            <section aria-labelledby="entry-heading" className="mt-10">
+              <h2
+                id="entry-heading"
+                className="text-sm font-bold text-muted-foreground"
+              >
+                {t("entryHeading")}
+              </h2>
+              {pokemon.flavorText ? (
+                <blockquote
+                  lang={pokemon.flavorText.locale}
+                  className="mt-3 max-w-[52ch] border-l-[3px] border-(--entry) pl-5 font-serif text-2xl leading-snug italic"
+                  style={
+                    {
+                      "--entry": `var(--color-type-${mainType})`,
+                    } as CSSProperties
+                  }
+                >
+                  {pokemon.flavorText.text}
+                </blockquote>
+              ) : (
+                <p className="mt-3 max-w-[52ch] font-serif text-lg text-muted-foreground">
+                  {pokemon.form ? t("noFormEntry") : t("noEntry")}
+                </p>
+              )}
+              {pokemon.flavorText && pokemon.flavorText.locale !== locale && (
+                <p className="mt-2 pl-5 text-sm text-muted-foreground">
+                  {t("onlyInEnglish")}
+                </p>
+              )}
+            </section>
+
+            <section aria-labelledby="data-heading" className="mt-10">
+              <h2 id="data-heading" className="sr-only">
+                {t("dataHeading")}
+              </h2>
+              <dl className="grid grid-cols-2 gap-x-6 gap-y-6 border-t border-foreground/15 pt-6 sm:grid-cols-4">
+                <div>
+                  <dt className="text-sm font-semibold text-muted-foreground">
+                    {t("height")}
+                  </dt>
+                  <dd className="mt-1 font-display text-2xl font-bold condensed">
+                    {measure(pokemon.heightM, "meter")}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-semibold text-muted-foreground">
+                    {t("weight")}
+                  </dt>
+                  <dd className="mt-1 font-display text-2xl font-bold condensed">
+                    {measure(pokemon.weightKg, "kilogram")}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-sm font-semibold text-muted-foreground">
+                    {t("region")}
+                  </dt>
+                  <dd className="mt-1 font-display text-2xl font-bold condensed">
+                    {pokemon.form
+                      ? pokemon.form.regionLabel
+                      : tDex(`regions.${pokemon.generation}`)}
+                  </dd>
+                </div>
+                <div className="col-span-2 sm:col-span-1">
+                  <dt className="text-sm font-semibold text-muted-foreground">
+                    {t("abilities")}
+                  </dt>
+                  <dd className="mt-1">
+                    <ul className="space-y-0.5">
+                      {pokemon.abilities.map((ability) => (
+                        <li key={ability.slug} className="font-semibold">
+                          {ability.name}
+                          {ability.isHidden && (
+                            <span className="ml-1.5 font-serif text-sm font-normal text-muted-foreground italic">
+                              ({t("hiddenAbility")})
+                            </span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </dd>
+                </div>
+              </dl>
+            </section>
+
+            <section
+              id="matchups"
+              aria-labelledby="matchups-heading"
+              className={cn(SECTION_SCROLL_MARGIN, "mt-10")}
             >
-              {t("statsHeading")}
-            </h2>
-            <p className="mt-3 font-serif text-lg leading-snug text-muted-foreground">
-              {t("statsIntro")}
-            </p>
+              <h2
+                id="matchups-heading"
+                className="text-sm font-bold text-muted-foreground"
+              >
+                {t("matchupsHeading")}
+              </h2>
+              <div className="mt-3">
+                <MatchupList rows={matchupRows} size="sm" />
+              </div>
+              <p className="mt-3 text-sm text-muted-foreground">
+                {t("matchupsNote")}{" "}
+                <Link
+                  href={`/tipos?types=${pokemon.types.join(",")}`}
+                  className="font-semibold text-foreground underline decoration-2 underline-offset-4 hover:text-highlight"
+                >
+                  {t("openInCalculator")}
+                </Link>
+              </p>
+            </section>
           </div>
-          <StatBars
-            stats={pokemon.stats}
-            total={pokemon.baseStatTotal}
-            type={mainType ?? "normal"}
-          />
         </div>
-      </section>
 
-      {family.length > 1 && (
         <section
-          aria-labelledby="forms-heading"
-          className="mt-16 border-t-[3px] border-foreground pt-10"
+          id="stats"
+          aria-labelledby="stats-heading"
+          className={cn(
+            SECTION_SCROLL_MARGIN,
+            "mt-16 border-t-[3px] border-foreground pt-10",
+          )}
         >
           <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
             <div>
               <h2
-                id="forms-heading"
+                id="stats-heading"
                 className="text-3xl font-black tracking-tight condensed"
               >
-                {t("formsHeading")}
+                {t("statsHeading")}
               </h2>
               <p className="mt-3 font-serif text-lg leading-snug text-muted-foreground">
-                {t("formsIntro")}
+                {t("statsIntro")}
               </p>
             </div>
-            <HoloSurface className="min-w-0">
-              <ul className="flex flex-wrap justify-center gap-3 sm:justify-start">
-                {family.map((entry) => (
-                  <li key={entry.slug}>
-                    <LineCard
-                      entry={entry}
-                      isCurrent={entry.slug === pokemon.slug}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </HoloSurface>
+            <StatBars
+              stats={pokemon.stats}
+              total={pokemon.baseStatTotal}
+              type={mainType ?? "normal"}
+            />
           </div>
         </section>
-      )}
 
-      <section
-        aria-labelledby="evolution-heading"
-        className="mt-16 border-t-[3px] border-foreground pt-10"
-      >
-        <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
-          <div>
-            <h2
-              id="evolution-heading"
-              className="text-3xl font-black tracking-tight condensed"
-            >
-              {t("evolutionHeading")}
-            </h2>
-            {evolution && evolution.children.length > 0 && (
-              <p className="mt-3 font-serif text-lg leading-snug text-muted-foreground">
-                {t("evolutionIntro")}
+        {family.length > 1 && (
+          <section
+            id="forms"
+            aria-labelledby="forms-heading"
+            className={cn(
+              SECTION_SCROLL_MARGIN,
+              "mt-16 border-t-[3px] border-foreground pt-10",
+            )}
+          >
+            <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
+              <div>
+                <h2
+                  id="forms-heading"
+                  className="text-3xl font-black tracking-tight condensed"
+                >
+                  {t("formsHeading")}
+                </h2>
+                <p className="mt-3 font-serif text-lg leading-snug text-muted-foreground">
+                  {t("formsIntro")}
+                </p>
+              </div>
+              <HoloSurface className="min-w-0">
+                <ul className="flex flex-wrap justify-center gap-3 sm:justify-start">
+                  {family.map((entry) => (
+                    <li key={entry.slug}>
+                      <LineCard
+                        entry={entry}
+                        isCurrent={entry.slug === pokemon.slug}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </HoloSurface>
+            </div>
+          </section>
+        )}
+
+        <section
+          id="evolution"
+          aria-labelledby="evolution-heading"
+          className={cn(
+            SECTION_SCROLL_MARGIN,
+            "mt-16 border-t-[3px] border-foreground pt-10",
+          )}
+        >
+          <div className="grid gap-8 lg:grid-cols-[17rem_1fr]">
+            <div>
+              <h2
+                id="evolution-heading"
+                className="text-3xl font-black tracking-tight condensed"
+              >
+                {t("evolutionHeading")}
+              </h2>
+              {evolution && evolution.children.length > 0 && (
+                <p className="mt-3 font-serif text-lg leading-snug text-muted-foreground">
+                  {t("evolutionIntro")}
+                </p>
+              )}
+            </div>
+            {evolution && evolution.children.length > 0 ? (
+              <HoloSurface className="flex min-w-0 justify-center sm:justify-start">
+                <EvolutionLine tree={evolution} currentSlug={pokemon.slug} />
+              </HoloSurface>
+            ) : (
+              <p className="font-serif text-lg text-muted-foreground lg:pt-1.5">
+                {t("noEvolution", { name: pokemon.name })}
               </p>
             )}
           </div>
-          {evolution && evolution.children.length > 0 ? (
-            <HoloSurface className="flex min-w-0 justify-center sm:justify-start">
-              <EvolutionLine tree={evolution} currentSlug={pokemon.slug} />
-            </HoloSurface>
-          ) : (
-            <p className="font-serif text-lg text-muted-foreground lg:pt-1.5">
-              {t("noEvolution", { name: pokemon.name })}
-            </p>
-          )}
+        </section>
+
+        <MovesSection
+          learnset={learnset}
+          pokemonSlug={pokemon.slug}
+          pokemonName={pokemon.name}
+        />
+
+        <div className="mt-16">
+          <PokemonPager previous={previous} next={next} />
         </div>
-      </section>
-
-      <MovesSection
-        learnset={learnset}
-        pokemonSlug={pokemon.slug}
-        pokemonName={pokemon.name}
-      />
-
-      <div className="mt-16">
-        <PokemonPager previous={previous} next={next} />
       </div>
     </div>
   );

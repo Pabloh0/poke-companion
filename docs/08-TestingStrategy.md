@@ -154,6 +154,26 @@ importación completa, build de producción, Chrome):
   `SegmentedControl`. Sin errores en consola. La prueba destapó que un lector
   de pantalla oía el número dos veces («Por nivel 20, 20 movimientos»).
 
+Verificación de la barra de la ficha (réplica, build de producción, Chrome):
+
+- Pikachu, Bulbasaur (sin anterior), Pecharunt (sin siguiente) y Vulpix de
+  Alola (con «Formas») a 320, 375, 768, 1024 y 1280 px: al bajar, la barra
+  queda pegada justo bajo la cabecera (65 px), la sección activa cambia y al
+  final es «Movimientos», visible también en la lista deslizable del móvil.
+- Pulsar Movimientos, Evolución o Estadísticas deja el título a 155 px, bajo
+  la barra (que acaba en 110), y la URL con `#moves`… Abrir
+  `/pokedex/eevee#moves` llega igual.
+- → pasa a Raichu y ← vuelve a Pikachu; con el foco en las pestañas de
+  movimientos, → cambia de método y no de página. Tras navegar, saltar a una
+  sección funciona aunque la página anterior siga oculta en el documento
+  (dos `#moves-heading`).
+- Las 1082 fichas a 320 px: sin scroll horizontal y con la barra dentro de la
+  pantalla. Sin errores en consola.
+- La primera prueba destapó que el margen de desplazamiento no se aplicaba:
+  la constante venía de un archivo `"use client"` y al componente de servidor
+  le llegaba una referencia en vez del texto. Ahora vive en
+  `lib/entry-sections.ts`.
+
 Tests unitarios actuales (`npm run test`, 103): transformación de datos de
 PokeAPI (13), importación de movimientos (11: juego más reciente, Let's Go
 ignorado, métodos, nivel 0, MT, duplicados, descripción más reciente, `0` →

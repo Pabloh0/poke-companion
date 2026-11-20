@@ -197,6 +197,28 @@ WCAG AA (`src/features/types/data/pokemon-types.ts`).
 - **Pasar hoja** (`PokemonPager`): anterior y siguiente con su sprite, como las
   páginas de una carpeta.
 
+### Barra de la ficha (`EntryBar`)
+
+Fija bajo la cabecera en toda la ficha (D-28), como las pestañas de índice
+que asoman en el canto de una carpeta, pero todas en el mismo plano.
+
+```text
+‹ #0024 Arbok   Datos · Debilidades · Estadísticas · Evolución · Movimientos   #0026 Raichu ›
+```
+
+- En los extremos, el Pokémon anterior y el siguiente. Desde `sm` con número
+  y nombre; en móvil, solo la flecha (con su nombre para lectores de pantalla).
+- En medio, las secciones de la ficha («Formas» solo si las hay). La sección
+  en la que estás se rellena (`aria-current`), como las casillas elegidas.
+- En móvil, las secciones se deslizan en horizontal, con los bordes
+  difuminados, y la activa se mantiene a la vista.
+- Al pulsar una sección se desplaza suave hasta ella (instantáneo con
+  «reducir movimiento») y la URL pasa a `#moves`, compartible. Cada sección
+  lleva `SECTION_SCROLL_MARGIN` para que el título no quede bajo la barra.
+- ← y → pasan de Pokémon, salvo con el foco en un control (en las pestañas de
+  movimientos, las flechas cambian de método).
+- «Pasar hoja» sigue al final de la ficha.
+
 ### Movimientos de la ficha (`MovesSection`)
 
 Al final de la ficha, antes de «Pasar hoja», con el mismo esquema que las
@@ -318,6 +340,7 @@ del menú: subrayado grueso.
 | `SegmentedControl` | `src/components/ui/segmented-control.tsx`                | Server |
 | `EvolutionLine`    | `src/features/pokedex/components/evolution-line.tsx`     | Server |
 | `MovesSection`     | `src/features/moves/components/moves-section.tsx`        | Server |
+| `EntryBar`         | `src/features/pokedex/components/entry-bar.tsx`          | Client |
 | `BrandMark`        | `src/components/layout/brand-mark.tsx`                   | Server |
 | `SiteHeader`       | `src/components/layout/site-header.tsx`                  | Server |
 | `MainNav`          | `src/components/layout/main-nav.tsx`                     | Client |

@@ -205,7 +205,20 @@
     "openInCalculator": "Abrir en la calculadora de tipos",
     "formsHeading": "Formas regionales",
     "formsIntro": "La misma especie en otras regiones: otro aspecto, otros tipos y otras estadísticas.",
-    "noFormEntry": "Esta forma regional aún no tiene entrada de la Pokédex en nuestros datos."
+    "noFormEntry": "Esta forma regional aún no tiene entrada de la Pokédex en nuestros datos.",
+    "entryBar": {
+      "label": "En esta ficha",
+      "previousPokemon": "Anterior: {name} (tecla ←)",
+      "nextPokemon": "Siguiente: {name} (tecla →)",
+      "sections": {
+        "overview": "Datos",
+        "matchups": "Debilidades",
+        "stats": "Estadísticas",
+        "forms": "Formas",
+        "evolution": "Evolución",
+        "moves": "Movimientos"
+      }
+    }
   },
   "TypeCalculator": {
     "title": "Calculadora de tipos",

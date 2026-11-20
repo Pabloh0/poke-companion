@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { SegmentedControl } from "@/components/ui/segmented-control";
+import { SECTION_SCROLL_MARGIN } from "@/features/pokedex/lib/entry-sections";
 import { TypeBadge } from "@/features/types/components/type-badge";
 import { cn } from "@/lib/utils";
 import {
@@ -64,8 +65,12 @@ export function MovesSection({
 
   return (
     <section
+      id="moves"
       aria-labelledby="moves-heading"
-      className="mt-16 border-t-[3px] border-foreground pt-10"
+      className={cn(
+        SECTION_SCROLL_MARGIN,
+        "mt-16 border-t-[3px] border-foreground pt-10",
+      )}
     >
       <div className="grid gap-8 lg:grid-cols-[17rem_minmax(0,1fr)]">
         <div>
