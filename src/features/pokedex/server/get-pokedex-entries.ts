@@ -4,7 +4,7 @@ import { isPokemonType } from "@/features/types/data/pokemon-types";
 import type { AppLocale } from "@/i18n/routing";
 import { createPublicClient } from "@/lib/supabase/public-client";
 import { isGeneration } from "../data/generations";
-import type { PokedexEntry } from "../lib/filters";
+import { rarityOf, type PokedexEntry } from "../lib/filters";
 
 /**
  * Supabase returns at most 1000 rows per request by default (the API's
@@ -36,9 +36,10 @@ export async function getPokedexEntries(
     const from = entries.length;
     const { data, error, count } = await supabase
       .from("pokedex_entries")
-      .select("dex_number, slug, name, generation_id, types", {
-        count: "exact",
-      })
+      .select(
+        "dex_number, slug, name, genus, generation_id, types, is_legendary, is_mythical, base_stat_total",
+        { count: "exact" },
+      )
       .eq("locale", locale)
       .order("dex_number")
       .range(from, from + PAGE_SIZE - 1);
@@ -50,15 +51,22 @@ export async function getPokedexEntries(
 
     for (const row of data) {
       const types = (row.types ?? []).filter(isPokemonType);
-      if (!isGeneration(row.generation_id) || types.length === 0) {
+      if (
+        !isGeneration(row.generation_id) ||
+        types.length === 0 ||
+        row.base_stat_total === null
+      ) {
         throw new Error(`Unexpected Pokédex row: ${JSON.stringify(row)}`);
       }
       entries.push({
         dexNumber: row.dex_number,
         slug: row.slug,
         name: row.name,
+        genus: row.genus,
         generation: row.generation_id,
         types,
+        rarity: rarityOf(row),
+        baseStatTotal: row.base_stat_total,
       });
     }
   }

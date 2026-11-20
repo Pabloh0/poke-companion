@@ -41,7 +41,8 @@ abilities (id, slug, generation_id)
 └── ability_translations (ability_id, locale, name)
 
 pokedex_entries (vista)  ← una fila por (especie, idioma): dex_number, slug,
-                           locale, name, generation_id, types[]
+                           locale, name, generation_id, types[], genus,
+                           is_legendary, is_mythical, base_stat_total
 ```
 
 La vista `pokedex_entries` (migración `20261120130000_pokedex_entries_view.sql`)
@@ -49,6 +50,11 @@ da a la web todo lo que necesita el listado en una sola consulta. Tiene
 `security_invoker = true`: se ejecuta con los permisos de quien consulta
 (`anon`), así que las políticas RLS de las tablas siguen aplicándose. Sin esa
 opción, una vista se ejecuta con los permisos de su dueño y se saltaría RLS.
+
+La migración `20261120140000_pokedex_entries_card_fields.sql` le añade los
+campos que muestran las cartas: categoría (`genus`), rareza (`is_legendary`,
+`is_mythical`) y la suma de estadísticas base (`base_stat_total`). Una vista
+solo admite añadir columnas al final con `create or replace view`.
 
 Detalles que conviene saber:
 

@@ -5,47 +5,60 @@ import {
   formatDexNumber,
   normalizeText,
   parseFilters,
+  rarityOf,
   serializeFilters,
   toggleType,
   type PokedexEntry,
 } from "./filters";
 
+const entry = (
+  fields: Pick<
+    PokedexEntry,
+    "dexNumber" | "slug" | "name" | "generation" | "types"
+  >,
+): PokedexEntry => ({
+  genus: null,
+  rarity: "common",
+  baseStatTotal: 300,
+  ...fields,
+});
+
 const ENTRIES: PokedexEntry[] = [
-  {
+  entry({
     dexNumber: 6,
     slug: "charizard",
     name: "Charizard",
     generation: 1,
     types: ["fire", "flying"],
-  },
-  {
+  }),
+  entry({
     dexNumber: 25,
     slug: "pikachu",
     name: "Pikachu",
     generation: 1,
     types: ["electric"],
-  },
-  {
+  }),
+  entry({
     dexNumber: 26,
     slug: "raichu",
     name: "Raichu",
     generation: 1,
     types: ["electric"],
-  },
-  {
+  }),
+  entry({
     dexNumber: 130,
     slug: "gyarados",
     name: "Gyarados",
     generation: 1,
     types: ["water", "flying"],
-  },
-  {
+  }),
+  entry({
     dexNumber: 669,
     slug: "flabebe",
     name: "Flabébé",
     generation: 6,
     types: ["fairy"],
-  },
+  }),
 ];
 
 const names = (list: PokedexEntry[]) => list.map((entry) => entry.name);
@@ -138,6 +151,18 @@ describe("helpers", () => {
   it("formats Pokédex numbers with four digits", () => {
     expect(formatDexNumber(25)).toBe("0025");
     expect(formatDexNumber(1025)).toBe("1025");
+  });
+
+  it("derives the card rarity, mythical first", () => {
+    expect(rarityOf({ is_legendary: false, is_mythical: false })).toBe(
+      "common",
+    );
+    expect(rarityOf({ is_legendary: true, is_mythical: false })).toBe(
+      "legendary",
+    );
+    expect(rarityOf({ is_legendary: false, is_mythical: true })).toBe(
+      "mythical",
+    );
   });
 
   it("normalizes text for searching", () => {

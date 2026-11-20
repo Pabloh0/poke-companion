@@ -13,7 +13,7 @@ export function LocaleSwitcher() {
 
   return (
     <nav aria-label={t("language")}>
-      <ul className="flex items-center rounded-full border p-0.5 text-sm">
+      <ul className="flex items-center rounded-md border border-foreground/25 p-0.5 text-sm">
         {routing.locales.map((locale) => {
           const isCurrent = locale === currentLocale;
           return (
@@ -26,9 +26,9 @@ export function LocaleSwitcher() {
                 aria-label={t(`languages.${locale}`)}
                 aria-current={isCurrent ? "true" : undefined}
                 className={cn(
-                  "inline-flex h-7 min-w-10 items-center justify-center rounded-full px-2.5 font-semibold transition-colors",
+                  "inline-flex h-7 min-w-9 items-center justify-center rounded-[4px] px-2 font-bold condensed transition-colors",
                   isCurrent
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-foreground text-background"
                     : "text-muted-foreground hover:text-foreground",
                 )}
               >
@@ -44,5 +44,5 @@ export function LocaleSwitcher() {
 
 /** Same footprint as the switcher, shown while the current URL resolves. */
 export function LocaleSwitcherFallback() {
-  return <div aria-hidden className="h-[34px] w-[86px] rounded-full border" />;
+  return <div aria-hidden className="h-[34px] w-[78px] rounded-md border" />;
 }

@@ -8,13 +8,28 @@ import {
 } from "@/features/types/data/pokemon-types";
 import { isGeneration, type Generation } from "../data/generations";
 
+export type Rarity = "common" | "legendary" | "mythical";
+
 export type PokedexEntry = {
   dexNumber: number;
   slug: string;
   name: string;
+  /** "Mouse Pokémon"; null when PokeAPI has no text in this language. */
+  genus: string | null;
   generation: Generation;
   types: PokemonType[];
+  rarity: Rarity;
+  baseStatTotal: number;
 };
+
+export function rarityOf(row: {
+  is_legendary: boolean;
+  is_mythical: boolean;
+}): Rarity {
+  if (row.is_mythical) return "mythical";
+  if (row.is_legendary) return "legendary";
+  return "common";
+}
 
 export type PokedexFilters = {
   query: string;

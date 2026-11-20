@@ -20,12 +20,13 @@ export default async function PokedexPage() {
   const entries = await getPokedexEntries(locale);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
-      <header className="mb-8">
-        <h1 className="text-4xl font-bold tracking-tight sm:text-5xl">
+    <div className="mx-auto max-w-6xl px-4 pt-10 pb-16 sm:px-6 sm:pt-14">
+      {/* Like the spine label of a binder: big title over a heavy rule. */}
+      <header className="mb-10 flex flex-wrap items-end justify-between gap-x-10 gap-y-4 border-b-[3px] border-foreground pb-5">
+        <h1 className="text-7xl leading-[0.82] font-black tracking-tight condensed sm:text-8xl">
           {t("title")}
         </h1>
-        <p className="mt-3 max-w-[60ch] text-lg text-muted-foreground">
+        <p className="max-w-[44ch] font-serif text-lg leading-snug text-muted-foreground">
           {t("intro")}
         </p>
       </header>

@@ -2,66 +2,71 @@
 @import "tw-animate-css";
 
 /*
- * PokéCompanion design tokens. Full documentation: docs/05-DesignSystem.md
+ * PokéCompanion design tokens — "La carpeta del coleccionista".
+ * Full documentation: docs/05-DesignSystem.md
  *
- * Theme lives in the `data-theme` attribute on <html> ("dark" | "light").
- * Dark is the default; an inline script in the root layout applies the saved
- * preference before first paint (no flash).
+ * Theme lives in the `data-theme` attribute on <html> ("light" | "dark").
+ * Light is the default (cards on the cool grey pages of a binder); an inline
+ * script in the root layout applies the saved preference before first paint.
  */
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* ---------- Dark theme (default): "night route" ---------- */
+/* ---------- Light theme (default): "Catálogo" ---------- */
 :root,
-[data-theme="dark"] {
-  color-scheme: dark;
-
-  --background: #141833; /* Noche */
-  --foreground: #eceefb; /* Luna */
-  --card: #1c2147; /* Superficie */
-  --card-foreground: #eceefb;
-  --popover: #1c2147;
-  --popover-foreground: #eceefb;
-  --primary: #ffc93c; /* Voltio: brand accent */
-  --primary-foreground: #1a1630;
-  --secondary: #262c5c;
-  --secondary-foreground: #eceefb;
-  --muted: #20254f;
-  --muted-foreground: #a3a9d1; /* Niebla */
-  --accent: #2a3166;
-  --accent-foreground: #eceefb;
-  --destructive: #ff6b6b;
-  --destructive-foreground: #1a1630;
-  --border: #2e3566; /* Trazo */
-  --input: #343b70;
-  --ring: #ffc93c;
-  /* Text-safe version of the brand colour (links, highlighted numbers) */
-  --highlight: #ffc93c;
-}
-
-/* ---------- Light theme: "day route" ---------- */
 [data-theme="light"] {
   color-scheme: light;
 
-  --background: #f2f3f9;
-  --foreground: #161a3a;
-  --card: #ffffff;
-  --card-foreground: #161a3a;
-  --popover: #ffffff;
-  --popover-foreground: #161a3a;
-  --primary: #ffc21a;
-  --primary-foreground: #161a3a;
-  --secondary: #e3e6f3;
-  --secondary-foreground: #161a3a;
-  --muted: #e8eaf4;
-  --muted-foreground: #565c85;
-  --accent: #dde1f2;
-  --accent-foreground: #161a3a;
-  --destructive: #c62828;
+  --background: #e7e9ee; /* Gris carpeta: binder page */
+  --foreground: #1a1c23; /* Tinta */
+  --card: #f5f6f9; /* Panel: raised UI surfaces */
+  --card-foreground: #1a1c23;
+  --popover: #f5f6f9;
+  --popover-foreground: #1a1c23;
+  --primary: #2747c8; /* Cobalto: actions and links */
+  --primary-foreground: #ffffff;
+  --secondary: #dde0e7;
+  --secondary-foreground: #1a1c23;
+  --muted: #dfe2e8;
+  --muted-foreground: #545969;
+  --accent: #d9dde6;
+  --accent-foreground: #1a1c23;
+  --destructive: #b42318;
   --destructive-foreground: #ffffff;
-  --border: #d3d7ea;
-  --input: #c9cee6;
-  --ring: #3a44a0;
-  --highlight: #8a5a00;
+  --border: #c9cdd6; /* decorative dividers */
+  --input: #767c8c; /* form field borders: ≥ 3:1 */
+  --ring: #2747c8;
+  --highlight: #2747c8; /* text-safe accent */
+
+  /* Binder sleeve pattern behind content */
+  --sleeve-line: rgb(26 28 35 / 0.06);
+}
+
+/* ---------- Dark theme: "Carpeta de noche" ---------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --background: #1c2030;
+  --foreground: #e9ebf2;
+  --card: #262b3d;
+  --card-foreground: #e9ebf2;
+  --popover: #262b3d;
+  --popover-foreground: #e9ebf2;
+  --primary: #9daeff;
+  --primary-foreground: #10131c;
+  --secondary: #2c3246;
+  --secondary-foreground: #e9ebf2;
+  --muted: #2a3043;
+  --muted-foreground: #a5abbe;
+  --accent: #323950;
+  --accent-foreground: #e9ebf2;
+  --destructive: #ff8a7a;
+  --destructive-foreground: #10131c;
+  --border: #353b50;
+  --input: #6b7290;
+  --ring: #9daeff;
+  --highlight: #9daeff;
+
+  --sleeve-line: rgb(233 235 242 / 0.05);
 }
 
 @theme inline {
@@ -86,21 +91,29 @@
   --color-ring: var(--ring);
   --color-highlight: var(--highlight);
 
-  --font-sans: var(--font-body);
-  --font-display: var(--font-heading);
+  --font-sans: var(--font-archivo);
+  --font-display: var(--font-archivo);
+  --font-serif: var(--font-newsreader);
 
-  --radius-sm: 0.375rem;
-  --radius-md: 0.625rem;
-  --radius-lg: 0.875rem;
-  --radius-xl: 1.25rem;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
 }
 
 /*
- * The 18 types. Same colour in both themes: they are data, not decoration.
- * Text colour on each chip is chosen per type for WCAG AA contrast
- * (see src/features/types/data/pokemon-types.ts).
+ * Physical card palette: cards are printed objects, so they look the same in
+ * both themes (light card stock, dark ink), like real cards on a dark table.
  */
-@theme {
+/* `static`: always emit these variables, even if no utility class uses them,
+   because cards reference them dynamically (var(--color-type-fire)). */
+@theme static {
+  --color-stock: #fcfbf7; /* Cartulina */
+  --color-stock-shade: #efede6;
+  --color-stock-ink: #1a1c23;
+  --color-stock-ink-muted: #5b5f6b;
+
+  /* The 18 types: data colours, identical in both themes. */
   --color-type-normal: #a8a77a;
   --color-type-fire: #ee8130;
   --color-type-water: #6390f0;
@@ -123,6 +136,14 @@
   --color-ink: #161a3a; /* dark text on light type chips */
 }
 
+/* Condensed width of Archivo, for card names, numbers and display type. */
+@utility condensed {
+  font-stretch: 72%;
+}
+@utility extra-condensed {
+  font-stretch: 62%;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -134,7 +155,13 @@
   body {
     @apply font-sans antialiased;
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 1.55;
+    /* The binder page: faint sleeve grid, fixed so it doesn't scroll. */
+    background-image:
+      linear-gradient(var(--sleeve-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--sleeve-line) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-attachment: fixed;
   }
   h1,
   h2,
@@ -150,6 +177,81 @@
   }
 }
 
+/* ---------------------------------------------------------------------------
+ * Holographic card. The pointer position arrives as CSS variables set by
+ * HoloSurface (--mx/--my in %, --rx/--ry in deg); with no pointer the card
+ * rests flat. Foil uses `color-dodge` so it brightens the art like real foil.
+ * ------------------------------------------------------------------------- */
+.holo-card {
+  --mx: 50%;
+  --my: 30%;
+  --rx: 0deg;
+  --ry: 0deg;
+  transform: perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition:
+    transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 400ms ease;
+  will-change: transform;
+}
+.holo-card[data-active] {
+  transition-duration: 80ms, 400ms;
+}
+.holo-card .holo-foil {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  mix-blend-mode: color-dodge;
+  background:
+    radial-gradient(
+      circle at var(--mx) var(--my),
+      rgb(255 255 255 / 0.45),
+      rgb(255 255 255 / 0) 38%
+    ),
+    repeating-linear-gradient(
+      115deg,
+      rgb(255 119 119 / 0.26) 0%,
+      rgb(255 237 95 / 0.26) 8%,
+      rgb(122 255 192 / 0.26) 16%,
+      rgb(110 180 255 / 0.26) 24%,
+      rgb(203 128 255 / 0.26) 32%,
+      rgb(255 119 119 / 0.26) 40%
+    );
+  background-size:
+    100% 100%,
+    260% 260%;
+  background-position:
+    center,
+    var(--mx) var(--my);
+  transition: opacity 300ms ease;
+}
+.holo-card[data-active] .holo-foil {
+  opacity: 1;
+}
+/* Legendary and mythical cards are foil all the time. */
+.holo-card[data-rarity="legendary"] .holo-foil,
+.holo-card[data-rarity="mythical"] .holo-foil {
+  opacity: 0.55;
+}
+
+/* Cards dealt into a fan (CardFan). Final position comes from --fan. */
+@keyframes deal {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(18%) rotate(0deg);
+  }
+  to {
+    opacity: 1;
+    transform: var(--fan);
+  }
+}
+@utility animate-deal {
+  transform: var(--fan);
+  animation: deal 750ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -158,5 +260,8 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .holo-card {
+    transform: none !important;
   }
 }

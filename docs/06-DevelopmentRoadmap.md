@@ -34,6 +34,8 @@ pronto y no tienen riesgos de seguridad.
 - [x] Cliente de Supabase en la web (clave publicable) y tipos generados.
 - [x] Listado con búsqueda (nombre o número, sin acentos), filtros por hasta
       dos tipos y por generación, URL compartible.
+- [x] Rediseño visual «carpeta del coleccionista»: cartas con marco por tipo,
+      efecto holográfico, filtros como pestañas de carpeta, nuevo inicio.
 - [ ] Ficha de Pokémon (estadísticas, habilidades, descripción, formas).
 - [ ] Despliegue en Vercel (región París, `cdg1`).
 

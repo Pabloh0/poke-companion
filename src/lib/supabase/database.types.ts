@@ -369,8 +369,12 @@ export type Database = {
     Views: {
       pokedex_entries: {
         Row: {
+          base_stat_total: number | null;
           dex_number: number;
           generation_id: number;
+          genus: string | null;
+          is_legendary: boolean;
+          is_mythical: boolean;
           locale: string;
           name: string;
           slug: string;

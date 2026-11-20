@@ -6,31 +6,32 @@ import localFont from "next/font/local";
  * Only the "latin" subset is included: it covers Spanish and English.
  */
 
-// Headings: wide, rounded geometric face with a game-UI feel.
-export const headingFont = localFont({
-  src: "./Unbounded-Variable.woff2",
-  weight: "200 900",
+/**
+ * Archivo: UI, headings and the cards. Variable in weight AND width
+ * (62%–125%), so one family gives both the condensed card names/numbers and
+ * normal-width interface text.
+ */
+export const sansFont = localFont({
+  src: "./Archivo-Variable.woff2",
+  weight: "100 900",
   style: "normal",
-  variable: "--font-heading",
+  declarations: [{ prop: "font-stretch", value: "62% 125%" }],
+  variable: "--font-archivo",
   display: "swap",
   adjustFontFallback: "Arial",
 });
 
-// Body: designed for maximum legibility, ideal for dense data (stats, tables).
-export const bodyFont = localFont({
+/** Newsreader: editorial serif for prose and, in italic, Pokédex entries. */
+export const serifFont = localFont({
   src: [
+    { path: "./Newsreader-Variable.woff2", weight: "200 800", style: "normal" },
     {
-      path: "./AtkinsonHyperlegibleNext-Variable.woff2",
-      weight: "200 800",
-      style: "normal",
-    },
-    {
-      path: "./AtkinsonHyperlegibleNext-Italic-Variable.woff2",
+      path: "./Newsreader-Italic-Variable.woff2",
       weight: "200 800",
       style: "italic",
     },
   ],
-  variable: "--font-body",
+  variable: "--font-newsreader",
   display: "swap",
-  adjustFontFallback: "Arial",
+  adjustFontFallback: "Times New Roman",
 });

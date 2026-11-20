@@ -49,8 +49,20 @@ clave publicable → rol `anon`, `max_rows = 1000`), build de producción y Chro
 - Estado vacío y "Quitar filtros"; los sprites cargan; sin errores en consola.
 - Cabecera completa visible a 360 y 390 px.
 
-Tests unitarios actuales (`npm run test`, 27): transformación de datos de
-PokeAPI (12), conexión segura (4) y filtros de la Pokédex (11).
+Verificación del rediseño (misma réplica de Supabase, build de producción,
+Chrome):
+
+- Tema claro por defecto; capturas en claro, oscuro, escritorio y móvil.
+- Efecto holográfico: al pasar el ratón la carta se inclina y la lámina se
+  activa; con «reducir movimiento» la carta queda plana (`transform: none`).
+- Pestañas de generación con el teclado (flechas): cambian el filtro y la URL.
+- Sin scroll horizontal a 360 y 390 px (medido contra el ancho fijo, no contra
+  la ventana, que el modo móvil puede ensanchar); el abanico del inicio no
+  tapa el texto.
+- Sin errores en consola ni respuestas fallidas al cargar inicio y Pokédex.
+
+Tests unitarios actuales (`npm run test`, 28): transformación de datos de
+PokeAPI (12), conexión segura (4) y filtros y rareza de la Pokédex (12).
 
 ## Qué se añadirá y cuándo
 

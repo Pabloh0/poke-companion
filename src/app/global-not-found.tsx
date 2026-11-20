@@ -3,7 +3,7 @@ import Link from "next/link";
 import { BrandMark } from "@/components/layout/brand-mark";
 import { themeScript } from "@/components/layout/theme-script";
 import { buttonVariants } from "@/components/ui/button";
-import { bodyFont, headingFont } from "@/fonts";
+import { sansFont, serifFont } from "@/fonts";
 import "./globals.css";
 
 /**
@@ -25,29 +25,36 @@ export default function GlobalNotFound() {
   return (
     <html
       lang="es"
-      data-theme="dark"
+      data-theme="light"
       suppressHydrationWarning
-      className={`${headingFont.variable} ${bodyFont.variable}`}
+      className={`${sansFont.variable} ${serifFont.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body className="flex min-h-dvh flex-col">
-        <header className="border-b">
+        <header className="border-b border-foreground/15">
           <div className="mx-auto flex h-16 max-w-6xl items-center gap-2.5 px-4 sm:px-6">
             <BrandMark />
-            <span className="font-display text-base font-semibold tracking-tight sm:text-lg">
+            <span className="font-display text-[1.35rem] font-black tracking-tight condensed">
               PokéCompanion
             </span>
           </div>
         </header>
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-24 sm:px-6">
-          <p className="font-display text-6xl font-bold text-highlight">404</p>
-          <h1 className="mt-6 text-3xl font-bold">Aquí no hay nada</h1>
-          <p className="mt-3 max-w-[60ch] text-muted-foreground">
+          <p className="font-display text-8xl leading-none font-black condensed">
+            404
+          </p>
+          <h1 className="mt-4 text-4xl font-black condensed">
+            Aquí no hay nada
+          </h1>
+          <p className="mt-3 max-w-[60ch] font-serif text-lg text-muted-foreground">
             La página que buscas no existe o ha cambiado de dirección.
           </p>
-          <p lang="en" className="mt-1 max-w-[60ch] text-muted-foreground">
+          <p
+            lang="en"
+            className="mt-1 max-w-[60ch] font-serif text-lg text-muted-foreground"
+          >
             The page you&apos;re looking for doesn&apos;t exist or has moved.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">

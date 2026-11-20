@@ -11,17 +11,17 @@ export function SiteHeader() {
   const t = useTranslations("Header");
 
   return (
-    <header className="border-b">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4 sm:gap-4 sm:px-6">
+    <header className="sticky top-0 z-40 border-b border-foreground/15 bg-background/85 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-6xl items-center gap-2 px-4 sm:gap-4 sm:px-6">
         <Link
           href="/"
           aria-label={t("homeLink")}
-          className="flex items-center gap-2.5 rounded-md"
+          className="flex items-center gap-2 rounded-md"
         >
           <BrandMark />
           {/* On narrow screens only the mark shows (the link keeps its
               accessible name), so navigation and controls always fit. */}
-          <span className="hidden font-display text-lg font-semibold tracking-tight sm:inline">
+          <span className="hidden font-display text-[1.35rem] font-black tracking-tight condensed sm:inline">
             {siteConfig.name}
           </span>
         </Link>
@@ -30,7 +30,7 @@ export function SiteHeader() {
             <MainNav />
           </Suspense>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {/* The switcher reads the current URL, which on dynamic routes is only
               known at request time. Suspense keeps the rest of the header in
               the prerendered shell. */}

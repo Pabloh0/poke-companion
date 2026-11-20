@@ -79,6 +79,8 @@ Lo que existe hoy y funciona (verificado con build de producción):
 - Base de datos en Supabase con los datos de la Pokédex (1025 especies, 1351
   formas) importados desde PokeAPI.
 - Pokédex: listado con búsqueda por nombre o número y filtros por tipo y
-  generación.
+  generación, presentado como una carpeta de cartas coleccionables.
+- Identidad visual propia («La carpeta del coleccionista»), ver
+  [05-DesignSystem.md](05-DesignSystem.md).
 
 Todavía **no** hay ficha de cada Pokémon ni autenticación.

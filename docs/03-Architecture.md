@@ -69,7 +69,8 @@ necesitan lo mismo, se sube a `lib/` o `components/`.
 
 - **Server Components por defecto.** Solo se marca `"use client"` cuando hay
   interactividad (clics, estado, APIs del navegador): el selector de idioma, el
-  botón de tema, el menú principal y el buscador de la Pokédex.
+  botón de tema, el menú principal, el buscador de la Pokédex y el efecto
+  holográfico de las cartas.
 - **Cache Components** (`cacheComponents: true`). Es el modelo que Next.js 16
   trae activado por defecto y que será obligatorio en la próxima versión mayor:
   - Los datos son dinámicos por defecto; lo que se quiera cachear se marca con
@@ -179,19 +180,22 @@ Diseño detallado de la base de datos en [04-DatabaseDesign.md](04-DatabaseDesig
 
 ## Registro de decisiones
 
-| ID   | Decisión                                                   | Motivo                                                                                                                                        |
-| ---- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| D-01 | Next.js 16 con Cache Components activado                   | Es el valor por defecto de la versión y el futuro del framework; adoptarlo ahora evita una migración después.                                 |
-| D-02 | next-intl con español en la raíz                           | El español es el idioma principal; inglés bajo `/en`. Librería madura, compatible con `next/root-params`.                                     |
-| D-03 | Tema sin librerías (`data-theme` + script en línea)        | Patrón oficial de Next.js, una dependencia menos, sin parpadeo.                                                                               |
-| D-04 | Tipografías autoalojadas (`next/font/local`)               | El build no depende de Google Fonts y los visitantes no hacen peticiones a terceros. Ambas tienen licencia OFL.                               |
-| D-05 | Componentes de shadcn/ui escritos a mano en la fase 1      | El registro de shadcn no era accesible desde el entorno de desarrollo. `components.json` está listo para usar `npx shadcn add` normalmente.   |
-| D-06 | `global-not-found` (experimental) para 404 reales          | El layout raíz vive dentro de `[locale]`; es el caso exacto para el que Next documenta esta opción. Descartado: lista de rutas en el proxy.   |
-| D-07 | Datos de PokeAPI importados a Supabase; imágenes enlazadas | Búsquedas y filtros rápidos, sin depender de un servicio externo en cada visita; no redistribuimos imágenes con derechos.                     |
-| D-08 | `noUncheckedIndexedAccess` en TypeScript                   | Con muchos arrays e índices (Pokémon, movimientos…), obliga a comprobar que un elemento existe antes de usarlo.                               |
-| D-09 | Importación con script propio (`pg`) en una transacción    | Atómica e idempotente. Descartado `seed.sql` + `db push --include-seed`: el CLI no vuelve a ejecutar un seed modificado.                      |
-| D-10 | TLS con verificación completa al conectar a la BD          | Recomendación de Supabase (`verify-full`): evita que alguien en medio suplante a la base de datos.                                            |
-| D-11 | Node.js 22.12 como mínimo                                  | Requisito de Vitest 5; Node 20 terminó su soporte en abril de 2026.                                                                           |
-| D-12 | Pokédex prerenderizada + filtrado en el navegador          | 1025 entradas pequeñas: filtrar en el cliente es instantáneo y la página se sirve estática. Descartado: filtrar en el servidor en cada tecla. |
-| D-13 | Sprites sin el optimizador de imágenes de Next             | Son PNG pixel art de 0,5–7 KB: optimizarlos no aporta y gastaría la cuota de optimización de Vercel.                                          |
-| D-14 | Vista `pokedex_entries` con `security_invoker`             | Una consulta simple para la web sin saltarse RLS (por defecto, una vista se ejecuta con los permisos de su dueño).                            |
+| ID   | Decisión                                                     | Motivo                                                                                                                                                                        |
+| ---- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D-01 | Next.js 16 con Cache Components activado                     | Es el valor por defecto de la versión y el futuro del framework; adoptarlo ahora evita una migración después.                                                                 |
+| D-02 | next-intl con español en la raíz                             | El español es el idioma principal; inglés bajo `/en`. Librería madura, compatible con `next/root-params`.                                                                     |
+| D-03 | Tema sin librerías (`data-theme` + script en línea)          | Patrón oficial de Next.js, una dependencia menos, sin parpadeo.                                                                                                               |
+| D-04 | Tipografías autoalojadas (`next/font/local`)                 | El build no depende de Google Fonts y los visitantes no hacen peticiones a terceros. Ambas tienen licencia OFL.                                                               |
+| D-05 | Componentes de shadcn/ui escritos a mano en la fase 1        | El registro de shadcn no era accesible desde el entorno de desarrollo. `components.json` está listo para usar `npx shadcn add` normalmente.                                   |
+| D-06 | `global-not-found` (experimental) para 404 reales            | El layout raíz vive dentro de `[locale]`; es el caso exacto para el que Next documenta esta opción. Descartado: lista de rutas en el proxy.                                   |
+| D-07 | Datos de PokeAPI importados a Supabase; imágenes enlazadas   | Búsquedas y filtros rápidos, sin depender de un servicio externo en cada visita; no redistribuimos imágenes con derechos.                                                     |
+| D-08 | `noUncheckedIndexedAccess` en TypeScript                     | Con muchos arrays e índices (Pokémon, movimientos…), obliga a comprobar que un elemento existe antes de usarlo.                                                               |
+| D-09 | Importación con script propio (`pg`) en una transacción      | Atómica e idempotente. Descartado `seed.sql` + `db push --include-seed`: el CLI no vuelve a ejecutar un seed modificado.                                                      |
+| D-10 | TLS con verificación completa al conectar a la BD            | Recomendación de Supabase (`verify-full`): evita que alguien en medio suplante a la base de datos.                                                                            |
+| D-11 | Node.js 22.12 como mínimo                                    | Requisito de Vitest 5; Node 20 terminó su soporte en abril de 2026.                                                                                                           |
+| D-12 | Pokédex prerenderizada + filtrado en el navegador            | 1025 entradas pequeñas: filtrar en el cliente es instantáneo y la página se sirve estática. Descartado: filtrar en el servidor en cada tecla.                                 |
+| D-13 | Sprites sin el optimizador de imágenes de Next               | Son PNG pixel art de 0,5–7 KB: optimizarlos no aporta y gastaría la cuota de optimización de Vercel.                                                                          |
+| D-14 | Vista `pokedex_entries` con `security_invoker`               | Una consulta simple para la web sin saltarse RLS (por defecto, una vista se ejecuta con los permisos de su dueño).                                                            |
+| D-15 | Rediseño «carpeta del coleccionista», tema claro por defecto | Identidad propia ligada al coleccionismo de cartas; las cartas y los colores de tipo destacan más sobre páginas claras. Diseño de carta original (no imita la carta oficial). |
+| D-16 | Archivo (con eje de anchura) + Newsreader                    | Una sola familia de palo seco cubre interfaz y titulares condensados; la serif da el tono de texto impreso. Sustituyen a Unbounded y Atkinson.                                |
+| D-17 | Efecto holográfico con delegación de eventos y variables CSS | Un solo par de listeners para toda la rejilla y el dibujo en CSS: barato con cientos de cartas y respeta «reducir movimiento».                                                |

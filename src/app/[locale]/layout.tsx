@@ -8,7 +8,7 @@ import { siteConfig } from "@/config/site";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 import { themeScript } from "@/components/layout/theme-script";
-import { bodyFont, headingFont } from "@/fonts";
+import { sansFont, serifFont } from "@/fonts";
 import "../globals.css";
 
 // With Cache Components, every root param needs at least one value at build
@@ -42,10 +42,10 @@ export default async function LocaleLayout({
   return (
     <html
       lang={locale}
-      data-theme="dark"
+      data-theme="light"
       // The inline theme script may change data-theme before React hydrates.
       suppressHydrationWarning
-      className={`${headingFont.variable} ${bodyFont.variable}`}
+      className={`${sansFont.variable} ${serifFont.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />

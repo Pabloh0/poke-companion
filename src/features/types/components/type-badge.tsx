@@ -48,10 +48,10 @@ export function TypeBadge({ type, size = "md", className }: TypeBadgeProps) {
     <span
       data-type={type}
       className={cn(
-        "inline-flex items-center justify-center rounded-full font-semibold tracking-wide",
+        "inline-flex items-center justify-center rounded-[4px] font-semibold",
         typeBackgroundClass(type),
         typeTextClass(type),
-        size === "sm" ? "h-6 px-2.5 text-xs" : "h-8 px-3.5 text-sm",
+        size === "sm" ? "h-5 px-1.5 text-[0.7rem]" : "h-7 px-2.5 text-sm",
         className,
       )}
     >

@@ -8,9 +8,9 @@ const NAV_ITEMS = [{ href: "/pokedex", key: "pokedex" }] as const;
 
 function navLinkClass(active: boolean) {
   return cn(
-    "inline-flex h-9 items-center rounded-md px-3 text-sm font-semibold transition-colors",
+    "inline-flex h-9 items-center rounded-md px-2.5 text-[0.95rem] font-bold underline-offset-[10px] transition-colors",
     active
-      ? "bg-accent text-foreground"
+      ? "text-foreground underline decoration-[3px]"
       : "text-muted-foreground hover:text-foreground",
   );
 }

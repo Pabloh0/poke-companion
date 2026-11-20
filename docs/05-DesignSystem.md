@@ -2,64 +2,76 @@
 
 > Última actualización: 2026-11-20 · Fuente de verdad del código: `src/app/globals.css`
 
-## Concepto: "ruta de noche"
+## Concepto: «La carpeta del coleccionista»
 
-PokéCompanion se siente como el **instrumento de campo de un investigador**: un
-fondo índigo profundo (no negro), un acento amarillo de señal y los colores de
-los 18 tipos como la capa de información. Nada de paneles genéricos de
-dashboard: la personalidad viene del mundo del juego (tipos, números de
-Pokédex, estadísticas), no de la decoración.
+PokéCompanion es una **carpeta de cartas coleccionables**. Cada Pokémon es una
+carta física (con marco, ventana de ilustración, número de colección y rareza)
+y la web es la carpeta donde se guardan: páginas gris frío con la cuadrícula
+de las fundas, pestañas de separador para filtrar y una lista de comprobación
+de la colección.
 
 Principios:
 
-1. **Los tipos son el color.** Los 18 colores de tipo son datos, no adorno: se
-   usan para identificar tipos y nada más.
-2. **Un solo acento de marca.** El amarillo Voltio marca lo importante (acción
-   principal, estado actual, números destacados). Si todo resalta, nada resalta.
-3. **Densidad legible.** Mucha información (estadísticas, tablas) con una
-   tipografía de cuerpo diseñada para leerse bien a tamaño pequeño.
-4. **Estructura que informa.** Bordes, divisores y numeración solo cuando
-   significan algo (la numeración solo para secuencias reales).
-5. **Movimiento con intención.** Un único momento orquestado por página como
-   mucho; animaciones que respondan a acciones del usuario.
+1. **La carta es el objeto.** Todo lo demás (cabecera, filtros, textos) es
+   sobrio para que las cartas y los colores de tipo destaquen.
+2. **Los tipos son el color.** Los 18 colores de tipo son datos: marcos de
+   carta, pegatinas de separador y etiquetas. La interfaz en sí solo usa tinta
+   y cobalto.
+3. **Un único momento memorable:** el efecto holográfico de las cartas. El
+   resto del movimiento es mínimo.
+4. **Vocabulario del coleccionismo, no del dashboard:** pestañas de carpeta,
+   pegatinas de separador, número de carta "025/1025", lista de colección.
+5. **Diseño de carta propio.** No se imita la carta oficial del juego de cartas
+   Pokémon (borde amarillo, PS arriba a la derecha, símbolos de energía,
+   franja de debilidad y resistencia): son elementos con derechos.
 
 ## Color
 
-### Tema oscuro (por defecto)
+### Tema claro: «Catálogo» (por defecto)
 
-| Token                | Hex       | Nombre     | Uso                                |
-| -------------------- | --------- | ---------- | ---------------------------------- |
-| `background`         | `#141833` | Noche      | Fondo de página                    |
-| `foreground`         | `#ECEEFB` | Luna       | Texto principal (15:1 sobre Noche) |
-| `card`               | `#1C2147` | Superficie | Paneles, menús                     |
-| `muted-foreground`   | `#A3A9D1` | Niebla     | Texto secundario (7,6:1)           |
-| `border`             | `#2E3566` | Trazo      | Bordes y divisores                 |
-| `primary`            | `#FFC93C` | Voltio     | Acción principal, estado actual    |
-| `primary-foreground` | `#1A1630` |            | Texto sobre Voltio (11:1)          |
-| `highlight`          | `#FFC93C` |            | Texto destacado (números, enlaces) |
-| `ring`               | `#FFC93C` |            | Foco de teclado                    |
-| `destructive`        | `#FF6B6B` |            | Errores, acciones destructivas     |
+| Token              | Hex       | Nombre       | Uso                                        |
+| ------------------ | --------- | ------------ | ------------------------------------------ |
+| `background`       | `#E7E9EE` | Gris carpeta | Página (con la cuadrícula de fundas)       |
+| `foreground`       | `#1A1C23` | Tinta        | Texto principal (14:1)                     |
+| `card`             | `#F5F6F9` | Panel        | Superficies de interfaz, página de carpeta |
+| `muted-foreground` | `#545969` |              | Texto secundario (5,7:1)                   |
+| `primary`          | `#2747C8` | Cobalto      | Acciones y enlaces (blanco encima: 7,4:1)  |
+| `highlight`        | `#2747C8` |              | Texto destacado (6,1:1)                    |
+| `border`           | `#C9CDD6` |              | Divisores decorativos                      |
+| `input`            | `#767C8C` |              | Bordes de campos de formulario (≥ 3:1)     |
+| `ring`             | `#2747C8` |              | Foco de teclado                            |
 
-### Tema claro
+### Tema oscuro: «Carpeta de noche»
 
-| Token              | Hex       | Uso                                                        |
-| ------------------ | --------- | ---------------------------------------------------------- |
-| `background`       | `#F2F3F9` | Fondo (gris azulado frío, no crema)                        |
-| `foreground`       | `#161A3A` | Texto principal (15:1)                                     |
-| `card`             | `#FFFFFF` | Paneles                                                    |
-| `muted-foreground` | `#565C85` | Texto secundario (5,8:1)                                   |
-| `primary`          | `#FFC21A` | Acción principal (con texto oscuro, 10:1)                  |
-| `highlight`        | `#8A5A00` | Texto destacado: el amarillo no se lee sobre claro (5,4:1) |
-| `ring`             | `#3A44A0` | Foco de teclado (7,5:1)                                    |
+| Token              | Hex       | Uso                                      |
+| ------------------ | --------- | ---------------------------------------- |
+| `background`       | `#1C2030` | Página                                   |
+| `foreground`       | `#E9EBF2` | Texto principal (13,6:1)                 |
+| `card`             | `#262B3D` | Superficies, página de carpeta           |
+| `muted-foreground` | `#A5ABBE` | Texto secundario (7:1)                   |
+| `primary`          | `#9DAEFF` | Acciones (texto `#10131C` encima: 8,8:1) |
+| `input`            | `#6B7290` | Bordes de campos (3,4:1)                 |
 
-**Regla:** nunca usar `text-primary` para texto; para texto destacado se usa
-`text-highlight`, que tiene una versión legible en cada tema.
+### Cartulina (igual en ambos temas)
+
+Las cartas son objetos impresos: se ven igual con tema claro u oscuro, como
+cartas reales sobre una mesa. Tokens fijos (`@theme static`):
+
+| Token             | Hex       | Uso                                  |
+| ----------------- | --------- | ------------------------------------ |
+| `stock`           | `#FCFBF7` | Fondo de la carta                    |
+| `stock-shade`     | `#EFEDE6` | Franja inferior de la carta          |
+| `stock-ink`       | `#1A1C23` | Texto de la carta (16:1)             |
+| `stock-ink-muted` | `#5B5F6B` | Texto secundario de la carta (6,2:1) |
+
+**Regla:** dentro de una carta se usan los tokens `stock-*`, nunca los de
+página.
 
 ### Colores de tipo
 
-Iguales en ambos temas. Clases: `bg-type-<tipo>`. El color del texto se elige
-por tipo para cumplir WCAG AA (≥ 4,5:1); está en
-`src/features/types/data/pokemon-types.ts`.
+Clases `bg-type-<tipo>`; también como variables (`var(--color-type-fire)`)
+para los marcos. El color del texto encima se elige por tipo para cumplir
+WCAG AA (`src/features/types/data/pokemon-types.ts`).
 
 | Tipo     | Hex       | Texto  | Contraste |
 | -------- | --------- | ------ | --------- |
@@ -82,92 +94,155 @@ por tipo para cumplir WCAG AA (≥ 4,5:1); está en
 | steel    | `#B7B7CE` | oscuro | 8,6:1     |
 | fairy    | `#D685AD` | oscuro | 6,3:1     |
 
-"Oscuro" = `#161A3A` (clase `text-ink`).
-
 ## Tipografía
 
-| Rol     | Familia                                   | Por qué                                                                                 |
-| ------- | ----------------------------------------- | --------------------------------------------------------------------------------------- |
-| Títulos | **Unbounded** (variable)                  | Geométrica, ancha y redondeada: recuerda a interfaces de videojuego sin imitar ninguna. |
-| Cuerpo  | **Atkinson Hyperlegible Next** (variable) | Diseñada para máxima legibilidad (Braille Institute); ideal para datos densos.          |
+| Rol                                   | Familia                                         | Clase                                        |
+| ------------------------------------- | ----------------------------------------------- | -------------------------------------------- |
+| Interfaz y títulos                    | **Archivo** (variable: peso y anchura 62–125 %) | `font-sans`, `font-display`                  |
+| Nombres y números de carta, titulares | Archivo condensada                              | `condensed` (72 %), `extra-condensed` (62 %) |
+| Textos y descripciones                | **Newsreader** (serif editorial)                | `font-serif`                                 |
+| Categoría en las cartas               | Newsreader cursiva                              | `font-serif italic`                          |
 
-- Clases: `font-display` (títulos) y `font-sans` (cuerpo, por defecto).
-- Atkinson Hyperlegible dibuja el cero con una barra para no confundirlo con la
-  O: es intencionado.
-- Los `h1`–`h3` usan `font-display` automáticamente; para títulos de elementos
-  pequeños dentro de listas se puede volver a `font-sans` en negrita.
-- Números en tablas y estadísticas: `tabular-nums` para que las cifras se alineen.
-- Longitud de línea: máximo ~60–72 caracteres en párrafos (`max-w-[60ch]`).
-- Sin mayúsculas sostenidas para etiquetas; se usa _sentence case_.
+- Una sola familia de palo seco (Archivo) cubre interfaz y titulares gracias
+  a su eje de anchura; la serif aporta el tono de "texto impreso" de las cartas.
+- Titulares: Archivo condensada en peso 900, interlineado muy cerrado
+  (`leading-[0.85]`–`[0.9]`).
+- Números de carta y estadísticas: `tabular-nums`.
+- Párrafos: 44–60 caracteres por línea (`max-w-[46ch]`…`[60ch]`).
+- Sin mayúsculas sostenidas en etiquetas.
 
-Escala (rem): 0,75 · 0,875 · 1 · 1,125 · 1,25 · 1,5 · 1,875 · 2,25 · 3 · 3,75
-(las clases `text-xs` … `text-6xl` de Tailwind siguen esta escala).
+## Forma, superficies y espacio
 
-## Forma y espacio
-
-- **Radios con jerarquía**, no uno para todo: chips de tipo y estados en
-  píldora (`rounded-full`); botones y campos `rounded-md` (0,625 rem); paneles
-  `rounded-lg` (0,875 rem); contenedores grandes `rounded-xl` (1,25 rem).
-- Separación por **bordes y divisores**, no por sombras. Sin rejillas de
-  tarjetas idénticas con sombra gris.
-- Ancho máximo de contenido: `max-w-6xl` (72 rem), alineado a la izquierda.
-- Espaciado en múltiplos de 4 px (escala de Tailwind).
+- **Proporción de carta 5:7** (`aspect-[5/7]`), la de cualquier carta
+  coleccionable.
+- Radios con jerarquía: carta 14 px (marco) / 10 px (interior); paneles
+  `rounded-xl`; botones y campos `rounded-md`; pegatinas y etiquetas 4–5 px.
+  Nada de píldoras.
+- **Sombras solo en objetos físicos** (las cartas): sombra corta + sombra
+  difusa. La interfaz se separa con bordes y con reglas gruesas
+  (`border-t-[3px] border-foreground`), como el lomo de una carpeta.
+- Fondo de página: cuadrícula de 32 px muy tenue (`--sleeve-line`), fija.
+- Ancho máximo de contenido `max-w-6xl`, alineado a la izquierda.
 
 ## Patrones
 
-- **Chips de tipo como filtro**: botones con `aria-pressed`. Sin seleccionar,
-  muestran un punto del color del tipo; seleccionados, se rellenan con él.
-  Al llegar al límite (dos tipos), los demás se deshabilitan.
-- **Sprites pixel art**: se muestran a su tamaño nativo (96 px) con
-  `image-rendering: pixelated`, y con `alt=""` porque el nombre va justo debajo.
-- **Cabecera en móvil**: por debajo de `sm` solo se ve el símbolo de la marca,
-  para que el menú, el idioma y el tema quepan siempre (comprobado a 360 px).
+### Anatomía de la carta (`PokemonCard`)
+
+```text
+╔═ marco: degradado tipo 1 → tipo 2 ═╗
+║ Nombre (Archivo condensada 800)    ║
+║ ┌────────────────────────────────┐ ║
+║ │ ventana: tinte del tipo +      │ ║
+║ │ trama de puntos + sprite       │ ║
+║ └────────────────────────────────┘ ║
+║ [Tipo] [Tipo]          Total 320   ║
+║ Pokémon Ratón (serif cursiva)      ║
+║ 0025/1025     Gen. I          ●    ║  ← franja stock-shade
+╚════════════════════════════════════╝
+```
+
+- Rareza: ● común, ★ legendario, ✦ singular (con texto para lectores de
+  pantalla). Legendarios y singulares llevan brillo holográfico permanente.
+- Si falta la categoría en el idioma (127 especies recientes en español), la
+  línea queda vacía para no descuadrar la carta.
+
+### Efecto holográfico (`HoloSurface` + `.holo-card`)
+
+- Un único componente cliente escucha el ratón para toda la rejilla (delegación
+  de eventos) y escribe variables CSS (`--mx`, `--my`, `--rx`, `--ry`). El
+  dibujo es CSS: inclinación 3D de hasta 10°/14° y una lámina iridiscente con
+  `mix-blend-mode: color-dodge` que sigue al cursor.
+- Solo con ratón (en pantallas táctiles, inclinar al hacer scroll molesta).
+- Con «reducir movimiento», la carta no se inclina.
+
+### Pestañas de carpeta (`GenerationTabs`)
+
+Las generaciones (Todas, I–IX) son pestañas unidas a la página de la carpeta
+que contiene las cartas. Son `input type="radio"` nativos: flechas del teclado
+y lectores de pantalla funcionan sin código extra. Cada pestaña lleva el nombre
+de la región en `title` y para lectores de pantalla.
+
+### Pegatinas de separador (filtro de tipos y enlaces de tipo)
+
+Rectángulos con una banda del color del tipo a la izquierda. Seleccionadas
+(`aria-pressed`), se rellenan con el color. Al llegar a dos tipos, el resto se
+deshabilita.
+
+### Mano de cartas (`CardFan`)
+
+Cinco cartas reales en abanico en el inicio. Al cargar se "reparten" (la única
+animación orquestada de la web, `animate-deal`). La sección recorta lo que
+sobresale para no generar nunca scroll horizontal (comprobado a 360 px).
+
+### Lista de la colección
+
+La hoja de ruta se presenta como la lista de comprobación de una colección:
+número `001/008`, casilla y nombre. La numeración es una secuencia real (orden
+de publicación).
+
+### Cabecera
+
+Fija arriba con fondo translúcido. Debajo de `sm` solo se ve el símbolo de la
+marca para que menú, idioma y tema quepan (comprobado a 360 px). Página actual
+del menú: subrayado grueso.
 
 ## Movimiento
 
-- Una sola animación orquestada por página. En el inicio: los 18 chips de tipo
-  entran en secuencia al cargar.
-- Transiciones cortas (150–300 ms) solo en respuesta a acciones.
-- `prefers-reduced-motion` desactiva todas las animaciones (regla global).
+- Una animación orquestada por página como máximo (el reparto de cartas del
+  inicio).
+- El resto, solo en respuesta a acciones: holo e inclinación al pasar el ratón,
+  transiciones cortas de color.
+- `prefers-reduced-motion` desactiva animaciones, transiciones e inclinación.
 
-## Componentes existentes
+## Componentes
 
 | Componente         | Ubicación                                                | Tipo   |
 | ------------------ | -------------------------------------------------------- | ------ |
 | `Button`           | `src/components/ui/button.tsx` (shadcn)                  | Server |
 | `TypeBadge`        | `src/features/types/components/type-badge.tsx`           | Server |
 | `PokemonCard`      | `src/features/pokedex/components/pokemon-card.tsx`       | Server |
+| `HoloSurface`      | `src/features/pokedex/components/holo-surface.tsx`       | Client |
+| `CardFan`          | `src/features/pokedex/components/card-fan.tsx`           | Server |
 | `PokedexFilterBar` | `src/features/pokedex/components/pokedex-filter-bar.tsx` | Client |
-| `MainNav`          | `src/components/layout/main-nav.tsx`                     | Client |
+| `GenerationTabs`   | `src/features/pokedex/components/pokedex-filter-bar.tsx` | Client |
 | `BrandMark`        | `src/components/layout/brand-mark.tsx`                   | Server |
 | `SiteHeader`       | `src/components/layout/site-header.tsx`                  | Server |
+| `MainNav`          | `src/components/layout/main-nav.tsx`                     | Client |
 | `SiteFooter`       | `src/components/layout/site-footer.tsx`                  | Server |
 | `LocaleSwitcher`   | `src/components/layout/locale-switcher.tsx`              | Client |
 | `ThemeToggle`      | `src/components/layout/theme-toggle.tsx`                 | Client |
 
-Para añadir componentes de shadcn/ui: `npx shadcn@latest add <componente>`.
-Después, revisar que usa los tokens del proyecto (no colores fijos).
+Para añadir componentes de shadcn/ui: `npx shadcn@latest add <componente>`, y
+después adaptarlos a estos tokens (radios, colores).
 
 ## Marca
 
-- El símbolo de PokéCompanion es un **dispositivo de campo con su luz de
-  señal**, diseño propio. No se usa la Poké Ball ni logotipos oficiales.
-- El nombre se escribe siempre **PokéCompanion** (con tilde y C mayúscula).
+- Símbolo: **dos cartas apiladas**, la delantera en cobalto con una franja de
+  lámina. Diseño propio; no se usa la Poké Ball ni logotipos oficiales.
+- Logotipo: «PokéCompanion» en Archivo condensada 900. Siempre con tilde y C
+  mayúscula.
 
 ## Accesibilidad (obligatorio)
 
-- Contraste ≥ 4,5:1 para texto normal y ≥ 3:1 para elementos gráficos.
+- Contraste ≥ 4,5:1 en texto y ≥ 3:1 en bordes de campos y elementos gráficos
+  informativos.
 - Foco de teclado siempre visible (`:focus-visible` global con `ring`).
-- Enlace "Saltar al contenido" como primer elemento enfocable.
-- Botones de solo icono con `aria-label`.
-- El color nunca es la única forma de transmitir información (los chips de
-  tipo siempre llevan el nombre).
+- Enlace «Saltar al contenido» como primer elemento enfocable.
+- Botones de solo icono con `aria-label`; los símbolos de rareza llevan texto
+  oculto para lectores de pantalla.
+- El color nunca es la única forma de transmitir información: los tipos
+  siempre llevan su nombre.
 
 ## Voz y textos
 
-- Desde el punto de vista del jugador y con palabras del juego.
-- Voz activa y verbos concretos: "Guardar equipo", no "Enviar".
-- Una acción mantiene su nombre en todo el flujo (botón "Publicar" → aviso
-  "Publicado").
+- Desde el punto de vista del jugador. El vocabulario de colección ("cartas",
+  "colección") se usa con moderación y sin sacrificar claridad.
+- Voz activa y verbos concretos: «Abrir la Pokédex», «Quitar filtros».
 - Los errores explican qué ha pasado y cómo solucionarlo, sin disculpas.
-- Un estado vacío invita a actuar ("Aún no tienes equipos. Crea el primero").
+
+## Qué evitamos (y por qué)
+
+Para que la web no parezca hecha con plantilla: fondos casi negros con un único
+acento chillón, rejillas de tarjetas idénticas con la misma sombra gris,
+píldoras en todos los elementos, etiquetas en mayúsculas sobre cada título,
+degradados decorativos y animaciones de aparición en cada sección.

@@ -24,15 +24,15 @@
     "disclaimer": "PokéCompanion is an independent fan project. It is not affiliated with, endorsed or sponsored by Nintendo, Game Freak, Creatures Inc. or The Pokémon Company. Pokémon and Pokémon character names are trademarks of their respective owners."
   },
   "Home": {
-    "title": "Pokédex, teams and collection in one place",
-    "intro": "PokéCompanion brings together the tools you reach for while playing: look up a Pokémon, check which types hit it hard, build a team and keep track of what you've caught.",
+    "title": "Every Pokémon, card by card",
+    "intro": "Look up any Pokémon, see which types hit it hard, build your team and keep track of what you’ve caught.",
     "typesHeading": "The 18 types",
-    "typesIntro": "The foundation of almost everything: each type has its own colour, and you'll see it the same way in the Pokédex, in teams and in the calculator.",
-    "roadmapHeading": "What we're building",
-    "roadmapIntro": "The site ships in stages. This is the order the tools will arrive in:",
+    "typesIntro": "Each type has its own colour, the same on cards, teams and the calculator. Tap one to see its Pokémon.",
+    "roadmapHeading": "Collection checklist",
+    "roadmapIntro": "PokéCompanion ships in parts, like a collection opened pack by pack. This is the order:",
     "status": {
-      "planned": "Later",
-      "inProgress": "In progress"
+      "available": "Available",
+      "planned": "Coming soon"
     },
     "modules": {
       "pokedex": {
@@ -68,7 +68,9 @@
         "description": "Share teams and collections with other trainers."
       }
     },
-    "openPokedex": "Open the Pokédex"
+    "openPokedex": "Open the Pokédex",
+    "handLabel": "Five sample cards from the Pokédex",
+    "typeLink": "See {type}-type Pokémon"
   },
   "NotFound": {
     "title": "Nothing here",
@@ -98,7 +100,7 @@
   "Pokedex": {
     "title": "Pokédex",
     "description": "All 1025 Pokémon with their number, types and generation. Search by name or number and filter by type or generation.",
-    "intro": "Every Pokémon, from 1 to 1025. Search by name or number, and filter by type or generation.",
+    "intro": "The complete collection: 1025 Pokémon, one per card. Search by name or number, and sort them by type or generation.",
     "searchLabel": "Search by name or number",
     "searchPlaceholder": "Pikachu, 25…",
     "generationLabel": "Generation",
@@ -115,13 +117,34 @@
       "9": "Paldea (IX)"
     },
     "typesLabel": "Types",
-    "typesHint": "You can combine up to two.",
+    "typesHint": "Combine up to two.",
     "resultsHeading": "Results",
-    "results": "{count, plural, =0 {No Pokémon} one {# Pokémon} other {# Pokémon}}",
     "showing": "Showing {shown} of {total}",
     "showMore": "Show more",
     "clearFilters": "Clear filters",
     "emptyTitle": "No Pokémon match your search",
-    "emptyDescription": "Try another name or number, or remove a filter."
+    "emptyDescription": "Try another name or number, or remove a filter.",
+    "generationShort": {
+      "1": "I",
+      "2": "II",
+      "3": "III",
+      "4": "IV",
+      "5": "V",
+      "6": "VI",
+      "7": "VII",
+      "8": "VIII",
+      "9": "IX"
+    },
+    "cardCount": "{count, plural, one {# card} other {# cards}}",
+    "card": {
+      "total": "Total",
+      "setNumber": "Card {number} of {total}",
+      "generation": "Gen. {generation}",
+      "rarity": {
+        "common": "Common",
+        "legendary": "Legendary",
+        "mythical": "Mythical"
+      }
+    }
   }
 }
