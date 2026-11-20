@@ -16,7 +16,7 @@
 | Supabase       | PostgreSQL 17     | Proyecto en West EU (París). Datos de referencia; autenticación en fase 6 |
 | supabase-js    | 2.x               | Lectura desde la web con la clave publicable                              |
 | Vitest         | 5.x               | Tests unitarios                                                           |
-| Vercel         | —                 | Pendiente de conectar (usar región París, `cdg1`)                         |
+| Vercel         | Hobby             | Funciones en París (`cdg1`, `vercel.json`), junto a la base de datos      |
 | GitHub Actions | —                 | CI: lint, tipos, formato, tests y build                                   |
 
 ## Estructura de carpetas
